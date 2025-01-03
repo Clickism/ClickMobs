@@ -1,0 +1,6 @@
+name: ClickMobs
+version: '${version}'
+main: me.clickism.clickmobs.ClickMobs
+api-version: '1.20'
+authors: [ Clickism ]
+description: A simple plugin that allows you to pick up any mob.
