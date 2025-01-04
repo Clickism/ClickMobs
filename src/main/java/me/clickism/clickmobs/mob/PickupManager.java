@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -34,7 +35,7 @@ public class PickupManager implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     private void onInteract(PlayerInteractEntityEvent event) {
         if (!(event.getRightClicked() instanceof LivingEntity entity)) return;
         Player player = event.getPlayer();
@@ -66,7 +67,7 @@ public class PickupManager implements Listener {
         world.playSound(location, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, .5f);
     }
     
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     private void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
@@ -140,16 +141,17 @@ public class PickupManager implements Listener {
     }
 
     private ItemStack createItem(LivingEntity entity) {
-        String name = ChatColor.YELLOW + Utils.capitalize(formatEntity(entity));
+        String entityName = formatEntity(entity);
+        String name = Utils.capitalize(entityName);
         if (entity instanceof Ageable ageable && !ageable.isAdult()) {
             name = "Baby " + name;
         }
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
-        meta.setDisplayName(name);
+        meta.setDisplayName(ChatColor.YELLOW + name);
         meta.setLore(List.of(
-                ChatColor.DARK_GRAY + "Right click to place the mob back."
+                ChatColor.DARK_GRAY + "Right click to place the " + entityName + " back."
         ));
         item.setItemMeta(meta);
         MobTextures.setEntityTexture(item, entity);
