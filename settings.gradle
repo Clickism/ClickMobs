@@ -1,1 +1,25 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id "dev.kikugie.stonecutter" version "0.5"
+}
+
+stonecutter {
+    create("fabric") {
+        versions "1.21.4"
+        vcsVersion = "1.21.4"
+    }
+}
+
 rootProject.name = 'ClickMobs'
+
+include 'spigot', 'fabric'
