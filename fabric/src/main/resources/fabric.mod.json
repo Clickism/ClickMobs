@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"me.clickism.ClickMobs"
+			"me.clickism.clickmobs.ClickMobs"
 		]
 	},
 	"mixins": [

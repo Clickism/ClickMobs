@@ -1,3 +1,7 @@
+plugins {
+    id 'java'
+}
+
 version = name + "-" + project.plugin_version
 def plugin_version = project.plugin_version
 
@@ -8,6 +12,8 @@ base {
 }
 
 repositories {
+    mavenCentral()
+    mavenLocal()
     maven {
         name = "spigotmc-repo"
         url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"

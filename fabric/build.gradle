@@ -1,4 +1,5 @@
 plugins {
+	id 'java'
 	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
 }
@@ -35,7 +36,7 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand props
 	}
-	inputs.properties(properties)
+	inputs.properties(props)
 }
 
 tasks.withType(JavaCompile).configureEach {

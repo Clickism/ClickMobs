@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "me.clickism.mixin",
+	"package": "me.clickism.clickmobs.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"ExampleMixin"
