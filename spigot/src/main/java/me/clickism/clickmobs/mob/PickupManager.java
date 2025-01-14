@@ -155,12 +155,7 @@ public class PickupManager implements Listener {
 
     private ItemStack createItem(LivingEntity entity) {
         String entityName = formatEntity(entity);
-        String name = Utils.capitalize(entityName);
-        if (entity instanceof Ageable ageable && !ageable.isAdult()) {
-            name = Message.BABY_MOB.parameterizer()
-                    .put("mob", name)
-                    .toString();
-        }
+        String name = getName(entity);
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
@@ -169,6 +164,20 @@ public class PickupManager implements Listener {
         item.setItemMeta(meta);
         MobTextures.setEntityTexture(item, entity);
         return item;
+    }
+
+    private static String getName(LivingEntity entity) {
+        if (entity.getCustomName() != null) {
+            return "\"" + entity.getCustomName() + "\"";
+        }
+        String entityName = formatEntity(entity);
+        String name = Utils.capitalize(entityName);
+        if (entity instanceof Ageable ageable && !ageable.isAdult()) {
+            return Message.BABY_MOB.parameterizer()
+                    .put("mob", name)
+                    .toString();
+        }
+        return name;
     }
 
     private static boolean canBePickedUp(Entity entity) {
