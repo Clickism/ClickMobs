@@ -54,6 +54,8 @@ public final class ClickMobs extends JavaPlugin {
         PickupManager pickupManager = new PickupManager(this, nbtHelper);
         new DispenserListener(this, pickupManager);
         new VehicleInteractListener(this, pickupManager);
+
+        checkUpdates();
     }
 
     private void checkUpdates() {
