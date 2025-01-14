@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Parameterizer {
 
+    protected static final String UPPERCASE_SELECTOR = "^";
     protected static final String FORMAT = "{%s}";
 
     private final String string;
@@ -36,8 +37,11 @@ public class Parameterizer {
     public String replace(String string) {
         String result = Utils.colorize(string);
         for (Map.Entry<String, Object> entry : params.entrySet()) {
-            String placeholder = String.format(FORMAT, entry.getKey());
-            result = result.replace(placeholder, entry.getValue().toString());
+            String value = entry.getValue().toString();
+            String uppercasedKey = String.format(UPPERCASE_SELECTOR + FORMAT, entry.getKey());
+            result = result.replace(uppercasedKey, Utils.capitalize(value));
+            String key = String.format(FORMAT, entry.getKey());
+            result = result.replace(key, value);
         }
         if (colorize) result = Utils.colorize(result);
         return result;

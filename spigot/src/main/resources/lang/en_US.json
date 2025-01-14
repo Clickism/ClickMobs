@@ -1,10 +1,10 @@
 {
-  "version": 2,
+  "version": 1,
   "credit": ["Clickism"],
   "update": "ClickMobs: &a&lNew version available: &f{version}",
   "no_permission": "You don't have permission to do this.",
   "pick_up": "You picked up a {mob}",
-  "blacklisted_mob": "You can't pick up this mob.",
+  "blacklisted_mob": "You can't pick up this mob",
   "write_error": "Failed to write mob data.",
   "read_error": "Failed to read mob data.",
   "baby_mob": "Baby {mob}",
