@@ -13,7 +13,21 @@ language: en_US
 # Strongly Recommended.
 check-update: true
 
+# Whether to allow hostile mobs to be picked up.
+# You can override this setting for individual mobs in the "whitelisted-mobs" list.
+# Default: false
+allow-hostile: false
+
+# Whether to ONLY allow mobs that are whitelisted to be picked up.
+# WARNING: This will override the "allow-hostile" setting.
+# Default: false
+only-allow-whitelisted: false
+
+# List of mobs that are allowed to be picked up.
+# Default: [ ]
 whitelisted-mobs: [ ]
+
+# List of mobs to blacklist from being picked up.
 blacklisted-mobs:
   - ENDER_DRAGON
   - WITHER

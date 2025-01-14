@@ -25,6 +25,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PickupManager implements Listener {
@@ -32,8 +33,8 @@ public class PickupManager implements Listener {
     public static final NamespacedKey TYPE_KEY = new NamespacedKey(ClickMobs.INSTANCE, "type");
     public static final NamespacedKey NBT_KEY = new NamespacedKey(ClickMobs.INSTANCE, "nbt");
 
-    private static final Set<String> WHITELISTED_MOBS = new HashSet<>(Setting.WHITELISTED_MOBS.getList());
-    private static final Set<String> BLACKLISTED_MOBS = new HashSet<>(Setting.BLACKLISTED_MOBS.getList());
+    private static final Set<String> WHITELISTED_MOBS = new HashSet<>(toUpperCase(Setting.WHITELISTED_MOBS.getList()));
+    private static final Set<String> BLACKLISTED_MOBS = new HashSet<>(toUpperCase(Setting.BLACKLISTED_MOBS.getList()));
 
     private final NBTHelper nbtHelper;
 
@@ -52,7 +53,7 @@ public class PickupManager implements Listener {
         event.setCancelled(true);
         if (Permission.PICKUP.lacksAndNotify(player)) return;
         if (!canBePickedUp(entity)) {
-            Message.BLACKLISTED_MOB.send(player);
+            Message.BLACKLISTED_MOB.sendActionbar(player);
             return;
         }
         ItemStack item;
@@ -182,9 +183,22 @@ public class PickupManager implements Listener {
 
     private static boolean canBePickedUp(Entity entity) {
         String name = entity.getType().name();
-        if (!WHITELISTED_MOBS.isEmpty()) {
-            return WHITELISTED_MOBS.contains(name);
+        boolean isWhitelisted = WHITELISTED_MOBS.contains(name);
+        if (isWhitelisted) {
+            return true;
+        }
+        if (Setting.ONLY_ALLOW_WHITELISTED.isEnabled()) {
+            return false;
+        }
+        if (Setting.ALLOW_HOSTILE.isDisabled() && entity instanceof Monster) {
+            return false;
         }
         return !BLACKLISTED_MOBS.contains(name);
+    }
+
+    private static List<String> toUpperCase(List<String> list) {
+        return list.stream()
+                .map(String::toUpperCase)
+                .toList();
     }
 }

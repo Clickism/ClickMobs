@@ -11,8 +11,11 @@ public enum Setting {
     LANGUAGE("en_US"),
     CHECK_UPDATE(true),
 
+    ALLOW_HOSTILE(false),
+    ONLY_ALLOW_WHITELISTED(false),
+
     WHITELISTED_MOBS(List.of()),
-    BLACKLISTED_MOBS(List.of("WITHER", "ENDER_DRAGON")),
+    BLACKLISTED_MOBS(List.of("wither", "ender_dragon")),
     ;
 
     private static SettingManager settingManager;
