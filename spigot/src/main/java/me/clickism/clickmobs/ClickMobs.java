@@ -7,6 +7,9 @@ import me.clickism.clickmobs.message.Message;
 import me.clickism.clickmobs.mob.PickupManager;
 import me.clickism.clickmobs.nbt.NBTHelper;
 import me.clickism.clickmobs.nbt.NBTHelperFactory;
+import me.clickism.clickmobs.util.MessageParameterizer;
+import me.clickism.clickmobs.util.UpdateChecker;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -14,6 +17,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class ClickMobs extends JavaPlugin {
+
+    public static final String RESOURCE_ID = "121939";
+
     public static ClickMobs INSTANCE;
     public static Logger LOGGER;
 
@@ -50,8 +56,18 @@ public final class ClickMobs extends JavaPlugin {
         new VehicleInteractListener(this, pickupManager);
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    private void checkUpdates() {
+        if (Setting.CHECK_UPDATE.isDisabled()) return;
+        LOGGER.info("Checking for updates...");
+        new UpdateChecker(this, RESOURCE_ID).checkVersion(version -> {
+            if (getDescription().getVersion().equals(version)) return;
+            LOGGER.info("New version available: " + version);
+            MessageParameterizer parameterizer = Message.UPDATE.parameterizer()
+                    .put("version", version);
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if (!player.isOp()) return;
+                parameterizer.send(player);
+            });
+        });
     }
 }
