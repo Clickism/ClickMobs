@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class MobTextures {
 
-    public static final String DEFAULT_TEXTURE = "http://textures.minecraft.net/texture/d14bff1a38c9154e5ec84ce5cf00c58768e068eb42b2d89a6bbd29787590106b";
+    public static final String DEFAULT_TEXTURE = "http://textures.minecraft.net/texture/ee7700096b5a2a87386d6205b4ddcc14fd33cf269362fa6893499431ce77bf9";
 
     public static final Map<Object, String> TEXTURE_MAP = Map.ofEntries(
             Map.entry("ELDER_GUARDIAN", "http://textures.minecraft.net/texture/30f868caf19cf2124f0fef98e6b8773d27fbf42d93aab06b22ee033b2aee6447"),
