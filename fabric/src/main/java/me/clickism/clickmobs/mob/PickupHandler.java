@@ -1,19 +1,13 @@
 package me.clickism.clickmobs.mob;
 
-import me.clickism.clickmobs.MobTextures;
-
 import me.clickism.clickmobs.config.Settings;
 import me.clickism.clickmobs.util.MessageType;
-import me.clickism.clickmobs.util.Utils;
 import me.clickism.clickmobs.util.VersionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
-import net.minecraft.entity.mob.ZombieVillagerEntity;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -27,8 +21,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.village.VillagerDataContainer;
-import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
