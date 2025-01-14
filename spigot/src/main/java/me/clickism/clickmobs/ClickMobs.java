@@ -1,6 +1,8 @@
 package me.clickism.clickmobs;
 
 import me.clickism.clickmobs.config.Setting;
+import me.clickism.clickmobs.listener.DispenserListener;
+import me.clickism.clickmobs.listener.VehicleInteractListener;
 import me.clickism.clickmobs.message.Message;
 import me.clickism.clickmobs.mob.PickupManager;
 import me.clickism.clickmobs.nbt.NBTHelper;
@@ -42,7 +44,10 @@ public final class ClickMobs extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        new PickupManager(this, nbtHelper);
+
+        PickupManager pickupManager = new PickupManager(this, nbtHelper);
+        new DispenserListener(this, pickupManager);
+        new VehicleInteractListener(this, pickupManager);
     }
 
     @Override

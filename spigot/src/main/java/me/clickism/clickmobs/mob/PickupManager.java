@@ -90,7 +90,7 @@ public class PickupManager implements Listener {
         if (item.getType() != Material.PLAYER_HEAD) return;
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
-        if (!isEntity(item)) return;
+        if (!isMob(item)) return;
         event.setCancelled(true);
         if (Permission.PLACE.lacksAndNotify(player)) return;
         Block block = event.getBlockPlaced();
@@ -111,7 +111,7 @@ public class PickupManager implements Listener {
         }
     }
 
-    public boolean isEntity(ItemStack item) {
+    public boolean isMob(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return false;
         PersistentDataContainer data = meta.getPersistentDataContainer();

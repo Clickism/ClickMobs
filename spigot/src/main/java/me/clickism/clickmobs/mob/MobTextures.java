@@ -118,6 +118,6 @@ public class MobTextures {
     }
 
     private static URL getTexture(EntityType type) throws MalformedURLException {
-        return URI.create(TEXTURE_MAP.getOrDefault(type.name(), DEFAULT_TEXTURE)).toURL();
+        return URI.create(TEXTURE_MAP.getOrDefault(type.getName().toUpperCase(), DEFAULT_TEXTURE)).toURL();
     }
 }
