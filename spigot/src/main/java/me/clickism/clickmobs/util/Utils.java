@@ -27,7 +27,7 @@ public class Utils {
         }
         return capitalizedString.toString().trim();
     }
-    
+
     public static String capitalizeWord(String string) {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }

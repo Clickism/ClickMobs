@@ -5,7 +5,6 @@ import me.clickism.clickmobs.message.Message;
 import me.clickism.clickmobs.mob.PickupManager;
 import me.clickism.clickmobs.nbt.NBTHelper;
 import me.clickism.clickmobs.nbt.NBTHelperFactory;
-import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;

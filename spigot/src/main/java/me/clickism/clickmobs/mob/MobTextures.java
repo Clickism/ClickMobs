@@ -2,7 +2,8 @@ package me.clickism.clickmobs.mob;
 
 import me.clickism.clickmobs.ClickMobs;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
@@ -11,7 +12,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class MobTextures {
@@ -103,7 +103,7 @@ public class MobTextures {
             Map.entry("BOGGED", "http://textures.minecraft.net/texture/7144d7bd1469593df59dce0cefb3afeaa54b8b3299cdbfc34b338bfb9ad2100"),
             Map.entry("CREAKING", "http://textures.minecraft.net/texture/aef009d86fcc420361a68cbb8bfa85a7422bfe9e2f306247be1e1b5d20fc52b1")
     );
-    
+
     public static void setEntityTexture(ItemStack item, LivingEntity entity) {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         if (meta == null) return;

@@ -90,7 +90,7 @@ public enum Message {
         Setting.initialize(plugin);
         messageManager = new MessageManager(plugin, Setting.LANGUAGE.getString());
     }
-    
+
     @NotNull
     public static String get(String key) {
         if (messageManager == null) return key;

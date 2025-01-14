@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 public enum Permission {
     PICKUP,
     PLACE;
-    
+
     private static final String PLUGIN_PREFIX = "clickmobs";
     private final String permission;
 

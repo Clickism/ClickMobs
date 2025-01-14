@@ -40,7 +40,7 @@ public enum Setting {
         }
         if (!type.isInstance(value)) {
             ClickMobs.LOGGER.warning("Invalid value for \"" + path + "\" in config.yml. Default value " +
-                                          defaultValue + " is used instead.");
+                    defaultValue + " is used instead.");
             value = defaultValue;
         }
         return type.cast(value);

@@ -13,7 +13,7 @@ language: en_US
 # Strongly Recommended.
 check-update: true
 
-whitelisted-mobs: []
+whitelisted-mobs: [ ]
 blacklisted-mobs:
-    - ENDER_DRAGON
-    - WITHER
+  - ENDER_DRAGON
+  - WITHER

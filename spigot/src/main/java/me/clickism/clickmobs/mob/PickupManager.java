@@ -4,7 +4,6 @@ import me.clickism.clickmobs.ClickMobs;
 import me.clickism.clickmobs.config.Permission;
 import me.clickism.clickmobs.config.Setting;
 import me.clickism.clickmobs.message.Message;
-import me.clickism.clickmobs.message.MessageType;
 import me.clickism.clickmobs.nbt.NBTHelper;
 import me.clickism.clickmobs.util.Parameterizer;
 import me.clickism.clickmobs.util.Utils;
@@ -26,7 +25,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class PickupManager implements Listener {
