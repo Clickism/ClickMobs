@@ -1,9 +1,11 @@
 package me.clickism.clickmobs.callback;
 
+import me.clickism.clickmobs.ClickMobs;
 import me.clickism.clickmobs.mob.PickupHandler;
 import me.clickism.clickmobs.util.VersionHelper;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.*;
 import net.minecraft.item.ItemStack;
@@ -13,6 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +34,8 @@ public class VehicleUseEntityCallback implements UseEntityCallback {
         ItemStack itemStack = player.getMainHandStack();
         Entity entity = PickupHandler.readEntityFromItemStack(world, itemStack);
         if (entity == null) return ActionResult.PASS;
+        if (entity instanceof LivingEntity && entity instanceof VillagerDataContainer
+                && ClickMobs.isClickVillagersPresent()) return ActionResult.PASS;
         world.spawnEntity(entity);
         BlockPos pos = vehicle.getBlockPos();
         entity.refreshPositionAndAngles(pos, 0, 0);

@@ -23,3 +23,6 @@ them around.**
   - Hostile mobs can't be picked up by default.
   - Blacklist/whitelist any mob you want.
 - **Language support:** German & English (Paper/Spigot only)
+
+## Compatibility
+- ClickMobs is fully compatible with [ClickVillagers](https://modrinth.com/plugin/clickvillagers)!

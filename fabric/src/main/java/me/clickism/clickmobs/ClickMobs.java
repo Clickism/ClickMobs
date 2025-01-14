@@ -8,6 +8,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,5 +29,9 @@ public class ClickMobs implements ModInitializer {
 		} catch (IOException e) {
 			LOGGER.error("Failed to load config file", e);
 		}
+	}
+
+	public static boolean isClickVillagersPresent() {
+		return FabricLoader.getInstance().isModLoaded("clickvillagers");
 	}
 }

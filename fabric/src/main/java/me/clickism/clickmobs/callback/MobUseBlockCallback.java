@@ -1,9 +1,11 @@
 package me.clickism.clickmobs.callback;
 
+import me.clickism.clickmobs.ClickMobs;
 import me.clickism.clickmobs.mob.PickupHandler;
 import me.clickism.clickmobs.util.VersionHelper;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -16,6 +18,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.world.World;
 
 public class MobUseBlockCallback implements UseBlockCallback {
@@ -28,6 +31,8 @@ public class MobUseBlockCallback implements UseBlockCallback {
         ItemStack itemStack = player.getMainHandStack();
         Entity entity = PickupHandler.readEntityFromItemStack(world, itemStack);
         if (entity == null) return ActionResult.PASS;
+        if (entity instanceof LivingEntity && entity instanceof VillagerDataContainer
+                && ClickMobs.isClickVillagersPresent()) return ActionResult.PASS;
         BlockPos clickedPos = hitResult.getBlockPos();
         //? if >=1.21.1 {
         ActionResult actionResult = world.getBlockState(clickedPos).onUse(world, player, hitResult);
