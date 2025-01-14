@@ -12,8 +12,8 @@ base {
 dependencies {
 	minecraft("com.mojang:minecraft:${stonecutter.current.project}")
 	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
-	modImplementation("net.fabricmc:fabric-loader:${property("deps.loader_version")}")
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_version")}")
+	modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 }
 
 tasks.processResources {
@@ -21,7 +21,7 @@ tasks.processResources {
 		"version" to version,
 		"targetVersion" to project.property("mod.mc_version"),
 		"minecraftVersion" to stonecutter.current.version,
-		"fabricVersion" to project.property("deps.loader_version")
+		"fabricVersion" to project.property("deps.fabric_loader")
 	)
 	filesMatching("fabric.mod.json") {
 		expand(props)

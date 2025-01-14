@@ -3,15 +3,15 @@
 	"id": "clickmobs",
 	"version": "${version}",
 	"name": "ClickMobs",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A simple plugin that allows you to pick up any mob into your inventory.",
 	"authors": [
-		"Me!"
+		"Clickism"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/plugin/clickmobs",
+		"sources": "https://github.com/Clickism/ClickMobs"
 	},
-	"license": "CC0-1.0",
+	"license": "ARR",
 	"icon": "assets/clickmobs/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -23,9 +23,9 @@
 		"clickmobs.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.9",
-		"minecraft": "~1.21.4",
-		"java": ">=21",
+		"fabricloader": ">=${fabricVersion}",
+		"minecraft": "${targetVersion}",
+		"java": ">=17",
 		"fabric-api": "*"
 	},
 	"suggests": {
