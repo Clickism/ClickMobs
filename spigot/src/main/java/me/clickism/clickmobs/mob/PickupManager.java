@@ -2,8 +2,11 @@ package me.clickism.clickmobs.mob;
 
 import me.clickism.clickmobs.ClickMobs;
 import me.clickism.clickmobs.config.Permission;
+import me.clickism.clickmobs.config.Setting;
+import me.clickism.clickmobs.message.Message;
 import me.clickism.clickmobs.message.MessageType;
 import me.clickism.clickmobs.nbt.NBTHelper;
+import me.clickism.clickmobs.util.Parameterizer;
 import me.clickism.clickmobs.util.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -14,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,12 +25,17 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PickupManager implements Listener {
     public static final NamespacedKey ENTITY_KEY = new NamespacedKey(ClickMobs.INSTANCE, "entity");
     public static final NamespacedKey TYPE_KEY = new NamespacedKey(ClickMobs.INSTANCE, "type");
     public static final NamespacedKey NBT_KEY = new NamespacedKey(ClickMobs.INSTANCE, "nbt");
+
+    private static final Set<String> WHITELISTED_MOBS = new HashSet<>(Setting.WHITELISTED_MOBS.getList());
+    private static final Set<String> BLACKLISTED_MOBS = new HashSet<>(Setting.BLACKLISTED_MOBS.getList());
 
     private final NBTHelper nbtHelper;
 
@@ -34,28 +43,35 @@ public class PickupManager implements Listener {
         this.nbtHelper = nbtHelper;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
-    
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     private void onInteract(PlayerInteractEntityEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) return;
         if (!(event.getRightClicked() instanceof LivingEntity entity)) return;
         Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!player.isSneaking()) return;
         event.setCancelled(true);
         if (Permission.PICKUP.lacksAndNotify(player)) return;
+        if (!canBePickedUp(entity)) {
+            Message.BLACKLISTED_MOB.send(player);
+            return;
+        }
         ItemStack item;
         try {
             item = toItemStack(entity);
         } catch (IllegalArgumentException exception) {
-            MessageType.FAIL.send(player, "Failed to write mob data.");
+            Message.WRITE_ERROR.send(player);
             ClickMobs.LOGGER.severe("Failed to write mob data: " + exception.getMessage());
             return;
         }
         Utils.setHandOrGive(player, item);
-        MessageType.PICK_UP.sendActionbarSilently(player, "You picked up a " + formatEntity(entity));
+        Message.PICK_UP.parameterizer()
+                .put("mob", formatEntity(entity))
+                .sendActionbarSilently(player);
         sendPickupEffect(entity);
     }
-    
+
     private static String formatEntity(Entity entity) {
         return entity.getType().name().toLowerCase().replace("_", " ");
     }
@@ -66,7 +82,7 @@ public class PickupManager implements Listener {
         world.spawnParticle(Particle.SWEEP_ATTACK, location, 1);
         world.playSound(location, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, .5f);
     }
-    
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     private void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
@@ -76,7 +92,6 @@ public class PickupManager implements Listener {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
         if (!isEntity(item)) return;
-
         event.setCancelled(true);
         if (Permission.PLACE.lacksAndNotify(player)) return;
         Block block = event.getBlockPlaced();
@@ -92,18 +107,18 @@ public class PickupManager implements Listener {
             Block blockBelow = block.getRelative(BlockFace.DOWN);
             world.spawnParticle(Particle.BLOCK_CRACK, location, 30, blockBelow.getBlockData());
         } catch (IllegalArgumentException exception) {
-            MessageType.FAIL.send(player, "Failed to read mob data.");
+            Message.READ_ERROR.send(player);
             ClickMobs.LOGGER.severe("Failed to read mob data: " + exception.getMessage());
         }
     }
-    
+
     public boolean isEntity(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return false;
         PersistentDataContainer data = meta.getPersistentDataContainer();
         return data.has(ENTITY_KEY, PersistentDataType.BOOLEAN);
     }
-    
+
     public ItemStack toItemStack(LivingEntity entity) {
         ItemStack item = createItem(entity);
         writeData(entity, item);
@@ -121,7 +136,7 @@ public class PickupManager implements Listener {
         data.set(NBT_KEY, PersistentDataType.STRING, nbt);
         item.setItemMeta(meta);
     }
-    
+
     public LivingEntity spawnFromItemStack(ItemStack item, Location location) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
@@ -144,17 +159,25 @@ public class PickupManager implements Listener {
         String entityName = formatEntity(entity);
         String name = Utils.capitalize(entityName);
         if (entity instanceof Ageable ageable && !ageable.isAdult()) {
-            name = "Baby " + name;
+            name = Message.BABY_MOB.parameterizer()
+                    .put("mob", name)
+                    .toString();
         }
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
         meta.setDisplayName(ChatColor.YELLOW + name);
-        meta.setLore(List.of(
-                ChatColor.DARK_GRAY + "Right click to place the " + entityName + " back."
-        ));
+        meta.setLore(Message.MOB.getParameterizedLore(Parameterizer.empty().put("mob", entityName)));
         item.setItemMeta(meta);
         MobTextures.setEntityTexture(item, entity);
         return item;
+    }
+
+    private static boolean canBePickedUp(Entity entity) {
+        String name = entity.getType().name();
+        if (!WHITELISTED_MOBS.isEmpty()) {
+            return WHITELISTED_MOBS.contains(name);
+        }
+        return !BLACKLISTED_MOBS.contains(name);
     }
 }
