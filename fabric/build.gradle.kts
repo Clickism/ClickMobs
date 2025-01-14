@@ -1,5 +1,6 @@
 plugins {
 	id("fabric-loom") version "1.9-SNAPSHOT"
+	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
 version = "${parent?.name}-${property("mod.version")}+${stonecutter.current.project}"
@@ -42,6 +43,30 @@ java {
 tasks.jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}" }
+	}
+}
+
+publishMods {
+	displayName.set("ClickMobs ${property("mod.version")} for Fabric")
+	file.set(tasks.remapJar.get().archiveFile)
+	version.set(project.version.toString())
+	changelog.set(rootProject.file("CHANGELOG.md").readText())
+	type.set(STABLE)
+	modLoaders.add("fabric")
+	val mcVersions = property("mod.target_mc_versions").toString().split(',')
+	modrinth {
+		accessToken.set(System.getenv("MODRINTH_TOKEN"))
+		projectId.set("tRdRT5jS")
+		requires("fabric-api")
+		minecraftVersions.addAll(mcVersions)
+	}
+	curseforge {
+		accessToken.set(System.getenv("CURSEFORGE_TOKEN"))
+		projectId.set("1179556")
+		clientRequired.set(false)
+		serverRequired.set(true)
+		requires("fabric-api")
+		minecraftVersions.addAll(mcVersions)
 	}
 }
 
