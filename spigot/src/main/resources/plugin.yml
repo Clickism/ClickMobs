@@ -4,3 +4,10 @@ main: me.clickism.clickmobs.ClickMobs
 api-version: '1.20'
 authors: [ Clickism ]
 description: A simple plugin that allows you to pick up any mob.
+permissions:
+  clickmobs.pickup:
+    description: Allows players to pick up mobs.
+    default: true
+  clickmobs.place:
+    description: Allows players to place mobs.
+    default: true
