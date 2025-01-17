@@ -26,3 +26,7 @@ them around.**
 
 ## Compatibility
 - ClickMobs is fully compatible with [ClickVillagers](https://modrinth.com/plugin/clickvillagers)!
+
+## Licensing
+- This project is licensed under the GPT v3 license.
+- Refer to LICENSE.md for more information.
