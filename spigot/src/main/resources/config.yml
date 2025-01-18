@@ -2,7 +2,7 @@
 # ClickMobs Settings
 # NOTE: RELOAD/RESTART SERVER FOR CHANGES TO TAKE EFFECT
 #########################################################
-config-version: 2
+config-version: 3
 #########################################################
 
 # Language of the plugin.
@@ -44,6 +44,8 @@ blacklisted-mobs:
 
 # Set a custom model data for the picked up mobs.
 # This is useful for resource packs that want to change the model/texture of picked up mobs.
-# Set to 0 to disable.
-# Default: 0
-custom-model-data: 0
+# Example:
+# custom-model-data:
+#   creeper: 10
+#   skeleton: 11
+custom-model-data:
