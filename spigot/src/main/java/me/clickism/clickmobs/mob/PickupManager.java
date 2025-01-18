@@ -164,7 +164,7 @@ public class PickupManager implements Listener {
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
         meta.setDisplayName(ChatColor.YELLOW + name);
         meta.setLore(Message.MOB.getParameterizedLore(Parameterizer.empty().put("mob", entityName)));
-        int modelDataOverride = Setting.CUSTOM_MODEL_DATA.getInt();
+        int modelDataOverride = Setting.getCustomModelData(entity);
         if (modelDataOverride != 0) {
             meta.setCustomModelData(modelDataOverride);
         }
@@ -188,7 +188,7 @@ public class PickupManager implements Listener {
     }
 
     private static boolean canPickUp(Player player, Entity entity) {
-        String name = entity.getType().name();
+        String name = Utils.getEntityTypeName(entity.getType());
         boolean isWhitelisted = Setting.WHITELISTED_MOBS.getList().contains(name);
         if (isWhitelisted) {
             return true;
