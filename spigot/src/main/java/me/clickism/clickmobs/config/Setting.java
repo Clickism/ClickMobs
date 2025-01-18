@@ -7,6 +7,8 @@
 package me.clickism.clickmobs.config;
 
 import me.clickism.clickmobs.ClickMobs;
+import me.clickism.clickmobs.util.Utils;
+import org.bukkit.entity.LivingEntity;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,10 +24,7 @@ public enum Setting {
     ONLY_ALLOW_WHITELISTED(false),
 
     WHITELISTED_MOBS(List.of()),
-    BLACKLISTED_MOBS(List.of("wither", "ender_dragon")),
-
-    CUSTOM_MODEL_DATA(0)
-    ;
+    BLACKLISTED_MOBS(List.of("wither", "ender_dragon"));
 
     private static SettingManager settingManager;
 
@@ -103,5 +102,14 @@ public enum Setting {
     public static void reloadSettings() throws IOException {
         settingManager = null;
         initialize();
+    }
+
+    public static int getCustomModelData(LivingEntity entity) {
+        String mobKey = Utils.getEntityTypeName(entity.getType()).toLowerCase();
+        Object value = settingManager.get("custom-model-data." + mobKey);
+        if (value instanceof Integer) {
+            return (int) value;
+        }
+        return 0;
     }
 }
