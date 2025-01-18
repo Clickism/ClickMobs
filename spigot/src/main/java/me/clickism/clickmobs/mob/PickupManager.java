@@ -143,7 +143,7 @@ public class PickupManager implements Listener {
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
         PersistentDataContainer data = meta.getPersistentDataContainer();
         if (!data.has(ENTITY_KEY, PersistentDataType.BOOLEAN))
-            throw new IllegalArgumentException("Item is not a villager");
+            throw new IllegalArgumentException("Item is not a mob");
         if (!data.has(TYPE_KEY, PersistentDataType.STRING))
             throw new IllegalArgumentException("Entity type is missing");
         EntityType type = EntityType.valueOf(data.get(TYPE_KEY, PersistentDataType.STRING));
