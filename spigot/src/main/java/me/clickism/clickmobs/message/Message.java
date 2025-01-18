@@ -6,11 +6,11 @@
 
 package me.clickism.clickmobs.message;
 
+import me.clickism.clickmobs.ClickMobs;
 import me.clickism.clickmobs.config.Setting;
 import me.clickism.clickmobs.util.MessageParameterizer;
 import me.clickism.clickmobs.util.Parameterizer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,9 +32,14 @@ public enum Message {
 
     @WithParameters("mob")
     BABY_MOB,
-    MOB;
+    MOB,
 
-    private static final MessageType MISSING = MessageType.silent("&2[?] &c", "&8< &2? &c%s &8>");
+    @WithParameters("usage")
+    USAGE(MessageType.FAIL),
+    RELOAD_SUCCESS(MessageType.CONFIRM),
+    RELOAD_FAIL(MessageType.FAIL);
+
+    private static final MessageType MISSING = MessageType.silent("&2[?] &c", "&8< &2? &f%s &8>");
 
     @Nullable
     private static MessageManager messageManager;
@@ -91,10 +96,10 @@ public enum Message {
         return new MessageParameterizer(this);
     }
 
-    public static void initialize(JavaPlugin plugin) throws IOException {
+    public static void initialize() throws IOException {
         if (messageManager != null) return;
-        Setting.initialize(plugin);
-        messageManager = new MessageManager(plugin, Setting.LANGUAGE.getString());
+        Setting.initialize();
+        messageManager = new MessageManager(ClickMobs.INSTANCE, Setting.LANGUAGE.getString());
     }
 
     @NotNull
