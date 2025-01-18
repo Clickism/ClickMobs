@@ -7,7 +7,7 @@
 package me.clickism.clickmobs.util;
 
 import me.clickism.clickmobs.message.Message;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 public class MessageParameterizer extends Parameterizer {
@@ -38,20 +38,20 @@ public class MessageParameterizer extends Parameterizer {
         return replace(message.toString());
     }
 
-    public void send(Player player) {
-        message.getTypeOrDefault().send(player, toString());
+    public void send(CommandSender sender) {
+        message.getTypeOrDefault().send(sender, toString());
     }
 
-    public void sendSilently(Player player) {
-        message.getTypeOrDefault().sendSilently(player, toString());
+    public void sendSilently(CommandSender sender) {
+        message.getTypeOrDefault().sendSilently(sender, toString());
     }
 
-    public void sendActionbar(Player player) {
-        message.getTypeOrDefault().sendActionbar(player, toString());
+    public void sendActionbar(CommandSender sender) {
+        message.getTypeOrDefault().sendActionbar(sender, toString());
     }
 
-    public void sendActionbarSilently(Player player) {
-        message.getTypeOrDefault().sendActionbarSilently(player, toString());
+    public void sendActionbarSilently(CommandSender sender) {
+        message.getTypeOrDefault().sendActionbarSilently(sender, toString());
     }
 
     public static MessageParameterizer of(Message message) {
