@@ -8,6 +8,7 @@ package me.clickism.clickmobs.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -47,5 +48,14 @@ public class Utils {
         player.getInventory().addItem(item).forEach((index, toDrop) -> {
             player.getWorld().dropItem(player.getLocation(), toDrop);
         });
+    }
+
+    @SuppressWarnings("deprecation")
+    public static String getEntityTypeName(EntityType type) {
+        String name = type.getName();
+        if (name != null) {
+            return name;
+        }
+        return type.name();
     }
 }
