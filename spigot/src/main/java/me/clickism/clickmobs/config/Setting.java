@@ -106,7 +106,7 @@ public enum Setting {
 
     public static int getCustomModelData(LivingEntity entity) {
         String mobKey = Utils.getEntityTypeName(entity.getType()).toLowerCase();
-        Object value = settingManager.get("custom-model-data." + mobKey);
+        Object value = settingManager.get("custom-model-datas." + mobKey);
         if (value instanceof Integer) {
             return (int) value;
         }

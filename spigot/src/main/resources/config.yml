@@ -44,8 +44,7 @@ blacklisted-mobs:
 
 # Set a custom model data for the picked up mobs.
 # This is useful for resource packs that want to change the model/texture of picked up mobs.
-# Example:
-# custom-model-data:
-#   creeper: 10
-#   skeleton: 11
-custom-model-data:
+# Value 0 will not change the model.
+custom-model-datas:
+  creeper: 0
+  skeleton: 0
