@@ -10,5 +10,8 @@
   "baby_mob": "Baby {mob}",
   "mob.lore": [
     "&8Right click to place the {mob} back."
-  ]
+  ],
+  "usage": "&cUsage: {usage}",
+  "reload_success": "Reloaded &lClickMobs &aconfig.",
+  "reload_fail": "Failed to reload &lClickMobs &cconfig."
 }

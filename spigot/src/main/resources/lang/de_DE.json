@@ -11,5 +11,8 @@
   "mob.lore": [
     "&8Rechtsklick, um den ^{mob}",
     "&8zurück zu platzieren."
-  ]
+  ],
+  "usage": "&cAnwendung: {usage}",
+  "reload_success": "&lClickMobs-&aKonfiguration wurde neu geladen.",
+  "reload_fail": "Neuladen der &lClickMobs&c-Konfiguration fehlgeschlagen."
 }
