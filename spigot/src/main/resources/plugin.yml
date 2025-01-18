@@ -4,6 +4,12 @@ main: me.clickism.clickmobs.ClickMobs
 api-version: '1.20'
 authors: [ Clickism ]
 description: A simple plugin that allows you to pick up any mob.
+commands:
+  clickmobs:
+    description: Main command for ClickMobs.
+    usage: /clickmobs <reload>
+    permission: clickmobs.reload
+    aliases: [ cm ]
 permissions:
   clickmobs.pickup:
     description: Allows players to pick up mobs.
@@ -11,3 +17,346 @@ permissions:
   clickmobs.place:
     description: Allows players to place mobs.
     default: true
+  clickmobs.reload:
+    description: Allows players to reload the plugin.
+    default: op
+  # Mob specific permissions, must be enabled in the config.
+  # Pick up permissions
+  clickmobs.pickup.elder_guardian:
+    default: false
+  clickmobs.pickup.wither_skeleton:
+    default: false
+  clickmobs.pickup.stray:
+    default: false
+  clickmobs.pickup.husk:
+    default: false
+  clickmobs.pickup.zombie_villager:
+    default: false
+  clickmobs.pickup.skeleton_horse:
+    default: false
+  clickmobs.pickup.zombie_horse:
+    default: false
+  clickmobs.pickup.armor_stand:
+    default: false
+  clickmobs.pickup.donkey:
+    default: false
+  clickmobs.pickup.mule:
+    default: false
+  clickmobs.pickup.evoker:
+    default: false
+  clickmobs.pickup.vex:
+    default: false
+  clickmobs.pickup.vindicator:
+    default: false
+  clickmobs.pickup.illusioner:
+    default: false
+  clickmobs.pickup.creeper:
+    default: false
+  clickmobs.pickup.skeleton:
+    default: false
+  clickmobs.pickup.spider:
+    default: false
+  clickmobs.pickup.giant:
+    default: false
+  clickmobs.pickup.zombie:
+    default: false
+  clickmobs.pickup.slime:
+    default: false
+  clickmobs.pickup.ghast:
+    default: false
+  clickmobs.pickup.zombified_piglin:
+    default: false
+  clickmobs.pickup.enderman:
+    default: false
+  clickmobs.pickup.cave_spider:
+    default: false
+  clickmobs.pickup.silverfish:
+    default: false
+  clickmobs.pickup.blaze:
+    default: false
+  clickmobs.pickup.magma_cube:
+    default: false
+  clickmobs.pickup.ender_dragon:
+    default: false
+  clickmobs.pickup.wither:
+    default: false
+  clickmobs.pickup.bat:
+    default: false
+  clickmobs.pickup.witch:
+    default: false
+  clickmobs.pickup.endermite:
+    default: false
+  clickmobs.pickup.guardian:
+    default: false
+  clickmobs.pickup.shulker:
+    default: false
+  clickmobs.pickup.pig:
+    default: false
+  clickmobs.pickup.sheep:
+    default: false
+  clickmobs.pickup.cow:
+    default: false
+  clickmobs.pickup.chicken:
+    default: false
+  clickmobs.pickup.squid:
+    default: false
+  clickmobs.pickup.wolf:
+    default: false
+  clickmobs.pickup.mooshroom:
+    default: false
+  clickmobs.pickup.snow_golem:
+    default: false
+  clickmobs.pickup.ocelot:
+    default: false
+  clickmobs.pickup.iron_golem:
+    default: false
+  clickmobs.pickup.horse:
+    default: false
+  clickmobs.pickup.rabbit:
+    default: false
+  clickmobs.pickup.polar_bear:
+    default: false
+  clickmobs.pickup.llama:
+    default: false
+  clickmobs.pickup.parrot:
+    default: false
+  clickmobs.pickup.villager:
+    default: false
+  clickmobs.pickup.turtle:
+    default: false
+  clickmobs.pickup.phantom:
+    default: false
+  clickmobs.pickup.cod:
+    default: false
+  clickmobs.pickup.salmon:
+    default: false
+  clickmobs.pickup.pufferfish:
+    default: false
+  clickmobs.pickup.tropical_fish:
+    default: false
+  clickmobs.pickup.drowned:
+    default: false
+  clickmobs.pickup.dolphin:
+    default: false
+  clickmobs.pickup.cat:
+    default: false
+  clickmobs.pickup.panda:
+    default: false
+  clickmobs.pickup.pillager:
+    default: false
+  clickmobs.pickup.ravager:
+    default: false
+  clickmobs.pickup.trader_llama:
+    default: false
+  clickmobs.pickup.wandering_trader:
+    default: false
+  clickmobs.pickup.fox:
+    default: false
+  clickmobs.pickup.bee:
+    default: false
+  clickmobs.pickup.hoglin:
+    default: false
+  clickmobs.pickup.piglin:
+    default: false
+  clickmobs.pickup.strider:
+    default: false
+  clickmobs.pickup.zoglin:
+    default: false
+  clickmobs.pickup.piglin_brute:
+    default: false
+  clickmobs.pickup.axolotl:
+    default: false
+  clickmobs.pickup.glow_squid:
+    default: false
+  clickmobs.pickup.goat:
+    default: false
+  clickmobs.pickup.allay:
+    default: false
+  clickmobs.pickup.frog:
+    default: false
+  clickmobs.pickup.tadpole:
+    default: false
+  clickmobs.pickup.warden:
+    default: false
+  clickmobs.pickup.camel:
+    default: false
+  clickmobs.pickup.sniffer:
+    default: false
+  clickmobs.pickup.breeze:
+    default: false
+  clickmobs.pickup.armadillo:
+    default: false
+  clickmobs.pickup.bogged:
+    default: false
+  clickmobs.pickup.creaking:
+    default: false
+
+  # Place permissions
+  clickmobs.place.elder_guardian:
+    default: false
+  clickmobs.place.wither_skeleton:
+    default: false
+  clickmobs.place.stray:
+    default: false
+  clickmobs.place.husk:
+    default: false
+  clickmobs.place.zombie_villager:
+    default: false
+  clickmobs.place.skeleton_horse:
+    default: false
+  clickmobs.place.zombie_horse:
+    default: false
+  clickmobs.place.armor_stand:
+    default: false
+  clickmobs.place.donkey:
+    default: false
+  clickmobs.place.mule:
+    default: false
+  clickmobs.place.evoker:
+    default: false
+  clickmobs.place.vex:
+    default: false
+  clickmobs.place.vindicator:
+    default: false
+  clickmobs.place.illusioner:
+    default: false
+  clickmobs.place.creeper:
+    default: false
+  clickmobs.place.skeleton:
+    default: false
+  clickmobs.place.spider:
+    default: false
+  clickmobs.place.giant:
+    default: false
+  clickmobs.place.zombie:
+    default: false
+  clickmobs.place.slime:
+    default: false
+  clickmobs.place.ghast:
+    default: false
+  clickmobs.place.zombified_piglin:
+    default: false
+  clickmobs.place.enderman:
+    default: false
+  clickmobs.place.cave_spider:
+    default: false
+  clickmobs.place.silverfish:
+    default: false
+  clickmobs.place.blaze:
+    default: false
+  clickmobs.place.magma_cube:
+    default: false
+  clickmobs.place.ender_dragon:
+    default: false
+  clickmobs.place.wither:
+    default: false
+  clickmobs.place.bat:
+    default: false
+  clickmobs.place.witch:
+    default: false
+  clickmobs.place.endermite:
+    default: false
+  clickmobs.place.guardian:
+    default: false
+  clickmobs.place.shulker:
+    default: false
+  clickmobs.place.pig:
+    default: false
+  clickmobs.place.sheep:
+    default: false
+  clickmobs.place.cow:
+    default: false
+  clickmobs.place.chicken:
+    default: false
+  clickmobs.place.squid:
+    default: false
+  clickmobs.place.wolf:
+    default: false
+  clickmobs.place.mooshroom:
+    default: false
+  clickmobs.place.snow_golem:
+    default: false
+  clickmobs.place.ocelot:
+    default: false
+  clickmobs.place.iron_golem:
+    default: false
+  clickmobs.place.horse:
+    default: false
+  clickmobs.place.rabbit:
+    default: false
+  clickmobs.place.polar_bear:
+    default: false
+  clickmobs.place.llama:
+    default: false
+  clickmobs.place.parrot:
+    default: false
+  clickmobs.place.villager:
+    default: false
+  clickmobs.place.turtle:
+    default: false
+  clickmobs.place.phantom:
+    default: false
+  clickmobs.place.cod:
+    default: false
+  clickmobs.place.salmon:
+    default: false
+  clickmobs.place.pufferfish:
+    default: false
+  clickmobs.place.tropical_fish:
+    default: false
+  clickmobs.place.drowned:
+    default: false
+  clickmobs.place.dolphin:
+    default: false
+  clickmobs.place.cat:
+    default: false
+  clickmobs.place.panda:
+    default: false
+  clickmobs.place.pillager:
+    default: false
+  clickmobs.place.ravager:
+    default: false
+  clickmobs.place.trader_llama:
+    default: false
+  clickmobs.place.wandering_trader:
+    default: false
+  clickmobs.place.fox:
+    default: false
+  clickmobs.place.bee:
+    default: false
+  clickmobs.place.hoglin:
+    default: false
+  clickmobs.place.piglin:
+    default: false
+  clickmobs.place.strider:
+    default: false
+  clickmobs.place.zoglin:
+    default: false
+  clickmobs.place.piglin_brute:
+    default: false
+  clickmobs.place.axolotl:
+    default: false
+  clickmobs.place.glow_squid:
+    default: false
+  clickmobs.place.goat:
+    default: false
+  clickmobs.place.allay:
+    default: false
+  clickmobs.place.frog:
+    default: false
+  clickmobs.place.tadpole:
+    default: false
+  clickmobs.place.warden:
+    default: false
+  clickmobs.place.camel:
+    default: false
+  clickmobs.place.sniffer:
+    default: false
+  clickmobs.place.breeze:
+    default: false
+  clickmobs.place.armadillo:
+    default: false
+  clickmobs.place.bogged:
+    default: false
+  clickmobs.place.creaking:
+    default: false
