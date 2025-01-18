@@ -7,7 +7,6 @@
 package me.clickism.clickmobs.config;
 
 import me.clickism.clickmobs.ClickMobs;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,11 +16,15 @@ public enum Setting {
     LANGUAGE("en_US"),
     CHECK_UPDATE(true),
 
+    PER_MOB_PERMISSIONS(false),
+
     ALLOW_HOSTILE(false),
     ONLY_ALLOW_WHITELISTED(false),
 
     WHITELISTED_MOBS(List.of()),
     BLACKLISTED_MOBS(List.of("wither", "ender_dragon")),
+
+    CUSTOM_MODEL_DATA(0)
     ;
 
     private static SettingManager settingManager;
@@ -84,9 +87,9 @@ public enum Setting {
         return !isEnabled();
     }
 
-    public static void initialize(JavaPlugin plugin) throws IOException {
+    public static void initialize() throws IOException {
         if (settingManager != null) return;
-        settingManager = new SettingManager(plugin);
+        settingManager = new SettingManager(ClickMobs.INSTANCE);
     }
 
     public static void saveSettings() {
@@ -95,5 +98,10 @@ public enum Setting {
             return;
         }
         settingManager.getDataManager().saveConfig();
+    }
+
+    public static void reloadSettings() throws IOException {
+        settingManager = null;
+        initialize();
     }
 }
