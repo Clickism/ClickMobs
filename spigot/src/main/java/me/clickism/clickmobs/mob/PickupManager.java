@@ -30,17 +30,12 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PickupManager implements Listener {
     public static final NamespacedKey ENTITY_KEY = new NamespacedKey(ClickMobs.INSTANCE, "entity");
     public static final NamespacedKey TYPE_KEY = new NamespacedKey(ClickMobs.INSTANCE, "type");
     public static final NamespacedKey NBT_KEY = new NamespacedKey(ClickMobs.INSTANCE, "nbt");
-
-    private static final Set<String> WHITELISTED_MOBS = new HashSet<>(toUpperCase(Setting.WHITELISTED_MOBS.getList()));
-    private static final Set<String> BLACKLISTED_MOBS = new HashSet<>(toUpperCase(Setting.BLACKLISTED_MOBS.getList()));
 
     private final NBTHelper nbtHelper;
 
@@ -53,12 +48,13 @@ public class PickupManager implements Listener {
     private void onInteract(PlayerInteractEntityEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (!(event.getRightClicked() instanceof LivingEntity entity)) return;
+        if (entity instanceof HumanEntity) return;
         Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!player.isSneaking()) return;
         event.setCancelled(true);
         if (Permission.PICKUP.lacksAndNotify(player)) return;
-        if (!canBePickedUp(entity)) {
+        if (!canPickUp(player, entity)) {
             Message.BLACKLISTED_MOB.sendActionbar(player);
             return;
         }
@@ -168,6 +164,10 @@ public class PickupManager implements Listener {
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
         meta.setDisplayName(ChatColor.YELLOW + name);
         meta.setLore(Message.MOB.getParameterizedLore(Parameterizer.empty().put("mob", entityName)));
+        int modelDataOverride = Setting.CUSTOM_MODEL_DATA.getInt();
+        if (modelDataOverride != 0) {
+            meta.setCustomModelData(modelDataOverride);
+        }
         item.setItemMeta(meta);
         MobTextures.setEntityTexture(item, entity);
         return item;
@@ -187,11 +187,14 @@ public class PickupManager implements Listener {
         return name;
     }
 
-    private static boolean canBePickedUp(Entity entity) {
+    private static boolean canPickUp(Player player, Entity entity) {
         String name = entity.getType().name();
-        boolean isWhitelisted = WHITELISTED_MOBS.contains(name);
+        boolean isWhitelisted = Setting.WHITELISTED_MOBS.getList().contains(name);
         if (isWhitelisted) {
             return true;
+        }
+        if (Setting.PER_MOB_PERMISSIONS.isEnabled()) {
+            return Permission.hasPickupPermissionFor(player, name) && !Setting.BLACKLISTED_MOBS.getList().contains(name);
         }
         if (Setting.ONLY_ALLOW_WHITELISTED.isEnabled()) {
             return false;
@@ -199,12 +202,6 @@ public class PickupManager implements Listener {
         if (Setting.ALLOW_HOSTILE.isDisabled() && entity instanceof Monster) {
             return false;
         }
-        return !BLACKLISTED_MOBS.contains(name);
-    }
-
-    private static List<String> toUpperCase(List<String> list) {
-        return list.stream()
-                .map(String::toUpperCase)
-                .toList();
+        return !Setting.BLACKLISTED_MOBS.getList().contains(name);
     }
 }
