@@ -16,8 +16,8 @@ check-update: true
 # Whether to have specific permissions for each mob.
 # For example, players won't be able to pick up a creeper unless they have
 # both "clickmobs.pickup" and "clickmobs.pickup.creeper" permissions.
-# - Whitelisted mobs will still be able to be picked up without a specific permission.
-# - Blacklisted mobs will not be able to be picked up even with a specific permission.
+# - Whitelisted mobs will still be able to be picked up without a mob-specific permission.
+# - Blacklisted mobs will not be able to be picked up even with a mob-specific permission.
 # Default: false
 per-mob-permissions: false
 
