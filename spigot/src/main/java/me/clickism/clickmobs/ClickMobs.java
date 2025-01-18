@@ -6,6 +6,7 @@
 
 package me.clickism.clickmobs;
 
+import me.clickism.clickmobs.config.ReloadCommand;
 import me.clickism.clickmobs.config.Setting;
 import me.clickism.clickmobs.listener.DispenserListener;
 import me.clickism.clickmobs.listener.VehicleInteractListener;
@@ -16,6 +17,7 @@ import me.clickism.clickmobs.nbt.NBTHelperFactory;
 import me.clickism.clickmobs.util.MessageParameterizer;
 import me.clickism.clickmobs.util.UpdateChecker;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -29,7 +31,6 @@ public final class ClickMobs extends JavaPlugin {
     public static ClickMobs INSTANCE;
     public static Logger LOGGER;
 
-    // TODO: CONFIG OPTIONS: ALLOW-HOSTILE, ALLOW-BOSSES
     @Override
     public void onLoad() {
         INSTANCE = this;
@@ -40,8 +41,8 @@ public final class ClickMobs extends JavaPlugin {
     public void onEnable() {
         // Load config/messages
         try {
-            Setting.initialize(this);
-            Message.initialize(this);
+            Setting.initialize();
+            Message.initialize();
         } catch (IOException exception) {
             LOGGER.log(Level.SEVERE, "Failed to load config/messages: ", exception);
             getServer().getPluginManager().disablePlugin(this);
@@ -60,6 +61,12 @@ public final class ClickMobs extends JavaPlugin {
         PickupManager pickupManager = new PickupManager(this, nbtHelper);
         new DispenserListener(this, pickupManager);
         new VehicleInteractListener(this, pickupManager);
+
+        // Register commands
+        PluginCommand command = Bukkit.getPluginCommand("clickmobs");
+        if (command != null) {
+            command.setExecutor(new ReloadCommand());
+        }
 
         checkUpdates();
     }
