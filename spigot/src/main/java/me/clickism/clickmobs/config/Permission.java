@@ -7,11 +7,13 @@
 package me.clickism.clickmobs.config;
 
 import me.clickism.clickmobs.message.MessageType;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public enum Permission {
     PICKUP,
-    PLACE;
+    PLACE,
+    RELOAD;
 
     private static final String PLUGIN_PREFIX = "clickmobs";
     private final String permission;
@@ -21,19 +23,24 @@ public enum Permission {
         permission = PLUGIN_PREFIX + "." + name;
     }
 
-    public boolean has(Player player) {
+    public boolean has(CommandSender player) {
         return player.hasPermission(permission);
     }
 
-    public boolean lacks(Player player) {
+    public boolean lacks(CommandSender player) {
         return !has(player);
     }
 
-    public boolean lacksAndNotify(Player player) {
+    public boolean lacksAndNotify(CommandSender player) {
         if (lacks(player)) {
             MessageType.FAIL.send(player, "You don't have permission to do this.");
             return true;
         }
         return false;
+    }
+
+    public static boolean hasPickupPermissionFor(CommandSender sender, String mobName) {
+        String mobKey = mobName.toLowerCase();
+        return sender.hasPermission("clickmobs.pickup." + mobKey);
     }
 }
