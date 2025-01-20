@@ -1,1 +1,2 @@
-- Inital release
+- Fixed: Can pick up mobs when not sneaking.
+- Fixed: Allowing/disallowing hostile mobs not working.
