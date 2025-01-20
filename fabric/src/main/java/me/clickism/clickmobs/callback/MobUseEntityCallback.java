@@ -32,6 +32,7 @@ public class MobUseEntityCallback implements UseEntityCallback {
                 && ClickMobs.isClickVillagersPresent()) return ActionResult.PASS;
         if (!hand.equals(Hand.MAIN_HAND)) return ActionResult.PASS;
         if (player.isSpectator()) return ActionResult.PASS;
+        if (!player.isSneaking()) return ActionResult.PASS;
         if (!(entity instanceof LivingEntity)) return ActionResult.PASS;
         if (hitResult == null) return ActionResult.CONSUME;
         handlePickup(player, entity);
