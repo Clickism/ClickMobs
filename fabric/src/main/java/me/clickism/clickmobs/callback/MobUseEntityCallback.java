@@ -42,6 +42,7 @@ public class MobUseEntityCallback implements UseEntityCallback {
     private void handlePickup(PlayerEntity player, Entity entity) {
         if (!PickupHandler.canBePickedUp(entity)) {
             MessageType.FAIL.sendActionbar(player, Text.literal("You can't pick up this mob"));
+            return;
         }
         PickupHandler.notifyPickup(player, entity);
         ItemStack itemStack = PickupHandler.toItemStack(entity);
