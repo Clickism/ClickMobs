@@ -13,6 +13,7 @@ import me.clickism.clickmobs.message.Message;
 import me.clickism.clickmobs.nbt.NBTHelper;
 import me.clickism.clickmobs.util.Parameterizer;
 import me.clickism.clickmobs.util.Utils;
+import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -21,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -88,11 +90,8 @@ public class PickupManager implements Listener {
     private void onPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
-        ItemStack item = inventory.getItemInMainHand();
-        if (item.getType() != Material.PLAYER_HEAD) return;
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) return;
-        if (!isMob(item)) return;
+        ItemResult itemResult = getHeldMobItem(inventory);
+        if (itemResult == null) return;
         event.setCancelled(true);
         if (Permission.PLACE.lacksAndNotify(player)) return;
         Block block = event.getBlockPlaced();
@@ -100,9 +99,9 @@ public class PickupManager implements Listener {
         float yaw = player.getLocation().getYaw();
         location.setYaw((yaw + 360) % 360 - 180); // Face the entity towards the player
         try {
+            ItemStack item = itemResult.item();
             spawnFromItemStack(item, location);
-            item.setAmount(item.getAmount() - 1);
-            inventory.setItemInMainHand(item);
+            itemResult.decrementAmount(inventory);
             World world = player.getWorld();
             world.playSound(location, Sound.ENTITY_PLAYER_ATTACK_WEAK, 1, .5f);
             Block blockBelow = block.getRelative(BlockFace.DOWN);
@@ -113,7 +112,20 @@ public class PickupManager implements Listener {
         }
     }
 
+    private ItemResult getHeldMobItem(PlayerInventory inventory) {
+        ItemStack item = inventory.getItemInMainHand();
+        if (isMob(item)) {
+            return new ItemResult(item, EquipmentSlot.HAND);
+        }
+        item = inventory.getItemInOffHand();
+        if (isMob(item)) {
+            return new ItemResult(item, EquipmentSlot.OFF_HAND);
+        }
+        return null;
+    }
+
     public boolean isMob(ItemStack item) {
+        if (item.getType() != Material.PLAYER_HEAD) return false;
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return false;
         PersistentDataContainer data = meta.getPersistentDataContainer();
@@ -203,5 +215,13 @@ public class PickupManager implements Listener {
             return false;
         }
         return !Setting.BLACKLISTED_MOBS.getList().contains(name);
+    }
+
+    private record ItemResult(ItemStack item, EquipmentSlot slot) {
+        void decrementAmount(PlayerInventory inventory) {
+            ItemStack item = this.item;
+            item.setAmount(item.getAmount() - 1);
+            inventory.setItem(slot, item);
+        }
     }
 }
