@@ -34,6 +34,7 @@ public class MobUseEntityCallback implements UseEntityCallback {
         if (player.isSpectator()) return ActionResult.PASS;
         if (!player.isSneaking()) return ActionResult.PASS;
         if (!(entity instanceof LivingEntity)) return ActionResult.PASS;
+        if (entity instanceof PlayerEntity) return ActionResult.PASS;
         if (hitResult == null) return ActionResult.CONSUME;
         handlePickup(player, entity);
         return ActionResult.CONSUME;
