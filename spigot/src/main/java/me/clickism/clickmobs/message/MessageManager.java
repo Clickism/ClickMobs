@@ -24,7 +24,7 @@ import java.util.List;
 public class MessageManager {
 
     private static final int VERSION = 2;
-    private static final boolean DEBUG_OVERRIDE_MESSAGES = true;
+    private static final boolean DEBUG_OVERRIDE_MESSAGES = false;
 
     private static final String DIRECTORY_NAME = "lang";
     private static final List<String> SUPPORTED_LANGUAGES = List.of(
