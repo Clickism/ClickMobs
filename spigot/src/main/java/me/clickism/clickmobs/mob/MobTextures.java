@@ -24,7 +24,7 @@ public class MobTextures {
 
     public static final String DEFAULT_TEXTURE = "http://textures.minecraft.net/texture/ee7700096b5a2a87386d6205b4ddcc14fd33cf269362fa6893499431ce77bf9";
 
-    public static final Map<Object, String> TEXTURE_MAP = Map.ofEntries(
+    public static final Map<Object, String> TEXTURE_MAP = Map.<Object, String>ofEntries(
             Map.entry("ELDER_GUARDIAN", "http://textures.minecraft.net/texture/30f868caf19cf2124f0fef98e6b8773d27fbf42d93aab06b22ee033b2aee6447"),
             Map.entry("WITHER_SKELETON", "http://textures.minecraft.net/texture/1e4d204ebc242eca2148f5853e3af00f84f0d674099dc394f6d2924b240ca2e3"),
             Map.entry("STRAY", "http://textures.minecraft.net/texture/9e391c6e535f7aa5a2b6ee6d137f59f2d7c60def88853ba611ceb2d16a7e7c73"),
@@ -123,7 +123,10 @@ public class MobTextures {
         item.setItemMeta(meta);
     }
 
+    @SuppressWarnings("deprecation")
     private static URL getTexture(EntityType type) throws MalformedURLException {
+        String name = type.getName();
+        if (name == null) return URI.create(DEFAULT_TEXTURE).toURL();
         return URI.create(TEXTURE_MAP.getOrDefault(type.getName().toUpperCase(), DEFAULT_TEXTURE)).toURL();
     }
 }
