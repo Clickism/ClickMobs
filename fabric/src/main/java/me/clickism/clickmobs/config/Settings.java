@@ -15,6 +15,7 @@ import java.util.function.Function;
 
 public enum Settings {
     CONFIG_VERSION(0),
+    CHECK_UPDATE(true),
 
     ALLOW_HOSTILE(false),
     ONLY_ALLOW_WHITELISTED(false),
