@@ -8,13 +8,18 @@ package me.clickism.clickmobs;
 
 import me.clickism.clickmobs.callback.MobUseBlockCallback;
 import me.clickism.clickmobs.callback.MobUseEntityCallback;
+import me.clickism.clickmobs.callback.UpdateNotifier;
 import me.clickism.clickmobs.callback.VehicleUseEntityCallback;
 import me.clickism.clickmobs.config.Config;
+import me.clickism.clickmobs.config.Settings;
+import me.clickism.clickmobs.util.UpdateChecker;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.MinecraftVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +27,9 @@ import java.io.IOException;
 
 public class ClickMobs implements ModInitializer {
 	public static final String MOD_ID = "clickmobs";
-
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	private static String newerVersion = null;
 
 	@Override
 	public void onInitialize() {
@@ -35,6 +41,24 @@ public class ClickMobs implements ModInitializer {
 		} catch (IOException e) {
 			LOGGER.error("Failed to load config file", e);
 		}
+		if (Settings.CHECK_UPDATE.isEnabled()) {
+			checkUpdates();
+			ServerPlayConnectionEvents.JOIN.register(new UpdateNotifier(() -> newerVersion));
+		}
+	}
+
+	private void checkUpdates() {
+		String modVersion = FabricLoader.getInstance().getModContainer(MOD_ID)
+				.map(container -> container.getMetadata().getVersion().getFriendlyString())
+				.orElse(null);
+		String minecraftVersion = MinecraftVersion.CURRENT.getName();
+		new UpdateChecker(MOD_ID, "fabric", minecraftVersion).checkVersion(version -> {
+			if (modVersion == null || UpdateChecker.getRawVersion(modVersion).equals(version)) {
+				return;
+			}
+			newerVersion = version;
+			LOGGER.info("Newer version available: {}", version);
+		});
 	}
 
 	public static boolean isClickVillagersPresent() {
