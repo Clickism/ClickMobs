@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("io.github.patrick.remapper") version "1.4.2"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 val pluginVersion = property("plugin_version").toString()
@@ -39,6 +40,11 @@ java {
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
     }
+}
+
+tasks.runServer {
+    dependsOn(tasks.remap)
+    minecraftVersion("1.21.5")
 }
 
 tasks.remap {
