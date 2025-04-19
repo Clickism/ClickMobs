@@ -1,1 +1,3 @@
-- Fixed: Can pick up players.
+- Updated to 1.21.5
+- Added update checker.
+- Added config option "check-update" to enable/disable update checker.
