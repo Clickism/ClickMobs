@@ -120,7 +120,10 @@ public class PickupHandler {
         try {
             NbtCompound nbt = readCustomData(itemStack);
             if (nbt == null) return null;
-            String id = nbt.getString(TYPE_KEY);
+            //? if >=1.21.5 {
+            String id = nbt.getString(TYPE_KEY).orElse(null);
+            //?} else
+            /*String id = nbt.getString(TYPE_KEY);*/
             if (id == null) return null;
             EntityType<?> type = EntityType.get(id).orElse(null);
             if (type == null) return null;

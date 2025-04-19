@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.BlockStateParticleEffect;
@@ -50,7 +51,9 @@ public class MobUseBlockCallback implements UseBlockCallback {
         world.spawnEntity(entity);
         itemStack.decrement(1);
         if (itemStack.getCount() <= 0) {
-            player.getInventory().setStack(player.getInventory().selectedSlot, Items.AIR.getDefaultStack());
+            PlayerInventory inventory = player.getInventory();
+            int slot = VersionHelper.getSelectedSlot(inventory);
+            inventory.setStack(slot, Items.AIR.getDefaultStack());
         }
         BlockPos posBelow = pos.down();
         VersionHelper.playSound(player, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.NEUTRAL, 1, .5f);
