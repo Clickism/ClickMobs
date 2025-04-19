@@ -9,11 +9,10 @@ package me.clickism.clickmobs.mob;
 import me.clickism.clickmobs.ClickMobs;
 import me.clickism.clickmobs.config.Permission;
 import me.clickism.clickmobs.config.Setting;
+import me.clickism.clickmobs.entity.EntitySaver;
 import me.clickism.clickmobs.message.Message;
-import me.clickism.clickmobs.nbt.NBTHelper;
 import me.clickism.clickmobs.util.Parameterizer;
 import me.clickism.clickmobs.util.Utils;
-import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -22,7 +21,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -32,17 +30,15 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
-
 public class PickupManager implements Listener {
     public static final NamespacedKey ENTITY_KEY = new NamespacedKey(ClickMobs.INSTANCE, "entity");
     public static final NamespacedKey TYPE_KEY = new NamespacedKey(ClickMobs.INSTANCE, "type");
     public static final NamespacedKey NBT_KEY = new NamespacedKey(ClickMobs.INSTANCE, "nbt");
 
-    private final NBTHelper nbtHelper;
+    private final EntitySaver entitySaver;
 
-    public PickupManager(JavaPlugin plugin, NBTHelper nbtHelper) {
-        this.nbtHelper = nbtHelper;
+    public PickupManager(JavaPlugin plugin, EntitySaver entitySaver) {
+        this.entitySaver = entitySaver;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -145,7 +141,7 @@ public class PickupManager implements Listener {
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(ENTITY_KEY, PersistentDataType.BOOLEAN, true);
         data.set(TYPE_KEY, PersistentDataType.STRING, entity.getType().name());
-        String nbt = nbtHelper.write(entity);
+        String nbt = entitySaver.writeToString(entity);
         data.set(NBT_KEY, PersistentDataType.STRING, nbt);
         item.setItemMeta(meta);
     }
@@ -161,9 +157,8 @@ public class PickupManager implements Listener {
         EntityType type = EntityType.valueOf(data.get(TYPE_KEY, PersistentDataType.STRING));
         World world = location.getWorld();
         if (world == null) throw new IllegalArgumentException("World is null");
-        LivingEntity entity = (LivingEntity) world.spawnEntity(location, type);
         String nbt = data.get(NBT_KEY, PersistentDataType.STRING);
-        nbtHelper.read(entity, nbt);
+        LivingEntity entity = (LivingEntity) entitySaver.readAndSpawnAt(nbt, type, location);
         entity.teleport(location);
         return entity;
     }
