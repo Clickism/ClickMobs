@@ -6,19 +6,16 @@
 
 package me.clickism.clickmobs.mob;
 
-import me.clickism.clickmobs.config.Settings;
 import me.clickism.clickmobs.util.MessageType;
 import me.clickism.clickmobs.util.VersionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtString;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -30,9 +27,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 //? if >=1.21.1 {
 import net.minecraft.component.DataComponentTypes;
@@ -48,9 +43,6 @@ public class PickupHandler {
     private static final String TYPE_KEY = "EntityType";
     //? if <1.21.1
     /*private static final String DATA_KEY = "ClickMobsData";*/
-
-    private static final Set<String> WHITELISTED_MOBS = new HashSet<>(Settings.WHITELISTED_MOBS.getStringList());
-    private static final Set<String> BLACKLISTED_MOBS = new HashSet<>(Settings.BLACKLISTED_MOBS.getStringList());
 
     public static <T extends Entity> ItemStack toItemStack(T entity) {
         NbtCompound nbt = new NbtCompound();
@@ -148,21 +140,6 @@ public class PickupHandler {
             return Text.literal("Baby ").append(name);
         }
         return name.copy();
-    }
-
-    public static boolean canBePickedUp(Entity entity) {
-        String name = entity.getType().getUntranslatedName();
-        boolean isWhitelisted = WHITELISTED_MOBS.contains(name);
-        if (isWhitelisted) {
-            return true;
-        }
-        if (Settings.ONLY_ALLOW_WHITELISTED.isEnabled()) {
-            return false;
-        }
-        if (Settings.ALLOW_HOSTILE.isDisabled() && entity instanceof Monster) {
-            return false;
-        }
-        return !BLACKLISTED_MOBS.contains(name);
     }
 
     public static void notifyPickup(PlayerEntity player, Entity entity) {

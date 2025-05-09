@@ -10,8 +10,8 @@ import me.clickism.clickmobs.callback.MobUseBlockCallback;
 import me.clickism.clickmobs.callback.MobUseEntityCallback;
 import me.clickism.clickmobs.callback.UpdateNotifier;
 import me.clickism.clickmobs.callback.VehicleUseEntityCallback;
-import me.clickism.clickmobs.config.Config;
-import me.clickism.clickmobs.config.Settings;
+import me.clickism.clickmobs.predicate.MobList;
+import me.clickism.clickmobs.predicate.MobListParser;
 import me.clickism.clickmobs.util.UpdateChecker;
 import net.fabricmc.api.ModInitializer;
 
@@ -23,7 +23,7 @@ import net.minecraft.MinecraftVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import static me.clickism.clickmobs.ClickMobsConfig.*;
 
 public class ClickMobs implements ModInitializer {
 	public static final String MOD_ID = "clickmobs";
@@ -33,15 +33,14 @@ public class ClickMobs implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		UseEntityCallback.EVENT.register(new MobUseEntityCallback());
+		CONFIG.load();
+		MobListParser parser = new MobListParser();
+		MobList whitelistedMobs = parser.parseMobList(CONFIG.get(WHITELISTED_MOBS));
+		MobList blacklistedMobs = parser.parseMobList(CONFIG.get(BLACKLISTED_MOBS));
+		UseEntityCallback.EVENT.register(new MobUseEntityCallback(whitelistedMobs, blacklistedMobs));
 		UseEntityCallback.EVENT.register(new VehicleUseEntityCallback());
 		UseBlockCallback.EVENT.register(new MobUseBlockCallback());
-		try {
-			new Config("ClickMobs.json");
-		} catch (IOException e) {
-			LOGGER.error("Failed to load config file", e);
-		}
-		if (Settings.CHECK_UPDATE.isEnabled()) {
+		if (CONFIG.get(CHECK_UPDATE)) {
 			checkUpdates();
 			ServerPlayConnectionEvents.JOIN.register(new UpdateNotifier(() -> newerVersion));
 		}

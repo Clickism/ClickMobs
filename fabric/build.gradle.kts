@@ -10,11 +10,18 @@ base {
 	archivesName.set(property("archives_base_name").toString())
 }
 
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
 dependencies {
 	minecraft("com.mojang:minecraft:${stonecutter.current.project}")
 	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+	// todo: shadow jar
+	implementation(include("me.clickism:configured:0.1")!!)
 }
 
 tasks.processResources {
