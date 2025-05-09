@@ -9,7 +9,6 @@ package me.clickism.clickmobs.message;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import me.clickism.clickmobs.config.Setting;
 import me.clickism.clickmobs.serialization.JSONDataManager;
 import me.clickism.clickmobs.util.Utils;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static me.clickism.clickmobs.ClickMobsConfig.*;
 
 public class MessageManager {
 
@@ -42,8 +43,8 @@ public class MessageManager {
         if (!new File(directory, fileName).exists() && !SUPPORTED_LANGUAGES.contains(languageCode)) {
             String defaultLanguage = SUPPORTED_LANGUAGES.get(0);
             plugin.getLogger().warning("Language \"" + languageCode + "\" not found. Reverting to \"" + defaultLanguage + "\".");
-            Setting.LANGUAGE.set(defaultLanguage);
-            Setting.saveSettings();
+            CONFIG.set(LANGUAGE, defaultLanguage);
+            CONFIG.save();
             fileName = defaultLanguage + ".json";
         }
         dataManager = new JSONDataManager(plugin, directory, fileName);

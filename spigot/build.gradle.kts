@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("com.gradleup.shadow") version "8.3.5"
     id("io.github.patrick.remapper") version "1.4.2"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
@@ -52,8 +53,19 @@ tasks.remap {
     version.set("1.20.1")
 }
 
+tasks.jar {
+    enabled = false
+}
+
 tasks.build {
     dependsOn(tasks.remap)
+    dependsOn(tasks.shadowJar)
+}
+
+tasks.shadowJar {
+    archiveClassifier.set("")
+    isEnableRelocation = true
+    relocationPrefix = "me.clickism.shadow"
 }
 
 tasks.withType<JavaCompile>().configureEach {

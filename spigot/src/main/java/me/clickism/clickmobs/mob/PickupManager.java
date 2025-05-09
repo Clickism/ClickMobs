@@ -8,9 +8,9 @@ package me.clickism.clickmobs.mob;
 
 import me.clickism.clickmobs.ClickMobs;
 import me.clickism.clickmobs.config.Permission;
-import me.clickism.clickmobs.config.Setting;
 import me.clickism.clickmobs.entity.EntitySaver;
 import me.clickism.clickmobs.message.Message;
+import me.clickism.clickmobs.predicate.MobList;
 import me.clickism.clickmobs.util.Parameterizer;
 import me.clickism.clickmobs.util.Utils;
 import org.bukkit.*;
@@ -30,6 +30,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static me.clickism.clickmobs.ClickMobsConfig.*;
+
 public class PickupManager implements Listener {
     public static final NamespacedKey ENTITY_KEY = new NamespacedKey(ClickMobs.INSTANCE, "entity");
     public static final NamespacedKey TYPE_KEY = new NamespacedKey(ClickMobs.INSTANCE, "type");
@@ -37,8 +39,14 @@ public class PickupManager implements Listener {
 
     private final EntitySaver entitySaver;
 
-    public PickupManager(JavaPlugin plugin, EntitySaver entitySaver) {
+    private final MobList whitelistedMobs;
+    private final MobList blacklistedMobs;
+
+    public PickupManager(JavaPlugin plugin, EntitySaver entitySaver,
+                         MobList whitelistedMobs, MobList blacklistedMobs) {
         this.entitySaver = entitySaver;
+        this.whitelistedMobs = whitelistedMobs;
+        this.blacklistedMobs = blacklistedMobs;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -171,7 +179,7 @@ public class PickupManager implements Listener {
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
         meta.setDisplayName(ChatColor.YELLOW + name);
         meta.setLore(Message.MOB.getParameterizedLore(Parameterizer.empty().put("mob", entityName)));
-        int modelDataOverride = Setting.getCustomModelData(entity);
+        int modelDataOverride = CONFIG.get(CUSTOM_MODEL_DATA).getOrDefault(Utils.getKeyOfEntity(entity), 0);
         if (modelDataOverride != 0) {
             meta.setCustomModelData(modelDataOverride);
         }
@@ -194,22 +202,16 @@ public class PickupManager implements Listener {
         return name;
     }
 
-    private static boolean canPickUp(Player player, Entity entity) {
-        String name = Utils.getEntityTypeName(entity.getType());
-        boolean isWhitelisted = Setting.WHITELISTED_MOBS.getList().contains(name);
-        if (isWhitelisted) {
+    private boolean canPickUp(Player player, LivingEntity entity) {
+        String name = Utils.getKeyOfEntity(entity);
+        if (whitelistedMobs.contains(entity)) {
             return true;
         }
-        if (Setting.PER_MOB_PERMISSIONS.isEnabled()) {
-            return Permission.hasPickupPermissionFor(player, name) && !Setting.BLACKLISTED_MOBS.getList().contains(name);
+        boolean blacklisted = blacklistedMobs.contains(entity);
+        if (CONFIG.get(PER_MOB_PERMISSIONS)) {
+            return Permission.hasPickupPermissionFor(player, name) && !blacklisted;
         }
-        if (Setting.ONLY_ALLOW_WHITELISTED.isEnabled()) {
-            return false;
-        }
-        if (Setting.ALLOW_HOSTILE.isDisabled() && entity instanceof Monster) {
-            return false;
-        }
-        return !Setting.BLACKLISTED_MOBS.getList().contains(name);
+        return !blacklisted;
     }
 
     private record ItemResult(ItemStack item, EquipmentSlot slot) {

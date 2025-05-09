@@ -7,7 +7,7 @@
 package me.clickism.clickmobs.message;
 
 import me.clickism.clickmobs.ClickMobs;
-import me.clickism.clickmobs.config.Setting;
+import me.clickism.clickmobs.ClickMobsConfig;
 import me.clickism.clickmobs.util.MessageParameterizer;
 import me.clickism.clickmobs.util.Parameterizer;
 import org.bukkit.command.CommandSender;
@@ -98,8 +98,7 @@ public enum Message {
 
     public static void initialize() throws IOException {
         if (messageManager != null) return;
-        Setting.initialize();
-        messageManager = new MessageManager(ClickMobs.INSTANCE, Setting.LANGUAGE.getString());
+        messageManager = new MessageManager(ClickMobs.INSTANCE, ClickMobsConfig.CONFIG.get(ClickMobsConfig.LANGUAGE));
     }
 
     @NotNull

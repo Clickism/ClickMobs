@@ -7,6 +7,7 @@
 package me.clickism.clickmobs.config;
 
 import me.clickism.clickmobs.ClickMobs;
+import me.clickism.clickmobs.ClickMobsConfig;
 import me.clickism.clickmobs.message.Message;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,7 +31,7 @@ public class ReloadCommand implements CommandExecutor {
         }
         if (Permission.RELOAD.lacksAndNotify(sender)) return false;
         try {
-            Setting.reloadSettings();
+            ClickMobsConfig.CONFIG.load();
             Message.RELOAD_SUCCESS.send(sender);
         } catch (Exception exception) {
             ClickMobs.LOGGER.log(Level.SEVERE, "Failed to reload config/messages: ", exception);
