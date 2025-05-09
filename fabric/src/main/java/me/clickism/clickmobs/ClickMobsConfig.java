@@ -35,9 +35,9 @@ public class ClickMobsConfig {
                             ---------------------------------------------------------
                             In the following section you can whitelist/blacklist mobs.
                             ---------------------------------------------------------
-                            To blacklist a vanilla mob, add its entity name.
+                            To whitelist/blacklist a vanilla mob, add its entity name.
                                 i.E: "creeper" or "ender_dragon"
-                            To blacklist mobs from other mods, use the full identifier with the namespace.
+                            To whitelist/blacklist mobs from other mods, use the full identifier with the namespace.
                                 i.E: "othermod:fancy_creeper"
                             ---------------------------------------------------------
                             You can also use tags (predicates) to whitelist/blacklist mobs with certain properties.
