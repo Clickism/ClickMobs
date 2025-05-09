@@ -15,7 +15,7 @@ import java.util.Map;
 public class ClickMobsConfig {
     public static final Config CONFIG =
             Config.ofYaml("plugins/ClickMobs/config.yml")
-                    .version(1)
+                    .version(5)
                     .header("""
                             ---------------------------------------------------------
                             ClickMobs Config
