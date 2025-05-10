@@ -1,5 +1,5 @@
 - Switch to Configured (https://github.com/Clickism/Configured) for configuration files.
-- Switched to YAML for the configuration file.
+- Switched to YAML for the configuration file and renamed keys to use snake_case.
 - Moved the configuration file to ".../config/ClickMobs/config.yml".
 - Changed blacklisting/whitelisting to use tags:
   - Available tags: `?all, ?hostile, ?baby, ?tamed, ?nametagged, ?silent, ?mob`
