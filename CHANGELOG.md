@@ -1,3 +1,7 @@
-- Updated to 1.21.5
-- Added update checker.
-- Added config option "check-update" to enable/disable update checker.
+- Switch to Configured (https://github.com/Clickism/Configured) for configuration files.
+- Switched to YAML for the configuration file.
+- Moved the configuration file to ".../config/ClickMobs/config.yml".
+- Changed blacklisting/whitelisting to use tags:
+  - Available tags: `?all, ?hostile, ?baby, ?tamed, ?nametagged, ?silent, ?mob`
+  - For more information, read the wiki: https://github.com/Clickism/ClickMobs/wiki/Tags
+  - Removed options "allow-hostile" and "only-allow-whitelisted". Use tags instead.
