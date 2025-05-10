@@ -20,8 +20,10 @@ dependencies {
 	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
-	// todo: shadow jar
+	// Configured
 	implementation(include("me.clickism:configured:0.1")!!)
+	// Configured Dependencies
+	implementation(include("org.snakeyaml:snakeyaml-engine:2.9")!!)
 }
 
 tasks.processResources {
