@@ -36,6 +36,7 @@ import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.SpawnReason;
 //?} else {
 /*import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 *///?}
 
 public class PickupHandler {
