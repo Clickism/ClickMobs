@@ -71,7 +71,8 @@ public class ClickMobsConfig {
                             You can use the ?mob tag alongside other tags to use tags on specific mobs.
                                 - ?mob(creeper, zombie) ?nametagged(Friendly!)
                             
-                            Check the wiki for more documentation on tags and predicates.
+                            Check the wiki for more documentation on tags:
+                            https://github.com/Clickism/ClickMobs/wiki/Tags
                             ---------------------------------------------------------
                             """)
                     .description("""
