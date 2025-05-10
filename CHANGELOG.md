@@ -5,3 +5,4 @@
   - Available tags: `?all, ?hostile, ?baby, ?tamed, ?nametagged, ?silent, ?mob`
   - For more information, read the wiki: https://github.com/Clickism/ClickMobs/wiki/Tags
   - Removed options "allow-hostile" and "only-allow-whitelisted". Use tags instead.
+- Warning: Due to the config changes, you will need to set up the config file again.
