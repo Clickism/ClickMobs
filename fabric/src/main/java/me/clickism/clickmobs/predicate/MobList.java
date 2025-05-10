@@ -22,13 +22,15 @@ public class MobList {
     public static Identifier parseIdentifier(String string) {
         String[] parts = string.split(":");
         if (parts.length != 2) {
-            return Identifier.ofVanilla(string);
+            return Identifier.tryParse("minecraft:" + string);
         }
-        return Identifier.tryParse(parts[0], parts[1]);
+        return Identifier.tryParse(string);
     }
 
     public static String getIdentifierOfEntity(LivingEntity entity) {
-        return Registries.ENTITY_TYPE.getEntry(entity.getType()).getIdAsString();
+        return Registries.ENTITY_TYPE.getEntry(entity.getType()).getKey()
+                .map((key) -> key.getValue().toString())
+                .orElse("[unregistered]");
     }
 
     public boolean contains(LivingEntity entity) {
