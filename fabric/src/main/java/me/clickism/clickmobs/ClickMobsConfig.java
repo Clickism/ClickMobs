@@ -14,7 +14,7 @@ import java.util.List;
 public class ClickMobsConfig {
     public static final Config CONFIG =
             Config.ofYaml("config/ClickMobs/config.yml")
-                    .version(5)
+                    .version(6)
                     .header("""
                             ---------------------------------------------------------
                             ClickMobs Config
@@ -30,7 +30,7 @@ public class ClickMobsConfig {
                     .appendDefaultValue();
 
     public static final ConfigOption<List<String>> WHITELISTED_MOBS =
-            CONFIG.optionOf("whitelisted_mobs", List.<String>of())
+            CONFIG.optionOf("whitelisted_mobs", List.of("cow", "pig", "sheep"))
                     .header("""
                             ---------------------------------------------------------
                             In the following section you can whitelist/blacklist mobs.

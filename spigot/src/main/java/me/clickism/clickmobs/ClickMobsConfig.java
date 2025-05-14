@@ -15,7 +15,7 @@ import java.util.Map;
 public class ClickMobsConfig {
     public static final Config CONFIG =
             Config.ofYaml("plugins/ClickMobs/config.yml")
-                    .version(5)
+                    .version(6)
                     .header("""
                             ---------------------------------------------------------
                             ClickMobs Config
@@ -45,12 +45,11 @@ public class ClickMobsConfig {
                             BOTH "clickmobs.pickup" and "clickmobs.pickup.creeper" permissions.
                             - Whitelisted mobs will still be able to be picked up without a mob-specific permission.
                             - Blacklisted mobs will not be able to be picked up even with a mob-specific permission.
-                            Default: false
                             """)
                     .appendDefaultValue();
 
     public static final ConfigOption<List<String>> WHITELISTED_MOBS =
-            CONFIG.optionOf("whitelisted_mobs", List.<String>of())
+            CONFIG.optionOf("whitelisted_mobs", List.of("cow", "pig", "sheep"))
                     .header("""
                             ---------------------------------------------------------
                             In the following section you can whitelist/blacklist mobs.
