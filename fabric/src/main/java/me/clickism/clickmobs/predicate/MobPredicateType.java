@@ -6,7 +6,11 @@
 
 package me.clickism.clickmobs.predicate;
 
+//? if =1.20.1 {
+/*import net.minecraft.entity.mob.MobEntity;
+*///?} else {
 import net.minecraft.entity.Leashable;
+//?}
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.TameableEntity;
@@ -54,6 +58,9 @@ public interface MobPredicateType<T> {
     };
 
     MobPredicateType<?> LEASHED = (entity, args) ->
+            //? if =1.20.1 {
+            /*entity instanceof MobEntity mob && mob.isLeashed();
+            *///?} else
             entity instanceof Leashable leashable && leashable.isLeashed();
 
     boolean test(LivingEntity entity, List<T> args);
