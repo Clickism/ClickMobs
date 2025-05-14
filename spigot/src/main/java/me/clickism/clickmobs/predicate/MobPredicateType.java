@@ -43,6 +43,8 @@ public interface MobPredicateType<T> {
     MobPredicateType<String> MOB = (entity, args) -> args.stream()
             .anyMatch(string -> string.equalsIgnoreCase(Utils.getKeyOfEntity(entity)));
 
+    MobPredicateType<?> LEASHED = (entity, args) -> entity.isLeashed();
+
     boolean test(LivingEntity entity, List<T> args);
 
     default List<T> parseArgs(List<String> args) {

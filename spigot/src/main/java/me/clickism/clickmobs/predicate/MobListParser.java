@@ -16,14 +16,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MobListParser {
-    private static final Map<String, MobPredicateType> PREDICATES = Map.ofEntries(
+    private static final Map<String, MobPredicateType<?>> PREDICATES = Map.ofEntries(
             Map.entry("all", MobPredicateType.ALL),
             Map.entry("hostile", MobPredicateType.HOSTILE),
             Map.entry("baby", MobPredicateType.BABY),
             Map.entry("tamed", MobPredicateType.TAMED),
             Map.entry("nametagged", MobPredicateType.NAMETAGGED),
             Map.entry("silent", MobPredicateType.SILENT),
-            Map.entry("mob", MobPredicateType.MOB)
+            Map.entry("mob", MobPredicateType.MOB),
+            Map.entry("leashed", MobPredicateType.LEASHED)
     );
 
     private static final Pattern PREDICATE_PATTERN = Pattern.compile(
