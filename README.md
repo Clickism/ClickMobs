@@ -28,7 +28,7 @@ them around.**
 - Blacklist/whitelist any mob you want using **tags**.
   - You can use and combine tags like `?hostile`, `?nametagged(...)`, `?baby`, etc.
     to select multiple mobs based on their properties.
-  - **For more information, read the wiki:** [Wiki/Tags](https://github.com/Clickism/ClickMobs/wiki/Tags)
+  - **For more information, read the wiki:** [Wiki/Tags](https://clickism.de/docs/clickmobs/tags)
 - You can also blacklist/whitelist individual mobs.
 - You can manage the blacklist/whitelist in the **"config.yml"** file.
 
