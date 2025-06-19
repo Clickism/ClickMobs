@@ -6,14 +6,14 @@
 
 package de.clickism.clickmobs;
 
-import me.clickism.configured.Config;
-import me.clickism.configured.ConfigOption;
+import de.clickism.configured.Config;
+import de.clickism.configured.ConfigOption;
 
 import java.util.List;
 
 public class ClickMobsConfig {
     public static final Config CONFIG =
-            Config.ofYaml("config/ClickMobs/config.yml")
+            Config.of("config/ClickMobs/config.yml")
                     .version(6)
                     .header("""
                             ---------------------------------------------------------
@@ -30,7 +30,7 @@ public class ClickMobsConfig {
                     .appendDefaultValue();
 
     public static final ConfigOption<List<String>> WHITELISTED_MOBS =
-            CONFIG.optionOf("whitelisted_mobs", List.of("cow", "pig", "sheep"))
+            CONFIG.optionOf("whitelisted_mobs", List.of("cow", "pig", "sheep"), String.class)
                     .header("""
                             ---------------------------------------------------------
                             In the following section you can whitelist/blacklist mobs.
@@ -65,7 +65,7 @@ public class ClickMobsConfig {
                     .appendDefaultValue();
 
     public static final ConfigOption<List<String>> BLACKLISTED_MOBS =
-            CONFIG.optionOf("blacklisted_mobs", List.of("?hostile", "wither", "ender_dragon"))
+            CONFIG.optionOf("blacklisted_mobs", List.of("?hostile", "wither", "ender_dragon"), String.class)
                     .description("""
                             Mobs that are not allowed to be picked up.
                             """)

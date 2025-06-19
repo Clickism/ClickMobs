@@ -15,15 +15,17 @@ repositories {
 	mavenLocal()
 }
 
+val configuredVersion = "0.2.4"
+
 dependencies {
 	minecraft("com.mojang:minecraft:${stonecutter.current.project}")
 	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 	// Configured
-	implementation(include("me.clickism:configured:0.1")!!)
-	// Configured Dependencies
-	implementation(include("org.snakeyaml:snakeyaml-engine:2.9")!!)
+	implementation(include("de.clickism:configured-core:${configuredVersion}")!!)
+	implementation(include("de.clickism:configured-yaml:${configuredVersion}")!!)
+	implementation(include("de.clickism:configured-json:${configuredVersion}")!!)
 }
 
 tasks.processResources {

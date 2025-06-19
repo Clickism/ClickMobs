@@ -11,6 +11,7 @@ import de.clickism.clickmobs.util.VersionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -20,15 +21,23 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+//? if >=1.21.6 {
+import net.minecraft.storage.NbtReadView;
+import net.minecraft.storage.NbtWriteView;
+import net.minecraft.storage.ReadView;
+import net.minecraft.util.ErrorReporter;
+//?}
 //? if >=1.21.1 {
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.LoreComponent;
@@ -45,24 +54,36 @@ public class PickupHandler {
     //? if <1.21.1
     /*private static final String DATA_KEY = "ClickMobsData";*/
 
+    //? if >=1.21.6 {
     public static <T extends Entity> ItemStack toItemStack(T entity) {
+        NbtWriteView view = NbtWriteView.create(new ErrorReporter.Impl());
+        entity.writeData(view);
+        String id = EntityType.getId(entity.getType()).toString();
+        view.putString(TYPE_KEY, id);
+        ItemStack itemStack = getItemStack(getDisplayName(entity), getEntityName(entity), view.getNbt());
+        MobTextures.setEntityTexture(itemStack, entity);
+        entity.remove(Entity.RemovalReason.DISCARDED);
+        return itemStack;
+    }
+    //?} else {
+    /*public static <T extends Entity> ItemStack toItemStack(T entity) {
         NbtCompound nbt = new NbtCompound();
         entity.writeNbt(nbt);
         String id = EntityType.getId(entity.getType()).toString();
-        nbt.putString("EntityType", id);
+        nbt.putString(TYPE_KEY, id);
         ItemStack itemStack = getItemStack(getDisplayName(entity), nbt);
         MobTextures.setEntityTexture(itemStack, entity);
         entity.remove(Entity.RemovalReason.DISCARDED);
         return itemStack;
     }
+    *///?}
 
-    private static ItemStack getItemStack(Text name, NbtCompound nbt) {
+    private static ItemStack getItemStack(Text name, String entityName, NbtCompound nbt) {
         ItemStack itemStack = Items.PLAYER_HEAD.getDefaultStack();
         writeCustomData(itemStack, nbt);
-        String lowercase = name.getString().toLowerCase();
         formatItem(itemStack, name.copy().fillStyle(Style.EMPTY.withItalic(false).withColor(Formatting.YELLOW)),
                 List.of(Text.literal("Right click to place the ")
-                        .append(Text.literal(lowercase))
+                        .append(Text.literal(entityName))
                         .append(" back.")
                         .fillStyle(Style.EMPTY.withItalic(false).withColor(Formatting.DARK_GRAY)))
         );
@@ -125,7 +146,11 @@ public class PickupHandler {
              //?} else
             /*Entity entity = type.create(world);*/
             if (entity == null) return null;
-            entity.readNbt(nbt);
+            //? if >=1.21.6 {
+            ReadView view = NbtReadView.create(new ErrorReporter.Impl(), world.getRegistryManager(), nbt);
+            entity.readData(view);
+            //?} else
+            /*entity.readNbt(nbt);*/
             return entity;
         } catch (Exception e) {
             return null;
@@ -141,6 +166,10 @@ public class PickupHandler {
             return Text.literal("Baby ").append(name);
         }
         return name.copy();
+    }
+
+    private static String getEntityName(Entity entity) {
+        return entity.getType().getName().getString().toLowerCase();
     }
 
     public static void notifyPickup(PlayerEntity player, Entity entity) {
