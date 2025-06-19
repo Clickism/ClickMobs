@@ -52,7 +52,7 @@ java {
 
 tasks.runServer {
     dependsOn(tasks.build)
-    minecraftVersion("1.21.5")
+    minecraftVersion("1.21.6")
 }
 
 tasks.remap {
