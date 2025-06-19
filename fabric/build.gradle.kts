@@ -26,6 +26,8 @@ dependencies {
 	implementation(include("de.clickism:configured-core:${configuredVersion}")!!)
 	implementation(include("de.clickism:configured-yaml:${configuredVersion}")!!)
 	implementation(include("de.clickism:configured-json:${configuredVersion}")!!)
+	// Configured Dependency
+	implementation(include("org.yaml:snakeyaml:2.0")!!)
 }
 
 tasks.processResources {
