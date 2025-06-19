@@ -18,6 +18,8 @@ import java.util.logging.Level;
 
 public class ReloadCommand implements CommandExecutor {
 
+    private static final String USAGE = "/clickmobs <reload>";
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!command.getLabel().equalsIgnoreCase("clickmobs")) return false;
@@ -41,8 +43,6 @@ public class ReloadCommand implements CommandExecutor {
     }
 
     private void sendUsage(CommandSender sender) {
-        Message.USAGE.parameterizer()
-                .put("usage", "/clickmobs <reload>")
-                .send(sender);
+        Message.USAGE.send(sender, USAGE);
     }
 }

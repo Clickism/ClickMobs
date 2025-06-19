@@ -6,6 +6,7 @@
 
 package de.clickism.clickmobs.config;
 
+import de.clickism.clickmobs.message.Message;
 import de.clickism.clickmobs.message.MessageType;
 import org.bukkit.command.CommandSender;
 
@@ -32,7 +33,7 @@ public enum Permission {
 
     public boolean lacksAndNotify(CommandSender player) {
         if (lacks(player)) {
-            MessageType.FAIL.send(player, "You don't have permission to do this.");
+            Message.NO_PERMISSION.send(player);
             return true;
         }
         return false;

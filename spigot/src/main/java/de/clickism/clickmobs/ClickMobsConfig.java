@@ -6,6 +6,7 @@
 
 package de.clickism.clickmobs;
 
+import de.clickism.clickmobs.message.Message;
 import de.clickism.configured.Config;
 import de.clickism.configured.ConfigOption;
 
@@ -28,7 +29,10 @@ public class ClickMobsConfig {
                     .description("""
                             Language of the plugin.
                             Currently supported languages: en_US, de_DE
-                            """);
+                            """)
+                    .onLoad(lang -> Message.LOCALIZATION
+                            .language(lang)
+                            .load());
 
     public static final ConfigOption<Boolean> CHECK_UPDATE =
             CONFIG.optionOf("check_update", true)

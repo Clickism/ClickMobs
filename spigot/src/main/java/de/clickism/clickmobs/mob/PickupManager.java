@@ -73,9 +73,7 @@ public class PickupManager implements Listener {
             return;
         }
         Utils.setHandOrGive(player, item);
-        Message.PICK_UP.parameterizer()
-                .put("mob", formatEntity(entity))
-                .sendActionbarSilently(player);
+        Message.PICK_UP.sendActionbarSilently(player, formatEntity(entity));
         sendPickupEffect(entity);
     }
 
@@ -178,7 +176,7 @@ public class PickupManager implements Listener {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
         meta.setDisplayName(ChatColor.YELLOW + name);
-        meta.setLore(Message.MOB.getParameterizedLore(Parameterizer.empty().put("mob", entityName)));
+        meta.setLore(Message.MOB.getLore(entityName));
         int modelDataOverride = CONFIG.get(CUSTOM_MODEL_DATA).getOrDefault(Utils.getKeyOfEntity(entity), 0);
         if (modelDataOverride != 0) {
             meta.setCustomModelData(modelDataOverride);
@@ -195,9 +193,7 @@ public class PickupManager implements Listener {
         String entityName = formatEntity(entity);
         String name = Utils.capitalize(entityName);
         if (entity instanceof Ageable ageable && !ageable.isAdult()) {
-            return Message.BABY_MOB.parameterizer()
-                    .put("mob", name)
-                    .toString();
+            return Message.BABY_MOB.localized(name);
         }
         return name;
     }

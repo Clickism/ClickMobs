@@ -58,13 +58,6 @@ public final class ClickMobs extends JavaPlugin {
             blacklistedMobs.addAll(parser.parseMobList(lines));
         });
         CONFIG.load();
-        try {
-            Message.initialize();
-        } catch (IOException exception) {
-            LOGGER.log(Level.SEVERE, "Failed to load messages: ", exception);
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
         EntitySaver entitySaver = EntitySaverFactory.create();
         PickupManager pickupManager = new PickupManager(this, entitySaver, whitelistedMobs, blacklistedMobs);
         new DispenserListener(this, pickupManager);
@@ -87,11 +80,9 @@ public final class ClickMobs extends JavaPlugin {
             if (getDescription().getVersion().equals(version)) return;
             newerVersion = version;
             LOGGER.info("New version available: " + version);
-            MessageParameterizer parameterizer = Message.UPDATE.parameterizer()
-                    .put("version", version);
             Bukkit.getOnlinePlayers().forEach(player -> {
                 if (!player.isOp()) return;
-                parameterizer.send(player);
+                Message.UPDATE.send(player, newerVersion);
             });
         });
     }

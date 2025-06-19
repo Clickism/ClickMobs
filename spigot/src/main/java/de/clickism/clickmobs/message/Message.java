@@ -10,41 +10,48 @@ import de.clickism.clickmobs.ClickMobs;
 import de.clickism.clickmobs.ClickMobsConfig;
 import de.clickism.clickmobs.util.MessageParameterizer;
 import de.clickism.clickmobs.util.Parameterizer;
+import de.clickism.configured.localization.Localization;
+import de.clickism.configured.localization.LocalizationKey;
+import de.clickism.configured.localization.Parameters;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public enum Message {
+public enum Message implements LocalizationKey {
 
-    @WithParameters("version")
+    @Parameters("version")
     UPDATE(MessageType.WARN),
     NO_PERMISSION(MessageType.FAIL),
-    @WithParameters("mob")
+    @Parameters("mob")
     PICK_UP(MessageType.PICK_UP),
     BLACKLISTED_MOB(MessageType.FAIL),
 
     WRITE_ERROR(MessageType.FAIL),
     READ_ERROR(MessageType.FAIL),
 
-    @WithParameters("mob")
+    @Parameters("mob")
     BABY_MOB,
     MOB,
 
-    @WithParameters("usage")
+    @Parameters("usage")
     USAGE(MessageType.FAIL),
     RELOAD_SUCCESS(MessageType.CONFIRM),
     RELOAD_FAIL(MessageType.FAIL);
 
+    public static final Localization LOCALIZATION =
+            Localization.of(lang -> "plugins/ClickMobs/lang/" + lang + ".json")
+                    .resourceProvider(ClickMobs.class, lang -> "/lang/" + lang + ".json")
+                    .fallbackLanguage("en_US")
+                    .version(3);
+
     private static final MessageType MISSING = MessageType.silent("&2[?] &c", "&8< &2? &f%s &8>");
 
-    @Nullable
-    private static MessageManager messageManager;
-
-    private final String path;
     private final MessageType type;
 
     Message() {
@@ -53,57 +60,45 @@ public enum Message {
 
     Message(MessageType type) {
         this.type = type;
-        this.path = name().toLowerCase();
     }
 
-    public void send(CommandSender player) {
-        getTypeOrDefault().send(player, toString());
+    public String localized(Object... params) {
+        return LOCALIZATION.get(this, params);
     }
 
-    public void sendSilently(CommandSender player) {
-        getTypeOrDefault().sendSilently(player, toString());
+    public static String localize(String key, Object... params) {
+        return LOCALIZATION.get(LocalizationKey.of(key), params);
     }
 
-    public void sendActionbar(CommandSender player) {
-        getTypeOrDefault().sendActionbar(player, toString());
+    public void send(CommandSender sender, Object... params) {
+        getTypeOrDefault().sendSilently(sender, localized(params));
     }
 
-    public void sendActionbarSilently(CommandSender player) {
-        getTypeOrDefault().sendActionbarSilently(player, toString());
+    public void sendSilently(CommandSender sender, Object... params) {
+        getTypeOrDefault().sendSilently(sender, localized(params));
+    }
+
+    public void sendActionbar(CommandSender sender, Object... params) {
+        getTypeOrDefault().sendActionbar(sender, localized(params));
+    }
+
+    public void sendActionbarSilently(CommandSender sender, Object... params) {
+        getTypeOrDefault().sendActionbarSilently(sender, localized(params));
     }
 
     @Override
     public String toString() {
-        return get(path);
+        return localized();
     }
 
-    public List<String> getLore() {
-        if (messageManager == null) return List.of(path);
-        return messageManager.getLore(path);
-    }
-
-    public List<String> getParameterizedLore(Parameterizer parameterizer) {
-        return getLore().stream()
-                .map(parameterizer::replace)
-                .collect(Collectors.toList());
+    public List<String> getLore(Object... params) {
+        String pathToLore = name().toLowerCase() + ".lore";
+        String text = localize(pathToLore, params);
+        return Arrays.stream(text.split("\n"))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public MessageType getTypeOrDefault() {
         return type != null ? type : MISSING;
-    }
-
-    public MessageParameterizer parameterizer() {
-        return new MessageParameterizer(this);
-    }
-
-    public static void initialize() throws IOException {
-        if (messageManager != null) return;
-        messageManager = new MessageManager(ClickMobs.INSTANCE, ClickMobsConfig.CONFIG.get(ClickMobsConfig.LANGUAGE));
-    }
-
-    @NotNull
-    public static String get(String key) {
-        if (messageManager == null) return key;
-        return messageManager.getOrPath(key);
     }
 }
