@@ -8,7 +8,7 @@ plugins {
 val pluginVersion = property("plugin_version").toString()
 version = "$name-$pluginVersion"
 
-group = "me.clickism"
+group = "de.clickism"
 
 base {
     archivesName.set(project.property("archives_base_name").toString())
@@ -27,11 +27,17 @@ repositories {
     }
 }
 
+val configuredVersion = "0.2.4"
+
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly("org.spigotmc:spigot:1.20.1-R0.1-SNAPSHOT:remapped-mojang")
     compileOnly("org.jetbrains:annotations:22.0.0")
-    implementation("me.clickism:configured:0.1")
+    // Configuration & Localization
+    implementation("de.clickism:configured-core:${configuredVersion}")
+    implementation("de.clickism:configured-yaml:${configuredVersion}")
+    implementation("de.clickism:configured-json:${configuredVersion}")
+    implementation("de.clickism:configured-localization:${configuredVersion}")
 }
 
 val targetJavaVersion = 17
@@ -45,7 +51,7 @@ java {
 }
 
 tasks.runServer {
-    dependsOn(tasks.remap)
+    dependsOn(tasks.build)
     minecraftVersion("1.21.5")
 }
 
@@ -64,8 +70,17 @@ tasks.build {
 
 tasks.shadowJar {
     archiveClassifier.set("")
+    mergeServiceFiles()
     isEnableRelocation = true
-    relocationPrefix = "me.clickism.shadow"
+    relocationPrefix = "de.clickism.clickauth.shadow"
+    // Exclude Gson and Snakeyaml since it is already provided in Spigot
+    dependencies {
+        exclude(dependency("com.google.code.gson:gson"))
+        exclude(dependency("org.yaml:snakeyaml"))
+    }
+    // Stop Gson and Snakeyaml from being relocated
+    relocate("com.google.gson", "com.google.gson")
+    relocate("org.yaml.snakeyaml", "org.yaml.snakeyaml")
 }
 
 tasks.withType<JavaCompile>().configureEach {
