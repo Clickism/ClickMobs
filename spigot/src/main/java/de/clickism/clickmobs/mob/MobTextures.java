@@ -107,7 +107,8 @@ public class MobTextures {
             Map.entry("BREEZE", "http://textures.minecraft.net/texture/a275728af7e6a29c88125b675a39d88ae9919bb61fdc200337fed6ab0c49d65c"),
             Map.entry("ARMADILLO", "http://textures.minecraft.net/texture/9852b33ba294f560090752d113fe728cbc7dd042029a38d5382d65a2146068b7"),
             Map.entry("BOGGED", "http://textures.minecraft.net/texture/7144d7bd1469593df59dce0cefb3afeaa54b8b3299cdbfc34b338bfb9ad2100"),
-            Map.entry("CREAKING", "http://textures.minecraft.net/texture/aef009d86fcc420361a68cbb8bfa85a7422bfe9e2f306247be1e1b5d20fc52b1")
+            Map.entry("CREAKING", "http://textures.minecraft.net/texture/aef009d86fcc420361a68cbb8bfa85a7422bfe9e2f306247be1e1b5d20fc52b1"),
+            Map.entry("HAPPY_GHAST", "http://textures.minecraft.net/texture/82698aa7274ee241d31362e2faa48cfa733d25010516568d40f3f967247da11b")
     );
 
     public static void setEntityTexture(ItemStack item, LivingEntity entity) {
