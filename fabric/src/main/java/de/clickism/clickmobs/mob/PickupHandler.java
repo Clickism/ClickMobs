@@ -71,7 +71,7 @@ public class PickupHandler {
         entity.writeNbt(nbt);
         String id = EntityType.getId(entity.getType()).toString();
         nbt.putString(TYPE_KEY, id);
-        ItemStack itemStack = getItemStack(getDisplayName(entity), nbt);
+        ItemStack itemStack = getItemStack(getDisplayName(entity), getEntityName(entity), nbt);
         MobTextures.setEntityTexture(itemStack, entity);
         entity.remove(Entity.RemovalReason.DISCARDED);
         return itemStack;
