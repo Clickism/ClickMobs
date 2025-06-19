@@ -1,2 +1,4 @@
-- Added example entries to the whitelist `cow, pig, sheep`.
-- Added `?leashed` tag: Selects mobs that are leashed.
+- Updated to 1.21.6
+- Update Configured to 0.2.4
+- Reduced jar size
+- Fixed: Custom name used in picked-up mobs' lore instead of the entity name
