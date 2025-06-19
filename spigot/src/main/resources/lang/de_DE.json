@@ -1,18 +1,18 @@
 {
   "version": 1,
   "credit": ["Clickism"],
-  "update": "ClickMobs: &a&lNeue Version verfügbar: &f{version}",
+  "update": "ClickMobs: §a§lNeue Version verfügbar: §f{version}",
   "no_permission": "Du bist nicht berechtigt, das zu tun.",
-  "pick_up": "Du hast einen ^{mob} aufgehoben",
+  "pick_up": "Du hast einen {mob} aufgehoben",
   "blacklisted_mob": "Du kannst diesen Mob nicht aufheben",
   "write_error": "Schreiben der Dorfbewohnerdaten fehlgeschlagen.",
   "read_error": "Lesen der Dorfbewohnerdaten fehlgeschlagen.",
   "baby_mob": "Baby-{mob}",
   "mob.lore": [
-    "&8Rechtsklick, um den ^{mob}",
-    "&8zurück zu platzieren."
+    "§8Rechtsklick, um den {mob}",
+    "§8zurück zu platzieren."
   ],
-  "usage": "&cAnwendung: {usage}",
-  "reload_success": "&lClickMobs-&aKonfiguration wurde neu geladen.",
-  "reload_fail": "Neuladen der &lClickMobs&c-Konfiguration fehlgeschlagen."
+  "usage": "§cAnwendung: {usage}",
+  "reload_success": "§lClickMobs-§aKonfiguration wurde neu geladen.",
+  "reload_fail": "Neuladen der §lClickMobs§c-Konfiguration fehlgeschlagen."
 }

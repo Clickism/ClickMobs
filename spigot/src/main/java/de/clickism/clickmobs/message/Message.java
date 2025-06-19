@@ -31,7 +31,8 @@ public enum Message implements LocalizationKey {
 
     @Parameters("mob")
     BABY_MOB,
-    MOB,
+    @Parameters("mob")
+    MOB$LORE,
 
     @Parameters("usage")
     USAGE(MessageType.FAIL),

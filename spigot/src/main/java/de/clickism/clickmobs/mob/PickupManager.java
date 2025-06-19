@@ -29,6 +29,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
+
 import static de.clickism.clickmobs.ClickMobsConfig.*;
 
 public class PickupManager implements Listener {
@@ -50,7 +52,11 @@ public class PickupManager implements Listener {
     }
 
     private static String formatEntity(Entity entity) {
-        return entity.getType().name().toLowerCase().replace("_", " ");
+        String name = entity.getType().name().toLowerCase().replace("_", " ");
+        if ("de_DE".equals(Message.LOCALIZATION.language())) {
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        }
+        return name;
     }
 
     private static String getName(LivingEntity entity) {
@@ -187,7 +193,8 @@ public class PickupManager implements Listener {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
         meta.setDisplayName(ChatColor.YELLOW + name);
-        meta.setLore(Message.MOB.getLore(entityName));
+        meta.setLore(Arrays.stream(Message.MOB$LORE.localized(entityName).split("\n"))
+                .toList());
         int modelDataOverride = CONFIG.get(CUSTOM_MODEL_DATA).getOrDefault(Utils.getKeyOfEntity(entity), 0);
         if (modelDataOverride != 0) {
             meta.setCustomModelData(modelDataOverride);

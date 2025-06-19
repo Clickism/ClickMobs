@@ -1,7 +1,7 @@
 {
   "version": 1,
   "credit": ["Clickism"],
-  "update": "ClickMobs: &a&lNew version available: &f{version}",
+  "update": "ClickMobs: §a§lNew version available: §f{version}",
   "no_permission": "You don't have permission to do this.",
   "pick_up": "You picked up a {mob}",
   "blacklisted_mob": "You can't pick up this mob",
@@ -9,9 +9,9 @@
   "read_error": "Failed to read mob data.",
   "baby_mob": "Baby {mob}",
   "mob.lore": [
-    "&8Right click to place the {mob} back."
+    "§8Right click to place the {mob} back."
   ],
-  "usage": "&cUsage: {usage}",
-  "reload_success": "Reloaded &lClickMobs &aconfig.",
-  "reload_fail": "Failed to reload &lClickMobs &cconfig."
+  "usage": "§cUsage: {usage}",
+  "reload_success": "Reloaded §lClickMobs §aconfig.",
+  "reload_fail": "Failed to reload §lClickMobs §cconfig."
 }
