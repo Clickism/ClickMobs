@@ -15,14 +15,20 @@ public class Parameterizer {
 
     protected static final String UPPERCASE_SELECTOR = "^";
     protected static final String FORMAT = "{%s}";
-
-    private final String string;
     protected final Map<String, Object> params = new HashMap<>();
-
+    private final String string;
     protected boolean colorize = true;
 
     protected Parameterizer(String string) {
         this.string = string;
+    }
+
+    public static Parameterizer empty() {
+        return new Parameterizer("");
+    }
+
+    public static Parameterizer of(String string) {
+        return new Parameterizer(string);
     }
 
     public Parameterizer put(String key, @NotNull Object value) {
@@ -56,13 +62,5 @@ public class Parameterizer {
     @Override
     public String toString() {
         return replace(this.string);
-    }
-
-    public static Parameterizer empty() {
-        return new Parameterizer("");
-    }
-
-    public static Parameterizer of(String string) {
-        return new Parameterizer(string);
     }
 }

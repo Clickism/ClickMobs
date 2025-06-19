@@ -11,7 +11,6 @@ import de.clickism.clickmobs.config.Permission;
 import de.clickism.clickmobs.entity.EntitySaver;
 import de.clickism.clickmobs.message.Message;
 import de.clickism.clickmobs.predicate.MobList;
-import de.clickism.clickmobs.util.Parameterizer;
 import de.clickism.clickmobs.util.Utils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -50,6 +49,22 @@ public class PickupManager implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
+    private static String formatEntity(Entity entity) {
+        return entity.getType().name().toLowerCase().replace("_", " ");
+    }
+
+    private static String getName(LivingEntity entity) {
+        if (entity.getCustomName() != null) {
+            return "\"" + entity.getCustomName() + "\"";
+        }
+        String entityName = formatEntity(entity);
+        String name = Utils.capitalize(entityName);
+        if (entity instanceof Ageable ageable && !ageable.isAdult()) {
+            return Message.BABY_MOB.localized(name);
+        }
+        return name;
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     private void onInteract(PlayerInteractEntityEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) return;
@@ -75,10 +90,6 @@ public class PickupManager implements Listener {
         Utils.setHandOrGive(player, item);
         Message.PICK_UP.sendActionbarSilently(player, formatEntity(entity));
         sendPickupEffect(entity);
-    }
-
-    private static String formatEntity(Entity entity) {
-        return entity.getType().name().toLowerCase().replace("_", " ");
     }
 
     public void sendPickupEffect(LivingEntity entity) {
@@ -184,18 +195,6 @@ public class PickupManager implements Listener {
         item.setItemMeta(meta);
         MobTextures.setEntityTexture(item, entity);
         return item;
-    }
-
-    private static String getName(LivingEntity entity) {
-        if (entity.getCustomName() != null) {
-            return "\"" + entity.getCustomName() + "\"";
-        }
-        String entityName = formatEntity(entity);
-        String name = Utils.capitalize(entityName);
-        if (entity instanceof Ageable ageable && !ageable.isAdult()) {
-            return Message.BABY_MOB.localized(name);
-        }
-        return name;
     }
 
     private boolean canPickUp(Player player, LivingEntity entity) {

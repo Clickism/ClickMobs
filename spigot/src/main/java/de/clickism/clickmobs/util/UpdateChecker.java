@@ -37,6 +37,17 @@ public class UpdateChecker {
         this.minecraftVersion = minecraftVersion;
     }
 
+    /*
+     * Get the raw version from a version string.
+     * i.E: "fabric-1.2+1.17.1" -> "1.2"
+     */
+    public static String getRawVersion(String version) {
+        if (version.isEmpty()) return version;
+        version = version.replaceAll("^\\D+", "");
+        String[] split = version.split("\\+");
+        return split[0];
+    }
+
     /**
      * Check the latest version of the project for the given loader and minecraft version
      * and call the consumer with it.
@@ -90,17 +101,6 @@ public class UpdateChecker {
         JsonArray versions = version.get("game_versions").getAsJsonArray();
         JsonArray loaders = version.get("loaders").getAsJsonArray();
         return (minecraftVersion == null || versions.contains(new JsonPrimitive(minecraftVersion)))
-                && loaders.contains(new JsonPrimitive(loader));
-    }
-
-    /*
-     * Get the raw version from a version string.
-     * i.E: "fabric-1.2+1.17.1" -> "1.2"
-     */
-    public static String getRawVersion(String version) {
-        if (version.isEmpty()) return version;
-        version = version.replaceAll("^\\D+", "");
-        String[] split = version.split("\\+");
-        return split[0];
+               && loaders.contains(new JsonPrimitive(loader));
     }
 }

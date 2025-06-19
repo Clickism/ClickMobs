@@ -28,6 +28,11 @@ public class NMSSaver implements EntitySaver {
         }
     }
 
+    private static net.minecraft.world.entity.Entity getNmsEntity(Entity entity) throws Exception {
+        Object nmsEntity = CRAFT_ENTITY_CLASS.cast(entity);
+        return (net.minecraft.world.entity.Entity) GET_HANDLE_METHOD.invoke(nmsEntity);
+    }
+
     @Override
     public String writeToString(Entity entity) throws IllegalArgumentException {
         try {
@@ -57,10 +62,5 @@ public class NMSSaver implements EntitySaver {
         } catch (Exception e) {
             throw new IllegalArgumentException("Failed to read NBT: " + string);
         }
-    }
-
-    private static net.minecraft.world.entity.Entity getNmsEntity(Entity entity) throws Exception {
-        Object nmsEntity = CRAFT_ENTITY_CLASS.cast(entity);
-        return (net.minecraft.world.entity.Entity) GET_HANDLE_METHOD.invoke(nmsEntity);
     }
 }

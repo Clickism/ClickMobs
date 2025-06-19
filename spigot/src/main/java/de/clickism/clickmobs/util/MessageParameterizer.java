@@ -19,6 +19,10 @@ public class MessageParameterizer extends Parameterizer {
         this.message = message;
     }
 
+    public static MessageParameterizer of(Message message) {
+        return new MessageParameterizer(message);
+    }
+
     @Override
     public MessageParameterizer put(String key, @NotNull Object value) {
         return (MessageParameterizer) super.put(key, value);
@@ -52,9 +56,5 @@ public class MessageParameterizer extends Parameterizer {
 
     public void sendActionbarSilently(CommandSender sender) {
         message.getTypeOrDefault().sendActionbarSilently(sender, toString());
-    }
-
-    public static MessageParameterizer of(Message message) {
-        return new MessageParameterizer(message);
     }
 }

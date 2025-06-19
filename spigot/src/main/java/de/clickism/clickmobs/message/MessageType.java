@@ -46,25 +46,9 @@ public abstract class MessageType {
     };
 
     public static final MessageType PICK_UP = silent("&2[↑] &a", "&8< &2↑ &a%s &8>");
-
-    /**
-     * An enum that represents where to send a message.
-     */
-    protected enum SendType {
-        /**
-         * Send the message to the chat.
-         */
-        CHAT,
-        /**
-         * Send the message to the action bar.
-         */
-        ACTION_BAR
-    }
-
     private final String prefix;
     private final String titleFormat;
     private final String subtitleFormat;
-
     /**
      * Create a new message type with the given prefix.
      *
@@ -86,6 +70,17 @@ public abstract class MessageType {
         this.prefix = Utils.colorize(prefix);
         this.titleFormat = Utils.colorize(titleFormat);
         this.subtitleFormat = Utils.colorize(subtitleFormat);
+    }
+
+    public static MessageType silent(String prefix, String titleFormat) {
+        return silent(prefix, titleFormat, titleFormat);
+    }
+
+    public static MessageType silent(String prefix, String titleFormat, String subtitleFormat) {
+        return new MessageType(prefix, titleFormat, subtitleFormat) {
+            @Override
+            public void playSound(Player player) {}
+        };
     }
 
     /**
@@ -386,14 +381,17 @@ public abstract class MessageType {
         Bukkit.getLogger().log(Level.INFO, ChatColor.stripColor(colorized));
     }
 
-    public static MessageType silent(String prefix, String titleFormat) {
-        return silent(prefix, titleFormat, titleFormat);
-    }
-
-    public static MessageType silent(String prefix, String titleFormat, String subtitleFormat) {
-        return new MessageType(prefix, titleFormat, subtitleFormat) {
-            @Override
-            public void playSound(Player player) {}
-        };
+    /**
+     * An enum that represents where to send a message.
+     */
+    protected enum SendType {
+        /**
+         * Send the message to the chat.
+         */
+        CHAT,
+        /**
+         * Send the message to the action bar.
+         */
+        ACTION_BAR
     }
 }

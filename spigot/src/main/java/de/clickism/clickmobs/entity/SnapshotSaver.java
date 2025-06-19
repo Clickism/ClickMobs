@@ -44,6 +44,28 @@ public class SnapshotSaver implements EntitySaver {
         }
     }
 
+    private static String appendEntityTypeIfAbsent(String string, EntityType type) {
+        String typeData = "id:\"" + type.getKey() + "\"";
+        if (!string.contains(typeData)) {
+            StringBuilder builder = new StringBuilder(string);
+            builder.setCharAt(builder.length() - 1, ',');
+            builder.append(typeData);
+            builder.append("}");
+            return builder.toString();
+        }
+        return string;
+    }
+
+    private static String getNBTFixedString(String string) {
+        MATCHER.reset(string);
+        StringBuilder result = new StringBuilder();
+        while (MATCHER.find()) {
+            MATCHER.appendReplacement(result, Matcher.quoteReplacement(MATCHER.group(1)));
+        }
+        MATCHER.appendTail(result);
+        return result.toString();
+    }
+
     @Override
     public String writeToString(Entity entity) throws IllegalArgumentException {
         try {
@@ -68,27 +90,5 @@ public class SnapshotSaver implements EntitySaver {
         } catch (Exception e) {
             throw new IllegalArgumentException("Failed to read NBT: " + string, e);
         }
-    }
-
-    private static String appendEntityTypeIfAbsent(String string, EntityType type) {
-        String typeData = "id:\"" + type.getKey() + "\"";
-        if (!string.contains(typeData)) {
-            StringBuilder builder = new StringBuilder(string);
-            builder.setCharAt(builder.length() - 1, ',');
-            builder.append(typeData);
-            builder.append("}");
-            return builder.toString();
-        }
-        return string;
-    }
-
-    private static String getNBTFixedString(String string) {
-        MATCHER.reset(string);
-        StringBuilder result = new StringBuilder();
-        while (MATCHER.find()) {
-            MATCHER.appendReplacement(result, Matcher.quoteReplacement(MATCHER.group(1)));
-        }
-        MATCHER.appendTail(result);
-        return result.toString();
     }
 }

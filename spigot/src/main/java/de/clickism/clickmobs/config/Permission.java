@@ -7,7 +7,6 @@
 package de.clickism.clickmobs.config;
 
 import de.clickism.clickmobs.message.Message;
-import de.clickism.clickmobs.message.MessageType;
 import org.bukkit.command.CommandSender;
 
 public enum Permission {
@@ -21,6 +20,11 @@ public enum Permission {
     Permission() {
         String name = name().replace('_', '-').toLowerCase();
         permission = PLUGIN_PREFIX + "." + name;
+    }
+
+    public static boolean hasPickupPermissionFor(CommandSender sender, String mobName) {
+        String mobKey = mobName.toLowerCase();
+        return sender.hasPermission("clickmobs.pickup." + mobKey);
     }
 
     public boolean has(CommandSender player) {
@@ -37,10 +41,5 @@ public enum Permission {
             return true;
         }
         return false;
-    }
-
-    public static boolean hasPickupPermissionFor(CommandSender sender, String mobName) {
-        String mobKey = mobName.toLowerCase();
-        return sender.hasPermission("clickmobs.pickup." + mobKey);
     }
 }

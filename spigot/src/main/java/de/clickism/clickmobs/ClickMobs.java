@@ -16,15 +16,12 @@ import de.clickism.clickmobs.message.Message;
 import de.clickism.clickmobs.mob.PickupManager;
 import de.clickism.clickmobs.predicate.MobList;
 import de.clickism.clickmobs.predicate.MobListParser;
-import de.clickism.clickmobs.util.MessageParameterizer;
 import de.clickism.clickmobs.util.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static de.clickism.clickmobs.ClickMobsConfig.*;

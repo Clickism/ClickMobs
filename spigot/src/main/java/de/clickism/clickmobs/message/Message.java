@@ -7,17 +7,11 @@
 package de.clickism.clickmobs.message;
 
 import de.clickism.clickmobs.ClickMobs;
-import de.clickism.clickmobs.ClickMobsConfig;
-import de.clickism.clickmobs.util.MessageParameterizer;
-import de.clickism.clickmobs.util.Parameterizer;
 import de.clickism.configured.localization.Localization;
 import de.clickism.configured.localization.LocalizationKey;
 import de.clickism.configured.localization.Parameters;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,12 +56,12 @@ public enum Message implements LocalizationKey {
         this.type = type;
     }
 
-    public String localized(Object... params) {
-        return LOCALIZATION.get(this, params);
-    }
-
     public static String localize(String key, Object... params) {
         return LOCALIZATION.get(LocalizationKey.of(key), params);
+    }
+
+    public String localized(Object... params) {
+        return LOCALIZATION.get(this, params);
     }
 
     public void send(CommandSender sender, Object... params) {
