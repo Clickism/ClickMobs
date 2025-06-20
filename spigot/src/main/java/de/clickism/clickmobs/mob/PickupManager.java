@@ -29,7 +29,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static de.clickism.clickmobs.ClickMobsConfig.*;
 
@@ -152,10 +153,30 @@ public class PickupManager implements Listener {
     }
 
     public ItemStack toItemStack(LivingEntity entity) {
-        ItemStack item = createItem(entity);
+        entity = getRootEntity(entity);
+        Set<LivingEntity> passengers = getAllPassengers(entity);
+        ItemStack item = createItem(entity, passengers);
         writeData(entity, item);
         entity.remove();
+        passengers.forEach(Entity::remove);
         return item;
+    }
+
+    private Set<LivingEntity> getAllPassengers(LivingEntity entity) {
+        Set<LivingEntity> passengers = new HashSet<>();
+        entity.getPassengers().forEach(passenger -> {
+            if (!(passenger instanceof LivingEntity livingEntity)) return;
+            passengers.add(livingEntity);
+            passengers.addAll(getAllPassengers(livingEntity));
+        });
+        return passengers;
+    }
+
+    private LivingEntity getRootEntity(LivingEntity entity) {
+        if (entity.getVehicle() instanceof LivingEntity vehicle) {
+            return getRootEntity(vehicle);
+        }
+        return entity;
     }
 
     private void writeData(LivingEntity entity, ItemStack item) {
@@ -186,9 +207,14 @@ public class PickupManager implements Listener {
         return entity;
     }
 
-    private ItemStack createItem(LivingEntity entity) {
+    private ItemStack createItem(LivingEntity entity, Set<LivingEntity> passengers) {
         String entityName = formatEntity(entity);
         String name = getName(entity);
+        if (!passengers.isEmpty()) {
+            name = name + " §7(+ " + passengers.stream()
+                    .map(PickupManager::getName)
+                    .collect(Collectors.joining(" + ")) + ")";
+        }
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         ItemMeta meta = item.getItemMeta();
         if (meta == null) throw new IllegalArgumentException("ItemMeta is null");
