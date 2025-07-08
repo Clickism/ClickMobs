@@ -10,7 +10,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.5"
+    id("dev.kikugie.stonecutter") version "0.6"
 }
 
 rootProject.name = "ClickMobs"
@@ -21,7 +21,7 @@ stonecutter {
     kotlinController = true
     centralScript = "build.gradle.kts"
     create("fabric") {
-        versions("1.21.6", "1.21.5", "1.21.4", "1.21.1", "1.20.1")
-        vcsVersion = "1.21.6"
+        versions("1.21.7", "1.21.5", "1.21.4", "1.21.1", "1.20.1")
+        vcsVersion = "1.21.7"
     }
 }

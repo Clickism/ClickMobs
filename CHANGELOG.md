@@ -1,4 +1,1 @@
-- Updated to 1.21.6
-    - Added textures for Happy Ghast
-- Update Configured to 0.2.4
-- Fixed: Custom name used in picked-up mobs' lore instead of the entity name
+- Update to 1.21.7

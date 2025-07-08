@@ -120,7 +120,7 @@ public class MobTextures {
             //? if >=1.21.4 {
             ,Map.entry(EntityType.CREAKING, "ewogICJ0aW1lc3RhbXAiIDogMTczNjg2MjM5OTU1NiwKICAicHJvZmlsZUlkIiA6ICJmMzNlZGMyNTRmNDk0NWY2YTg5ZjFjM2JhZmNkZjIwNiIsCiAgInByb2ZpbGVOYW1lIiA6ICJGVV9CYWJ5IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2FlZjAwOWQ4NmZjYzQyMDM2MWE2OGNiYjhiZmE4NWE3NDIyYmZlOWUyZjMwNjI0N2JlMWUxYjVkMjBmYzUyYjEiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==")
             //?}
-            //?  if >=1.21.6 {
+            //? if >=1.21.6 {
             ,Map.entry(EntityType.HAPPY_GHAST, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODI2OThhYTcyNzRlZTI0MWQzMTM2MmUyZmFhNDhjZmE3MzNkMjUwMTA1MTY1NjhkNDBmM2Y5NjcyNDdkYTExYiJ9fX0=")
             //?}
     );
