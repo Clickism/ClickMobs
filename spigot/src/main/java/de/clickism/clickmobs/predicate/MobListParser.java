@@ -24,7 +24,8 @@ public class MobListParser {
             Map.entry("nametagged", MobPredicateType.NAMETAGGED),
             Map.entry("silent", MobPredicateType.SILENT),
             Map.entry("mob", MobPredicateType.MOB),
-            Map.entry("leashed", MobPredicateType.LEASHED)
+            Map.entry("leashed", MobPredicateType.LEASHED),
+            Map.entry("customdata", MobPredicateType.CUSTOM_DATA)
     );
 
     private static final Pattern PREDICATE_PATTERN = Pattern.compile(

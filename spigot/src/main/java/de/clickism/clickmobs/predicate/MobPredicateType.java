@@ -45,6 +45,11 @@ public interface MobPredicateType<T> {
 
     MobPredicateType<?> LEASHED = (entity, args) -> entity.isLeashed();
 
+    /**
+     * Checks if the entity has a specific custom data key.
+     */
+    MobPredicateType<?> CUSTOM_DATA = new CustomDataMobPredicateType();
+
     boolean test(LivingEntity entity, List<T> args);
 
     default List<T> parseArgs(List<String> args) {
