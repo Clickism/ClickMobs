@@ -49,6 +49,7 @@ public abstract class MessageType {
     private final String prefix;
     private final String titleFormat;
     private final String subtitleFormat;
+
     /**
      * Create a new message type with the given prefix.
      *

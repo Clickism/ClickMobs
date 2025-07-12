@@ -17,6 +17,20 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class CustomDataMobPredicateType implements MobPredicateType<CustomDataMobPredicateType.MatchingContext> {
+    private static ParsingContext<?, ?> getParsingContextFromString(String arg) {
+        return switch (arg.toLowerCase()) {
+            case "string" -> new ParsingContext<>(PersistentDataType.STRING, Function.identity());
+            case "integer", "int" -> new ParsingContext<>(PersistentDataType.INTEGER, Integer::parseInt);
+            case "long" -> new ParsingContext<>(PersistentDataType.LONG, Long::parseLong);
+            case "double" -> new ParsingContext<>(PersistentDataType.DOUBLE, Double::parseDouble);
+            case "boolean", "bool" -> new ParsingContext<>(PersistentDataType.BOOLEAN, Boolean::parseBoolean);
+            case "byte" -> new ParsingContext<>(PersistentDataType.BYTE, Byte::parseByte);
+            case "float" -> new ParsingContext<>(PersistentDataType.FLOAT, Float::parseFloat);
+            case "short" -> new ParsingContext<>(PersistentDataType.SHORT, Short::parseShort);
+            default -> throw new IllegalArgumentException("Unsupported data type: " + arg);
+        };
+    }
+
     @Override
     public boolean test(LivingEntity entity, List<CustomDataMobPredicateType.MatchingContext> args) {
         PersistentDataContainer pdc = entity.getPersistentDataContainer();
@@ -54,20 +68,6 @@ public class CustomDataMobPredicateType implements MobPredicateType<CustomDataMo
         );
     }
 
-    private static ParsingContext<?, ?> getParsingContextFromString(String arg) {
-        return switch (arg.toLowerCase()) {
-            case "string" -> new ParsingContext<>(PersistentDataType.STRING, Function.identity());
-            case "integer", "int" -> new ParsingContext<>(PersistentDataType.INTEGER, Integer::parseInt);
-            case "long" -> new ParsingContext<>(PersistentDataType.LONG, Long::parseLong);
-            case "double" -> new ParsingContext<>(PersistentDataType.DOUBLE, Double::parseDouble);
-            case "boolean", "bool" -> new ParsingContext<>(PersistentDataType.BOOLEAN, Boolean::parseBoolean);
-            case "byte" -> new ParsingContext<>(PersistentDataType.BYTE, Byte::parseByte);
-            case "float" -> new ParsingContext<>(PersistentDataType.FLOAT, Float::parseFloat);
-            case "short" -> new ParsingContext<>(PersistentDataType.SHORT, Short::parseShort);
-            default -> throw new IllegalArgumentException("Unsupported data type: " + arg);
-        };
-    }
-
     public record ParsingContext<T, Z>(
             PersistentDataType<T, Z> dataType,
             Function<String, Z> parser
@@ -79,6 +79,5 @@ public class CustomDataMobPredicateType implements MobPredicateType<CustomDataMo
             Optional<ParsingContext<?, ?>> parsingContext,
             Optional<Object> value
     ) {
-
     }
 }
