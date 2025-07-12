@@ -1,1 +1,3 @@
-- Update to 1.21.7
+- Added new **?customdata** tag
+  - This tag targets mobs that have custom data in their persistent data containers.
+  - You can use this tag to target mobs added by external plugins.
