@@ -71,11 +71,13 @@ public class ClickMobsConfig {
                                 - ?tamed ?nametagged
                             You can negate tags using "not":
                                 - not ?hostile
-                            You can use the ?mob tag alongside other tags to use tags on specific mobs.
+                            You can use the ?mob tag alongside other tags to use tags on specific mobs:
                                 - ?mob(creeper, zombie) ?nametagged(Friendly!)
+                            You can use the ?customdata tag to target mobs added by other plugins or mobs with
+                            custom data. Please read the wiki for more information on this tag.
                             
                             Check the wiki for more documentation on tags:
-                            https://github.com/Clickism/ClickMobs/wiki/Tags
+                            https://clickism.de/docs/clickmobs/tags
                             ---------------------------------------------------------
                             """)
                     .description("""
