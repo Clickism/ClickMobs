@@ -1,4 +1,1 @@
-- Added new **?customdata** tag
-  - This tag targets mobs that have custom data in their persistent data containers.
-  - You can use this tag to target mobs added by external plugins.
-  - For more information: https://clickism.de/docs/clickmobs/tags
+- Update to 1.21.8
