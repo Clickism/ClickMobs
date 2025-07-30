@@ -168,6 +168,11 @@ public class PickupManager implements Listener {
         Set<LivingEntity> passengers = new HashSet<>();
         entity.getPassengers().forEach(passenger -> {
             if (!(passenger instanceof LivingEntity livingEntity)) return;
+            if (passenger instanceof Player) {
+                // Exclude players, and remove them from the vehicle
+                passenger.leaveVehicle();
+                return;
+            }
             passengers.add(livingEntity);
             passengers.addAll(getAllPassengers(livingEntity));
         });
