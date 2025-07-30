@@ -1,1 +1,2 @@
-- Update to 1.21.8
+- Fix: Picking up an entity that has a player riding it throws an
+exception and the entity is lost.
