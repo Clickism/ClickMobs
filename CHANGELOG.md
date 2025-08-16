@@ -1,2 +1,1 @@
-- Fix: Picking up an entity that has a player riding it throws an
-exception and the entity is lost.
+- Fix: Placing a block adds an empty NBT tag and breaks stacking.
