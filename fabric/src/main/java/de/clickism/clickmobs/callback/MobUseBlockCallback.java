@@ -41,7 +41,7 @@ public class MobUseBlockCallback implements UseBlockCallback {
         if (entity instanceof LivingEntity && entity instanceof VillagerDataContainer
                 && ClickMobs.isClickVillagersPresent()) return ActionResult.PASS;
         BlockPos clickedPos = hitResult.getBlockPos();
-        //? if >=1.21.1 {
+        //? if >=1.20.5 {
         ActionResult actionResult = world.getBlockState(clickedPos).onUse(world, player, hitResult);
         //?} else
         /*ActionResult actionResult = world.getBlockState(clickedPos).onUse(world, player, hand, hitResult);*/
