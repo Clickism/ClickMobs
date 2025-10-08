@@ -1,1 +1,1 @@
-- Fix: Placing a block adds an empty NBT tag and breaks stacking.
+- Added support for 1.21.9

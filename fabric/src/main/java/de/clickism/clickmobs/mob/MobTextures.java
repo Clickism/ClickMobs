@@ -7,6 +7,8 @@
 package de.clickism.clickmobs.mob;
 
 
+import com.google.common.collect.ArrayListMultimap;
+import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 
@@ -129,14 +131,22 @@ public class MobTextures {
         setTexture(itemStack, getTexture(entity));
     }
 
-    //? if >=1.21.1 {
+    //? if >=1.21.9 {
     private static void setTexture(ItemStack itemStack, String texture) {
+        ArrayListMultimap<String, Property> properties = ArrayListMultimap.create();
+        properties.put("textures", new Property("textures", texture));
+        PropertyMap propertyMap = new PropertyMap(properties);
+        var profile = ProfileComponent.ofStatic(new GameProfile(UUID.randomUUID(), "", propertyMap));
+        itemStack.set(DataComponentTypes.PROFILE, profile);
+    }
+    //?} elif >=1.20.5 {
+    /*private static void setTexture(ItemStack itemStack, String texture) {
         PropertyMap propertyMap = new PropertyMap();
         propertyMap.put("textures", new Property("textures", texture));
         itemStack.set(DataComponentTypes.PROFILE,
                 new ProfileComponent(Optional.empty(), Optional.of(UUID.randomUUID()), propertyMap));
     }
-    //?} else {
+    *///?} else {
     /*private static void setTexture(ItemStack itemStack, String texture) {
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         profile.getProperties().put("textures", new Property("textures", texture));

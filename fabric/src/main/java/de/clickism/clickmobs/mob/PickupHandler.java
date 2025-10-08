@@ -104,6 +104,7 @@ public class PickupHandler {
     
     private static void formatItem(ItemStack itemStack, Text name, List<Text> lore) {
         itemStack.set(DataComponentTypes.ITEM_NAME, name);
+        itemStack.set(DataComponentTypes.CUSTOM_NAME, name);
         itemStack.set(DataComponentTypes.LORE, new LoreComponent(lore));
     }
     //?} else {
@@ -178,7 +179,7 @@ public class PickupHandler {
         String name = entity.getType().getName().getString().toLowerCase();
         MessageType.PICKUP_MESSAGE.sendActionbarSilently(player, Text.literal("You picked up a ")
                 .append(Text.literal(name)));
-        ServerWorld world = (ServerWorld) player.getWorld();
+        ServerWorld world = (ServerWorld) VersionHelper.getWorld(player);
         double x = entity.getX();
         double y = entity.getY() + .25f;
         double z = entity.getZ();
