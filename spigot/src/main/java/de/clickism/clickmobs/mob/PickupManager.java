@@ -98,14 +98,14 @@ public class PickupManager implements Listener {
         Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!player.isSneaking()) return;
-        // Check if mob is blacklisted
-        if (!canPickUp(player, entity)) {
-            Message.BLACKLISTED_MOB.sendActionbar(player);
-            return;
-        }
         // Check held item
         ItemStack held = player.getInventory().getItemInMainHand();
         if (isBlacklistedItemInHand(held.getType())) {
+            return;
+        }
+        // Check if mob is blacklisted
+        if (!canPickUp(player, entity)) {
+            Message.BLACKLISTED_MOB.sendActionbar(player);
             return;
         }
         // Only cancel if mob can be picked up
