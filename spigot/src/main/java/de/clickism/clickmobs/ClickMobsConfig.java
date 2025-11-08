@@ -106,8 +106,12 @@ public class ClickMobsConfig {
                     .description("""
                             Items that prevent picking up mobs when held in hand.
                             Use the item names (material names) of the items.
+                            
                             Harnesses are always blocked for Happy Ghast compatibility
                             and do not need to be added here.
+                            
+                            Use the tag "?all" to block all items. This will make it so players
+                            can only pick up mobs with an empty hand.
                             """)
                     .appendDefaultValue();
 

@@ -41,6 +41,8 @@ public class PickupManager implements Listener {
     public static final NamespacedKey TYPE_KEY = new NamespacedKey(ClickMobs.INSTANCE, "type");
     public static final NamespacedKey NBT_KEY = new NamespacedKey(ClickMobs.INSTANCE, "nbt");
 
+    private static final String ALL_TAG = "?all";
+
     private final EntitySaver entitySaver;
 
     private final MobList whitelistedMobs;
@@ -58,6 +60,9 @@ public class PickupManager implements Listener {
     }
 
     private boolean isBlacklistedItemInHand(Material material) {
+        if (blacklistedMaterialsInHand.contains(ALL_TAG) && material != Material.AIR) {
+            return true;
+        }
         if (material.toString().toLowerCase().matches(".*_harness$")) {
             // Harnesses cause problems with Happy Ghasts
             return true;
