@@ -54,6 +54,14 @@ public class PickupManager implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
+    private static boolean isBlacklistedItemInHand(Material material) {
+        if (material.toString().toLowerCase().matches(".*_harness$")) {
+            // Harnesses cause problems with Happy Ghasts
+            return true;
+        }
+        return material == Material.SADDLE || material == Material.LEAD;
+    }
+
     private static String formatEntity(Entity entity) {
         String name = entity.getType().name().toLowerCase().replace("_", " ");
         if ("de_DE".equals(Message.LOCALIZATION.language())) {
@@ -82,12 +90,19 @@ public class PickupManager implements Listener {
         Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!player.isSneaking()) return;
-        event.setCancelled(true);
-        if (Permission.PICKUP.lacksAndNotify(player)) return;
+        // Check if mob is blacklisted
         if (!canPickUp(player, entity)) {
             Message.BLACKLISTED_MOB.sendActionbar(player);
             return;
         }
+        // Check held item
+        ItemStack held = player.getInventory().getItemInMainHand();
+        if (isBlacklistedItemInHand(held.getType())) {
+            return;
+        }
+        // Only cancel if mob can be picked up
+        if (Permission.PICKUP.lacksAndNotify(player)) return;
+        event.setCancelled(true);
         ItemStack item;
         try {
             item = toItemStack(entity);
