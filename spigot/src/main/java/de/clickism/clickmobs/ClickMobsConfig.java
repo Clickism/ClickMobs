@@ -101,6 +101,16 @@ public class ClickMobsConfig {
                             """)
                     .appendDefaultValue();
 
+    public static final ConfigOption<List<String>> BLACKLISTED_ITEMS_IN_HAND =
+            CONFIG.optionOf("blacklisted_items_in_hand", List.of("lead", "saddle"), String.class)
+                    .description("""
+                            Items that prevent picking up mobs when held in hand.
+                            Use the item names (material names) of the items.
+                            Harnesses are always blocked for Happy Ghast compatibility
+                            and do not need to be added here.
+                            """)
+                    .appendDefaultValue();
+
     public static final ConfigOption<Map<String, Integer>> CUSTOM_MODEL_DATA =
             CONFIG.optionOf("custom_model_data",
                             Map.of("creeper", 0, "skeleton", 0),

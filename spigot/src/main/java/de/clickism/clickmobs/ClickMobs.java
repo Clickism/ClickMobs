@@ -22,6 +22,8 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import static de.clickism.clickmobs.ClickMobsConfig.*;
@@ -54,9 +56,15 @@ public final class ClickMobs extends JavaPlugin {
             blacklistedMobs.clear();
             blacklistedMobs.addAll(parser.parseMobList(lines));
         });
+        Set<String> blacklistedItemsInHand = new HashSet<>();
+        BLACKLISTED_ITEMS_IN_HAND.onLoad(lines -> {
+            blacklistedItemsInHand.clear();
+            blacklistedItemsInHand.addAll(lines);
+        });
         CONFIG.load();
         EntitySaver entitySaver = EntitySaverFactory.create();
-        PickupManager pickupManager = new PickupManager(this, entitySaver, whitelistedMobs, blacklistedMobs);
+        PickupManager pickupManager = new PickupManager(this, entitySaver,
+                whitelistedMobs, blacklistedMobs, blacklistedItemsInHand);
         new DispenserListener(this, pickupManager);
         new VehicleInteractListener(this, pickupManager);
         // Register commands

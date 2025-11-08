@@ -45,21 +45,24 @@ public class PickupManager implements Listener {
 
     private final MobList whitelistedMobs;
     private final MobList blacklistedMobs;
+    private final Set<String> blacklistedMaterialsInHand;
 
     public PickupManager(JavaPlugin plugin, EntitySaver entitySaver,
-                         MobList whitelistedMobs, MobList blacklistedMobs) {
+                         MobList whitelistedMobs, MobList blacklistedMobs,
+                         Set<String> blacklistedMaterialsInHand) {
         this.entitySaver = entitySaver;
         this.whitelistedMobs = whitelistedMobs;
         this.blacklistedMobs = blacklistedMobs;
+        this.blacklistedMaterialsInHand = blacklistedMaterialsInHand;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    private static boolean isBlacklistedItemInHand(Material material) {
+    private boolean isBlacklistedItemInHand(Material material) {
         if (material.toString().toLowerCase().matches(".*_harness$")) {
             // Harnesses cause problems with Happy Ghasts
             return true;
         }
-        return material == Material.SADDLE || material == Material.LEAD;
+        return blacklistedMaterialsInHand.contains(material.toString().toLowerCase());
     }
 
     private static String formatEntity(Entity entity) {
