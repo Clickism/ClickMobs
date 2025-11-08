@@ -10,21 +10,25 @@ import de.clickism.clickmobs.ClickMobs;
 import de.clickism.clickmobs.mob.PickupManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Container;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DispenserListener implements Listener {
 
-    private static final BukkitScheduler SCHEDULER = Bukkit.getScheduler();
     private final PickupManager pickupManager;
 
     @AutoRegistered
@@ -33,26 +37,62 @@ public class DispenserListener implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    // Dispensers only work on 1.21 and above
+    @EventHandler
+    private void onRedstone(BlockRedstoneEvent event) {
+        Block block = event.getBlock();
+        // Only trigger on rising edge
+        if (!(event.getOldCurrent() == 0 && event.getNewCurrent() > 0)) return;
+
+        List<Block> dispensers = new ArrayList<>();
+
+        for (BlockFace face : BlockFace.values()) {
+            Block relative = block.getRelative(face);
+            if (relative.getType() == Material.DISPENSER) {
+                dispensers.add(relative);
+            }
+        }
+
+        if (dispensers.isEmpty()) return;
+
+        Bukkit.getScheduler().runTaskLater(ClickMobs.INSTANCE, () -> {
+            for (Block dispenser : dispensers) {
+                if (!dispenser.isBlockIndirectlyPowered()) return;
+                if (dispenser.getType() != Material.DISPENSER) return;
+                dispenseMob(dispenser);
+            }
+        }, 1L);
+    }
+
+    private void dispenseMob(Block block) {
+        Dispenser dispenser = (Dispenser) block.getState();
+        Inventory inventory = dispenser.getSnapshotInventory();
+        List<ItemStack> mobs = new ArrayList<>();
+        for (ItemStack item : inventory) {
+            if (item == null) continue;
+            if (!pickupManager.isMob(item)) continue;
+            mobs.add(item);
+        }
+        if (mobs.isEmpty()) return;
+        ItemStack item = mobs.get((int) (Math.random() * mobs.size()));
+        try {
+            BlockFace facing = ((Directional) dispenser.getBlockData()).getFacing();
+            Location location = block.getRelative(facing).getLocation().add(.5, 0, .5);
+            pickupManager.spawnFromItemStack(item, location);
+            item.setAmount(item.getAmount() - 1);
+            if (item.getAmount() <= 0) {
+                item.setType(Material.AIR);
+            }
+            dispenser.update(true, false);
+        } catch (IllegalArgumentException exception) {
+            ClickMobs.LOGGER.severe("Failed to spawn mob from NBT data: " + exception.getMessage());
+        }
+    }
+
     @EventHandler(ignoreCancelled = true)
     private void onDispense(BlockDispenseEvent event) {
         ItemStack item = event.getItem();
         if (!pickupManager.isMob(item)) return;
-        Block block = event.getBlock();
-        BlockState state = block.getState();
-        if (!(state instanceof Dispenser)) return;
+        // Handled in redstone event
         event.setCancelled(true);
-        Directional directional = (Directional) state.getBlockData();
-        Location location = block.getRelative(directional.getFacing()).getLocation().add(.5, 0, .5);
-        try {
-            pickupManager.spawnFromItemStack(item, location);
-            SCHEDULER.runTask(ClickMobs.INSTANCE, () -> {
-                Container container = (Container) state;
-                container.getInventory().removeItem(item);
-                container.update();
-            });
-        } catch (IllegalArgumentException exception) {
-            ClickMobs.LOGGER.severe("Failed to spawn mob from NBT data: " + exception.getMessage());
-        }
     }
 }
