@@ -16,7 +16,7 @@ import java.util.Map;
 public class ClickMobsConfig {
     public static final Config CONFIG =
             Config.of("plugins/ClickMobs/config.yml")
-                    .version(7)
+                    .version(8)
                     .header("""
                             ---------------------------------------------------------
                             ClickMobs Config
@@ -49,6 +49,13 @@ public class ClickMobsConfig {
                             BOTH "clickmobs.pickup" and "clickmobs.pickup.creeper" permissions.
                             - Whitelisted mobs will still be able to be picked up without a mob-specific permission.
                             - Blacklisted mobs will not be able to be picked up even with a mob-specific permission.
+                            """)
+                    .appendDefaultValue();
+
+    public static final ConfigOption<Boolean> ENABLE_DISPENSERS =
+            CONFIG.optionOf("enable_dispensers", true)
+                    .description("""
+                            Whether dispensers can dispense picked up mobs.
                             """)
                     .appendDefaultValue();
 

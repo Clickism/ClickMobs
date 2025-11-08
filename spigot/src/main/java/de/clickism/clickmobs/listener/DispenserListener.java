@@ -26,6 +26,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import static de.clickism.clickmobs.ClickMobsConfig.CONFIG;
+import static de.clickism.clickmobs.ClickMobsConfig.ENABLE_DISPENSERS;
+
 public class DispenserListener implements Listener {
 
     private final PickupManager pickupManager;
@@ -38,6 +41,7 @@ public class DispenserListener implements Listener {
 
     @EventHandler
     private void onRedstone(BlockRedstoneEvent event) {
+        if (!CONFIG.get(ENABLE_DISPENSERS)) return;
         Block block = event.getBlock();
         // Only trigger on rising edge
         if (!(event.getOldCurrent() == 0 && event.getNewCurrent() > 0)) return;
@@ -89,6 +93,7 @@ public class DispenserListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     private void onDispense(BlockDispenseEvent event) {
+        if (!CONFIG.get(ENABLE_DISPENSERS)) return;
         ItemStack item = event.getItem();
         if (!pickupManager.isMob(item)) return;
         // Handled in redstone event
