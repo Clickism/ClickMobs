@@ -14,7 +14,7 @@ import java.util.List;
 public class ClickMobsConfig {
     public static final Config CONFIG =
             Config.of("config/ClickMobs/config.yml")
-                    .version(6)
+                    .version(7)
                     .header("""
                             ---------------------------------------------------------
                             ClickMobs Config
@@ -68,6 +68,13 @@ public class ClickMobsConfig {
             CONFIG.optionOf("blacklisted_mobs", List.of("?hostile", "wither", "ender_dragon"), String.class)
                     .description("""
                             Mobs that are not allowed to be picked up.
+                            """)
+                    .appendDefaultValue();
+
+    public static final ConfigOption<Boolean> ENABLE_DISPENSERS =
+            CONFIG.optionOf("enable_dispensers", true)
+                    .description("""
+                            Whether dispensers can dispense picked up mobs.
                             """)
                     .appendDefaultValue();
 }

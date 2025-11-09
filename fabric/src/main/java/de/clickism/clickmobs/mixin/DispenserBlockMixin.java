@@ -23,6 +23,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static de.clickism.clickmobs.ClickMobsConfig.CONFIG;
+import static de.clickism.clickmobs.ClickMobsConfig.ENABLE_DISPENSERS;
+
 @Mixin(DispenserBlock.class)
 public abstract class DispenserBlockMixin extends BlockWithEntity {
     protected DispenserBlockMixin(Settings settings) {
@@ -49,6 +52,7 @@ public abstract class DispenserBlockMixin extends BlockWithEntity {
             CallbackInfoReturnable<DispenserBehavior> cir
     ) {
         if (!PickupHandler.isMob(itemStack)) return;
+        if (!CONFIG.get(ENABLE_DISPENSERS)) return;
         cir.setReturnValue((pointer, stack) -> {
             //? if <1.21.1
             /*World world = world(pointer);*/
