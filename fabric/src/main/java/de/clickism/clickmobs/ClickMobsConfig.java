@@ -6,6 +6,7 @@
 
 package de.clickism.clickmobs;
 
+import de.clickism.clickmobs.mob.PickupHandler;
 import de.clickism.configured.Config;
 import de.clickism.configured.ConfigOption;
 
@@ -77,4 +78,33 @@ public class ClickMobsConfig {
                             Whether dispensers can dispense picked up mobs.
                             """)
                     .appendDefaultValue();
+
+    public static final ConfigOption<List<String>> BLACKLISTED_ITEMS_IN_HAND =
+            CONFIG.optionOf("blacklisted_items_in_hand", List.of("lead", "saddle"), String.class)
+                    .description("""
+                            Items that prevent picking up mobs when held in hand.
+                            Use the (full) item identifiers of the items.
+                            
+                            Harnesses are always blocked for Happy Ghast compatibility
+                            and do not need to be added here.
+                            
+                            Use the tag "?all" to block all items. This will make it so players
+                            can only pick up mobs with an empty hand.
+                            
+                            For items from another mod, add the namespace before the item name.
+                                i.E: "othermod:otheritem"
+                            """)
+                    .appendDefaultValue()
+                    .onLoad(list -> {
+                        PickupHandler.BLACKLISTED_MATERIALS_IN_HAND.clear();
+                        list.forEach(item -> {
+                            String name = item.toLowerCase();
+                            if (!item.contains(":")) {
+                                // Add minecraft namespace
+                                name = "minecraft:" + name;
+                            }
+                            PickupHandler.BLACKLISTED_MATERIALS_IN_HAND.add(name);
+                        });
+                    });
+
 }

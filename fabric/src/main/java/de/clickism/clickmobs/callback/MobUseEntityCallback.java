@@ -11,10 +11,12 @@ import de.clickism.clickmobs.predicate.MobList;
 import de.clickism.clickmobs.mob.PickupHandler;
 import de.clickism.clickmobs.util.MessageType;
 import de.clickism.clickmobs.util.Utils;
+import de.clickism.clickmobs.util.VersionHelper;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -45,18 +47,22 @@ public class MobUseEntityCallback implements UseEntityCallback {
         if (!(entity instanceof LivingEntity livingEntity)) return ActionResult.PASS;
         if (livingEntity instanceof PlayerEntity) return ActionResult.PASS;
         if (hitResult == null) return ActionResult.CONSUME;
-        handlePickup(player, livingEntity);
-        return ActionResult.CONSUME;
+        return handlePickup(player, livingEntity);
     }
 
-    private void handlePickup(PlayerEntity player, LivingEntity entity) {
+    private ActionResult handlePickup(PlayerEntity player, LivingEntity entity) {
+        Item item = VersionHelper.getSelectedStack(player.getInventory()).getItem();
+        if (PickupHandler.isBlacklistedItemInHand(item)) {
+            return ActionResult.PASS;
+        }
         if (!canBePickedUp(entity)) {
             MessageType.FAIL.sendActionbar(player, Text.literal("You can't pick up this mob"));
-            return;
+            return ActionResult.PASS;
         }
         PickupHandler.notifyPickup(player, entity);
         ItemStack itemStack = PickupHandler.toItemStack(entity);
         Utils.offerToHand(player, itemStack);
+        return ActionResult.CONSUME;
     }
 
     public boolean canBePickedUp(LivingEntity entity) {

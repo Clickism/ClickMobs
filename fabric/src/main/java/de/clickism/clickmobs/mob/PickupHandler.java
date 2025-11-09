@@ -11,13 +11,15 @@ import de.clickism.clickmobs.util.VersionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -26,11 +28,12 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 //? if >=1.21.6 {
 import net.minecraft.storage.NbtReadView;
@@ -53,6 +56,22 @@ public class PickupHandler {
     private static final String TYPE_KEY = "EntityType";
     //? if <1.21.1
     /*private static final String DATA_KEY = "ClickMobsData";*/
+
+    private static final String ALL_TAG = "?all";
+    public static final Set<String> BLACKLISTED_MATERIALS_IN_HAND = new HashSet<>();
+
+    public static boolean isBlacklistedItemInHand(Item item) {
+        if (BLACKLISTED_MATERIALS_IN_HAND.contains(ALL_TAG) && item != Items.AIR) {
+            return true;
+        }
+
+        String itemName = Registries.ITEM.getId(item).toString();
+        if (itemName.toLowerCase().matches(".*_harness$")) {
+            // Harnesses cause problems with Happy Ghasts
+            return true;
+        }
+        return BLACKLISTED_MATERIALS_IN_HAND.contains(item.toString().toLowerCase());
+    }
 
     //? if >=1.21.6 {
     public static <T extends Entity> ItemStack toItemStack(T entity) {
