@@ -25,6 +25,7 @@ repositories {
         name = "sonatype"
         url = uri("https://oss.sonatype.org/content/groups/public/")
     }
+    maven("https://repo.bstats.org/content/repositories/releases/")
 }
 
 val configuredVersion = "0.2.4"
@@ -38,6 +39,8 @@ dependencies {
     implementation("de.clickism:configured-yaml:${configuredVersion}")
     implementation("de.clickism:configured-json:${configuredVersion}")
     implementation("de.clickism:configured-localization:${configuredVersion}")
+    // Metrics
+    implementation("org.bstats:bstats-bukkit:3.1.0")
 }
 
 val targetJavaVersion = 17
@@ -72,7 +75,7 @@ tasks.shadowJar {
     archiveClassifier.set("")
     mergeServiceFiles()
     isEnableRelocation = true
-    relocationPrefix = "de.clickism.clickauth.shadow"
+    relocationPrefix = "de.clickism.clickmobs.shadow"
     // Exclude Gson and Snakeyaml since it is already provided in Spigot
     dependencies {
         exclude(dependency("com.google.code.gson:gson"))

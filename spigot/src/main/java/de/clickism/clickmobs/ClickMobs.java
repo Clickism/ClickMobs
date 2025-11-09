@@ -17,6 +17,9 @@ import de.clickism.clickmobs.mob.PickupManager;
 import de.clickism.clickmobs.predicate.MobList;
 import de.clickism.clickmobs.predicate.MobListParser;
 import de.clickism.clickmobs.util.UpdateChecker;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -77,6 +80,8 @@ public final class ClickMobs extends JavaPlugin {
             checkUpdates();
             new JoinListener(this, () -> newerVersion);
         }
+        // Setup Metrics
+        setupBStats();
     }
 
     private void checkUpdates() {
@@ -90,5 +95,28 @@ public final class ClickMobs extends JavaPlugin {
                 Message.UPDATE.send(player, newerVersion);
             });
         });
+    }
+
+    private void setupBStats() {
+        int pluginId = 27923;
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new SimplePie("language", () ->
+                String.valueOf(CONFIG.get(LANGUAGE))));
+        metrics.addCustomChart(new SingleLineChart("blacklist_tag_entries", () ->
+                (int) CONFIG.get(BLACKLISTED_MOBS)
+                        .stream()
+                        .filter(entry -> entry.contains("?"))
+                        .count()
+        ));
+        metrics.addCustomChart(new SingleLineChart("blacklist_all_entries", () ->
+                CONFIG.get(BLACKLISTED_MOBS).size()));
+        metrics.addCustomChart(new SingleLineChart("whitelist_tag_entries", () ->
+                (int) CONFIG.get(WHITELISTED_MOBS)
+                        .stream()
+                        .filter(entry -> entry.contains("?"))
+                        .count()
+        ));
+        metrics.addCustomChart(new SingleLineChart("whitelist_all_entries", () ->
+                CONFIG.get(WHITELISTED_MOBS).size()));
     }
 }
