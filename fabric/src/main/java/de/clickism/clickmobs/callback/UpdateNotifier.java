@@ -7,6 +7,7 @@
 package de.clickism.clickmobs.callback;
 
 import de.clickism.clickmobs.util.MessageType;
+import de.clickism.clickmobs.util.VersionHelper;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
@@ -36,7 +37,7 @@ public class UpdateNotifier implements ServerPlayConnectionEvents.Join {
         ServerPlayerEntity player = handler.player;
         if (notifiedPlayers.contains(player.getUuid())) return;
         notifiedPlayers.add(player.getUuid());
-        if (!player.hasPermissionLevel(3)) return;
+        if (!VersionHelper.isOp(player)) return;
         MessageType.WARN.send(player, Text.literal("ClickMobs: Newer version available: ")
                 .append(Text.of(newerVersion)));
     }
