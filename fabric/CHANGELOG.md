@@ -5,3 +5,4 @@
     - `/clickmobs config path`: Prints the path to the **configuration file**.
     - `/clickmobs config reload`: Reloads the configuration file.
 - Whitelist/blacklist will now reload when the config is reloaded.
+- Fixed: Running with ClickVillagers 1.6+ would cause a crash.
