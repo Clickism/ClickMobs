@@ -12,8 +12,8 @@ import de.clickism.configured.ConfigOption;
 
 import java.util.List;
 
-public class ClickMobsConfig {
-    public static final Config CONFIG =
+public interface ClickMobsConfig {
+    Config CONFIG =
             Config.of("config/ClickMobs/config.yml")
                     .version(7)
                     .header("""
@@ -23,15 +23,15 @@ public class ClickMobsConfig {
                             ---------------------------------------------------------
                             """);
 
-    public static final ConfigOption<Boolean> CHECK_UPDATE =
-            CONFIG.optionOf("check_update", true)
+    ConfigOption<Boolean> CHECK_UPDATE =
+            CONFIG.option("check_update", true)
                     .description("""
                             Whether to check for updates on server startup. Strongly Recommended.
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<List<String>> WHITELISTED_MOBS =
-            CONFIG.optionOf("whitelisted_mobs", List.of("cow", "pig", "sheep"), String.class)
+    ConfigOption<List<String>> WHITELISTED_MOBS =
+            CONFIG.option("whitelisted_mobs", List.of("cow", "pig", "sheep"))
+                    .listOf(String.class)
                     .header("""
                             ---------------------------------------------------------
                             In the following section you can whitelist/blacklist mobs.
@@ -53,7 +53,7 @@ public class ClickMobsConfig {
                                 - not ?hostile
                             You can use the ?mob tag alongside other tags to use tags on specific mobs.
                                 - ?mob(creeper, zombie) ?nametagged(Friendly!)
-
+                            
                             Check the wiki for more documentation on tags:
                             https://github.com/Clickism/ClickMobs/wiki/Tags
                             ---------------------------------------------------------
@@ -62,25 +62,24 @@ public class ClickMobsConfig {
                             Mobs that are allowed to be picked up.
                             The whitelist takes precedence over the blacklist.
                             (Blacklisted mobs included in the whitelist will still be allowed)
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<List<String>> BLACKLISTED_MOBS =
-            CONFIG.optionOf("blacklisted_mobs", List.of("?hostile", "wither", "ender_dragon"), String.class)
+    ConfigOption<List<String>> BLACKLISTED_MOBS =
+            CONFIG.option("blacklisted_mobs", List.of("?hostile", "wither", "ender_dragon"))
+                    .listOf(String.class)
                     .description("""
                             Mobs that are not allowed to be picked up.
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<Boolean> ENABLE_DISPENSERS =
-            CONFIG.optionOf("enable_dispensers", true)
+    ConfigOption<Boolean> ENABLE_DISPENSERS =
+            CONFIG.option("enable_dispensers", true)
                     .description("""
                             Whether dispensers can dispense picked up mobs.
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<List<String>> BLACKLISTED_ITEMS_IN_HAND =
-            CONFIG.optionOf("blacklisted_items_in_hand", List.of("lead", "saddle"), String.class)
+    ConfigOption<List<String>> BLACKLISTED_ITEMS_IN_HAND =
+            CONFIG.option("blacklisted_items_in_hand", List.of("lead", "saddle"))
+                    .listOf(String.class)
                     .description("""
                             Items that prevent picking up mobs when held in hand.
                             Use the (full) item identifiers of the items.
@@ -94,8 +93,7 @@ public class ClickMobsConfig {
                             For items from another mod, add the namespace before the item name.
                                 i.E: "othermod:otheritem"
                             """)
-                    .appendDefaultValue()
-                    .onLoad(list -> {
+                    .onChange(list -> {
                         PickupHandler.BLACKLISTED_MATERIALS_IN_HAND.clear();
                         list.forEach(item -> {
                             String name = item.toLowerCase();

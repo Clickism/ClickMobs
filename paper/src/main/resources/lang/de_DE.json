@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 4,
   "credit": ["Clickism"],
   "update": "ClickMobs: §a§lNeue Version verfügbar: §f{version}",
   "no_permission": "Du bist nicht berechtigt, das zu tun.",
@@ -14,5 +14,9 @@
   ],
   "usage": "§cAnwendung: {usage}",
   "reload_success": "§lClickMobs-§aKonfiguration wurde neu geladen.",
-  "reload_fail": "Neuladen der §lClickMobs§c-Konfiguration fehlgeschlagen."
+  "reload_fail": "Neuladen der §lClickMobs§c-Konfiguration fehlgeschlagen.",
+  "config_set": "Config-Option \"&l{option}&a\" wurde auf &l{value} gesetzt.",
+  "config_get": "Config-Option \"&l{option}&a\" hat den Wert &l{value}.",
+  "config_path": "Die Konfigurationsdatei befindet sich unter: &f{path}",
+  "config_reload": "Konfiguration neu geladen."
 }

@@ -1,15 +1,13 @@
 name: ClickMobs
 version: '${version}'
 main: de.clickism.clickmobs.ClickMobs
-api-version: '1.20'
+api-version: '1.21'
 authors: [ Clickism ]
 description: A simple plugin that allows you to pick up any mob.
 commands:
   clickmobs:
     description: Main command for ClickMobs.
-    usage: /clickmobs <reload>
-    permission: clickmobs.reload
-    aliases: [ cm ]
+    permission: clickmobs.config
 permissions:
   clickmobs.pickup:
     description: Allows players to pick up mobs.
@@ -17,8 +15,8 @@ permissions:
   clickmobs.place:
     description: Allows players to place mobs.
     default: true
-  clickmobs.reload:
-    description: Allows players to reload the plugin.
+  clickmobs.config:
+    description: Allows players to configure and reload the plugin via commands.
     default: op
   # Mob specific permissions, must be enabled in the config.
   # Pick up permissions

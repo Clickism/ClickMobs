@@ -46,6 +46,12 @@ public abstract class MessageType {
     };
 
     public static final MessageType PICK_UP = silent("&2[↑] &a", "&8< &2↑ &a%s &8>");
+    public static final MessageType CONFIG = new MessageType("&6[⚒] &a", "&8< &6%s &8>") {
+        @Override
+        public void playSound(Player player) {
+            MessageType.CONFIRM.playSound(player);
+        }
+    };
     private final String prefix;
     private final String titleFormat;
     private final String subtitleFormat;

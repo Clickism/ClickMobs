@@ -13,10 +13,11 @@ import de.clickism.configured.ConfigOption;
 import java.util.List;
 import java.util.Map;
 
-public class ClickMobsConfig {
-    public static final Config CONFIG =
+public interface ClickMobsConfig {
+    Config CONFIG =
             Config.of("plugins/ClickMobs/config.yml")
                     .version(8)
+                    .appendDefaults()
                     .header("""
                             ---------------------------------------------------------
                             ClickMobs Config
@@ -24,43 +25,41 @@ public class ClickMobsConfig {
                             ---------------------------------------------------------
                             """);
 
-    public static final ConfigOption<String> LANGUAGE =
-            CONFIG.optionOf("language", "en_US")
+    ConfigOption<String> LANGUAGE =
+            CONFIG.option("language", "en_US")
                     .description("""
                             Language of the plugin.
                             Currently supported languages: en_US, de_DE
                             """)
-                    .onLoad(lang -> Message.LOCALIZATION
+                    .onChange(lang -> Message.LOCALIZATION
                             .language(lang)
                             .load());
 
-    public static final ConfigOption<Boolean> CHECK_UPDATE =
-            CONFIG.optionOf("check_update", true)
+    ConfigOption<Boolean> CHECK_UPDATE =
+            CONFIG.option("check_update", true)
                     .description("""
                             Whether to check for updates on server startup. Strongly Recommended.
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<Boolean> PER_MOB_PERMISSIONS =
-            CONFIG.optionOf("per_mob_permissions", false)
+    ConfigOption<Boolean> PER_MOB_PERMISSIONS =
+            CONFIG.option("per_mob_permissions", false)
                     .description("""
                             Whether to have specific permissions for each mob.
                             For example, players won't be able to pick up a creeper unless they have
                             BOTH "clickmobs.pickup" and "clickmobs.pickup.creeper" permissions.
                             - Whitelisted mobs will still be able to be picked up without a mob-specific permission.
                             - Blacklisted mobs will not be able to be picked up even with a mob-specific permission.
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<Boolean> ENABLE_DISPENSERS =
-            CONFIG.optionOf("enable_dispensers", true)
+    ConfigOption<Boolean> ENABLE_DISPENSERS =
+            CONFIG.option("enable_dispensers", true)
                     .description("""
                             Whether dispensers can dispense picked up mobs.
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<List<String>> WHITELISTED_MOBS =
-            CONFIG.optionOf("whitelisted_mobs", List.of("cow", "pig", "sheep"), String.class)
+    ConfigOption<List<String>> WHITELISTED_MOBS =
+            CONFIG.option("whitelisted_mobs", List.of("cow", "pig", "sheep"))
+                    .listOf(String.class)
                     .header("""
                             ---------------------------------------------------------
                             In the following section you can whitelist/blacklist mobs.
@@ -91,18 +90,18 @@ public class ClickMobsConfig {
                             Mobs that are allowed to be picked up.
                             The whitelist takes precedence over the blacklist.
                             (Blacklisted mobs included in the whitelist will still be allowed)
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<List<String>> BLACKLISTED_MOBS =
-            CONFIG.optionOf("blacklisted_mobs", List.of("?hostile", "wither", "ender_dragon"), String.class)
+    ConfigOption<List<String>> BLACKLISTED_MOBS =
+            CONFIG.option("blacklisted_mobs", List.of("?hostile", "wither", "ender_dragon"))
+                    .listOf(String.class)
                     .description("""
                             Mobs that are not allowed to be picked up.
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<List<String>> BLACKLISTED_ITEMS_IN_HAND =
-            CONFIG.optionOf("blacklisted_items_in_hand", List.of("lead", "saddle"), String.class)
+    ConfigOption<List<String>> BLACKLISTED_ITEMS_IN_HAND =
+            CONFIG.option("blacklisted_items_in_hand", List.of("lead", "saddle"))
+                    .listOf(String.class)
                     .description("""
                             Items that prevent picking up mobs when held in hand.
                             Use the item names (material names) of the items.
@@ -112,13 +111,11 @@ public class ClickMobsConfig {
                             
                             Use the tag "?all" to block all items. This will make it so players
                             can only pick up mobs with an empty hand.
-                            """)
-                    .appendDefaultValue();
+                            """);
 
-    public static final ConfigOption<Map<String, Integer>> CUSTOM_MODEL_DATA =
-            CONFIG.optionOf("custom_model_data",
-                            Map.of("creeper", 0, "skeleton", 0),
-                            String.class, Integer.class)
+    ConfigOption<Map<String, Integer>> CUSTOM_MODEL_DATA =
+            CONFIG.option("custom_model_data", Map.of("creeper", 0, "skeleton", 0))
+                    .mapOf(String.class, Integer.class)
                     .description("""
                             Set a custom model data for the picked up mobs.
                             This is useful for resource packs that want to change the model/texture of picked up mobs.

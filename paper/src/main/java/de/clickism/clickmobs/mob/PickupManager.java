@@ -150,7 +150,7 @@ public class PickupManager implements Listener {
             World world = player.getWorld();
             world.playSound(location, Sound.ENTITY_PLAYER_ATTACK_WEAK, 1, .5f);
             Block blockBelow = block.getRelative(BlockFace.DOWN);
-            world.spawnParticle(Particle.BLOCK_CRACK, location, 30, blockBelow.getBlockData());
+            world.spawnParticle(Particle.BLOCK, location, 30, blockBelow.getBlockData());
         } catch (IllegalArgumentException exception) {
             Message.READ_ERROR.send(player);
             ClickMobs.LOGGER.severe("Failed to read mob data: " + exception.getMessage());
@@ -251,7 +251,7 @@ public class PickupManager implements Listener {
         meta.setDisplayName(ChatColor.YELLOW + name);
         meta.setLore(Arrays.stream(Message.MOB$LORE.localized(entityName).split("\n"))
                 .toList());
-        int modelDataOverride = CONFIG.get(CUSTOM_MODEL_DATA).getOrDefault(Utils.getKeyOfEntity(entity), 0);
+        int modelDataOverride = CUSTOM_MODEL_DATA.get().getOrDefault(Utils.getKeyOfEntity(entity), 0);
         if (modelDataOverride != 0) {
             meta.setCustomModelData(modelDataOverride);
         }
@@ -266,7 +266,7 @@ public class PickupManager implements Listener {
             return true;
         }
         boolean blacklisted = blacklistedMobs.contains(entity);
-        if (CONFIG.get(PER_MOB_PERMISSIONS)) {
+        if (PER_MOB_PERMISSIONS.get()) {
             return Permission.hasPickupPermissionFor(player, name) && !blacklisted;
         }
         return !blacklisted;

@@ -1,14 +1,14 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "8.3.5"
-    id("io.github.patrick.remapper") version "1.4.2"
+    id("com.gradleup.shadow") version "9.3.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
 val pluginVersion = property("plugin_version").toString()
-version = "$name-$pluginVersion"
 
 group = "de.clickism"
+version = "$name-$pluginVersion"
 
 base {
     archivesName.set(project.property("archives_base_name").toString())
@@ -17,40 +17,28 @@ base {
 repositories {
     mavenCentral()
     mavenLocal()
-    maven {
-        name = "spigotmc-repo"
-        url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    }
-    maven {
-        name = "sonatype"
-        url = uri("https://oss.sonatype.org/content/groups/public/")
-    }
-    maven("https://repo.bstats.org/content/repositories/releases/")
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
-val configuredVersion = "0.2.4"
+val configuredVersion = "0.3"
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
-    compileOnly("org.spigotmc:spigot:1.20.1-R0.1-SNAPSHOT:remapped-mojang")
+    // Paper
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
+    // Annotations
     compileOnly("org.jetbrains:annotations:22.0.0")
     // Configuration & Localization
     implementation("de.clickism:configured-core:${configuredVersion}")
     implementation("de.clickism:configured-yaml:${configuredVersion}")
     implementation("de.clickism:configured-json:${configuredVersion}")
     implementation("de.clickism:configured-localization:${configuredVersion}")
+    implementation("de.clickism:configured-paper-command-adapter:${configuredVersion}")
     // Metrics
     implementation("org.bstats:bstats-bukkit:3.1.0")
 }
 
-val targetJavaVersion = 17
 java {
-    val javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
-    }
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 tasks.runServer {
@@ -58,23 +46,15 @@ tasks.runServer {
     minecraftVersion("1.21.10")
 }
 
-tasks.remap {
-    version.set("1.20.1")
-}
-
-tasks.jar {
-    enabled = false
-}
-
 tasks.build {
-    dependsOn(tasks.remap)
     dependsOn(tasks.shadowJar)
 }
 
 tasks.shadowJar {
     archiveClassifier.set("")
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     mergeServiceFiles()
-    isEnableRelocation = true
+    enableAutoRelocation = true
     relocationPrefix = "de.clickism.clickmobs.shadow"
     // Exclude Gson and Snakeyaml since it is already provided in Spigot
     dependencies {
@@ -86,12 +66,9 @@ tasks.shadowJar {
     relocate("org.yaml.snakeyaml", "org.yaml.snakeyaml")
 }
 
-tasks.withType<JavaCompile>().configureEach {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
-        options.release.set(targetJavaVersion)
-    }
+    options.release.set(21)
 }
 
 tasks.processResources {
@@ -100,5 +77,25 @@ tasks.processResources {
     filteringCharset = "UTF-8"
     filesMatching("plugin.yml") {
         expand(props)
+    }
+}
+
+publishMods {
+    displayName.set("ClickMobs $pluginVersion for Paper")
+    file.set(tasks.shadowJar.get().archiveFile)
+    version.set(project.version.toString())
+    changelog.set(rootProject.file("paper/CHANGELOG.md").readText())
+    type.set(STABLE)
+    modLoaders.add("paper")
+    modLoaders.add("purpur")
+    val mcVersionStart = "1.21"
+    val mcVersionEnd = "1.21.11"
+    modrinth {
+        accessToken.set(System.getenv("MODRINTH_TOKEN"))
+        projectId.set("tRdRT5jS")
+        minecraftVersionRange {
+            start = mcVersionStart
+            end = mcVersionEnd
+        }
     }
 }

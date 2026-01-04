@@ -37,13 +37,21 @@ public enum Message implements LocalizationKey {
     @Parameters("usage")
     USAGE(MessageType.FAIL),
     RELOAD_SUCCESS(MessageType.CONFIRM),
-    RELOAD_FAIL(MessageType.FAIL);
+    RELOAD_FAIL(MessageType.FAIL),
+
+    @Parameters({"option", "value"})
+    CONFIG_SET(MessageType.CONFIG),
+    @Parameters({"option", "value"})
+    CONFIG_GET(MessageType.CONFIG),
+    @Parameters("path")
+    CONFIG_PATH(MessageType.CONFIG),
+    CONFIG_RELOAD(MessageType.CONFIG);
 
     public static final Localization LOCALIZATION =
             Localization.of(lang -> "plugins/ClickMobs/lang/" + lang + ".json")
                     .resourceProvider(ClickMobs.class, lang -> "/lang/" + lang + ".json")
                     .fallbackLanguage("en_US")
-                    .version(3);
+                    .version(4);
 
     private static final MessageType MISSING = MessageType.silent("&2[?] &c", "&8< &2? &f%s &8>");
 

@@ -9,6 +9,7 @@ package de.clickism.clickmobs.callback;
 import de.clickism.clickmobs.ClickMobs;
 import de.clickism.clickmobs.predicate.MobList;
 import de.clickism.clickmobs.mob.PickupHandler;
+import de.clickism.clickmobs.predicate.MobListParser;
 import de.clickism.clickmobs.util.MessageType;
 import de.clickism.clickmobs.util.Utils;
 import de.clickism.clickmobs.util.VersionHelper;
@@ -26,14 +27,18 @@ import net.minecraft.village.VillagerDataContainer;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import static de.clickism.clickmobs.ClickMobsConfig.BLACKLISTED_MOBS;
+import static de.clickism.clickmobs.ClickMobsConfig.WHITELISTED_MOBS;
+
 public class MobUseEntityCallback implements UseEntityCallback {
 
-    private final MobList whitelistedMobs;
-    private final MobList blacklistedMobs;
+    private final MobListParser parser = new MobListParser();
+    private MobList whitelistedMobs;
+    private MobList blacklistedMobs;
 
-    public MobUseEntityCallback(MobList whitelistedMobs, MobList blacklistedMobs) {
-        this.whitelistedMobs = whitelistedMobs;
-        this.blacklistedMobs = blacklistedMobs;
+    public MobUseEntityCallback() {
+        WHITELISTED_MOBS.onChange(list -> this.whitelistedMobs = parser.parseMobList(list));
+        BLACKLISTED_MOBS.onChange(list -> this.blacklistedMobs = parser.parseMobList(list));
     }
 
     @Override

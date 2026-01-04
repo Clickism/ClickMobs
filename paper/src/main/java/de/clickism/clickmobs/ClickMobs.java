@@ -6,9 +6,10 @@
 
 package de.clickism.clickmobs;
 
-import de.clickism.clickmobs.config.ReloadCommand;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import de.clickism.clickmobs.config.Permission;
 import de.clickism.clickmobs.entity.EntitySaver;
-import de.clickism.clickmobs.entity.EntitySaverFactory;
+import de.clickism.clickmobs.entity.SnapshotSaver;
 import de.clickism.clickmobs.listener.DispenserListener;
 import de.clickism.clickmobs.listener.JoinListener;
 import de.clickism.clickmobs.listener.VehicleInteractListener;
@@ -17,6 +18,14 @@ import de.clickism.clickmobs.mob.PickupManager;
 import de.clickism.clickmobs.predicate.MobList;
 import de.clickism.clickmobs.predicate.MobListParser;
 import de.clickism.clickmobs.util.UpdateChecker;
+import de.clickism.configured.papercommandadapter.PaperCommandAdapter;
+import de.clickism.configured.papercommandadapter.command.GetCommand;
+import de.clickism.configured.papercommandadapter.command.PathCommand;
+import de.clickism.configured.papercommandadapter.command.ReloadCommand;
+import de.clickism.configured.papercommandadapter.command.SetCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bstats.charts.SingleLineChart;
@@ -31,6 +40,7 @@ import java.util.logging.Logger;
 
 import static de.clickism.clickmobs.ClickMobsConfig.*;
 
+@SuppressWarnings("UnstableApiUsage")
 public final class ClickMobs extends JavaPlugin {
 
     public static final String PROJECT_ID = "clickmobs";
@@ -65,18 +75,26 @@ public final class ClickMobs extends JavaPlugin {
             blacklistedItemsInHand.addAll(lines);
         });
         CONFIG.load();
-        EntitySaver entitySaver = EntitySaverFactory.create();
+        EntitySaver entitySaver = new SnapshotSaver();
         PickupManager pickupManager = new PickupManager(this, entitySaver,
                 whitelistedMobs, blacklistedMobs, blacklistedItemsInHand);
         new DispenserListener(this, pickupManager);
         new VehicleInteractListener(this, pickupManager);
-        // Register commands
-        PluginCommand command = Bukkit.getPluginCommand("clickmobs");
-        if (command != null) {
-            command.setExecutor(new ReloadCommand());
-        }
+
+        // Register Commands
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+            LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("clickmobs");
+            root.then(PaperCommandAdapter.ofConfig(CONFIG)
+                    .requires(sender -> Permission.CONFIG.has(sender.getSender()))
+                    .add(new SetCommand(Message.CONFIG_SET::send))
+                    .add(new GetCommand(Message.CONFIG_GET::send))
+                    .add(new ReloadCommand(Message.CONFIG_RELOAD::send))
+                    .add(new PathCommand(Message.CONFIG_PATH::send))
+                    .buildRoot());
+            commands.registrar().register(root.build());
+        });
         // Check for updates
-        if (CONFIG.get(CHECK_UPDATE)) {
+        if (CHECK_UPDATE.get()) {
             checkUpdates();
             new JoinListener(this, () -> newerVersion);
         }
@@ -101,22 +119,22 @@ public final class ClickMobs extends JavaPlugin {
         int pluginId = 27923;
         Metrics metrics = new Metrics(this, pluginId);
         metrics.addCustomChart(new SimplePie("language", () ->
-                String.valueOf(CONFIG.get(LANGUAGE))));
+                String.valueOf(LANGUAGE.get())));
         metrics.addCustomChart(new SingleLineChart("blacklist_tag_entries", () ->
-                (int) CONFIG.get(BLACKLISTED_MOBS)
+                (int) BLACKLISTED_MOBS.get()
                         .stream()
                         .filter(entry -> entry.contains("?"))
                         .count()
         ));
         metrics.addCustomChart(new SingleLineChart("blacklist_all_entries", () ->
-                CONFIG.get(BLACKLISTED_MOBS).size()));
+                BLACKLISTED_MOBS.get().size()));
         metrics.addCustomChart(new SingleLineChart("whitelist_tag_entries", () ->
-                (int) CONFIG.get(WHITELISTED_MOBS)
+                (int) WHITELISTED_MOBS.get()
                         .stream()
                         .filter(entry -> entry.contains("?"))
                         .count()
         ));
         metrics.addCustomChart(new SingleLineChart("whitelist_all_entries", () ->
-                CONFIG.get(WHITELISTED_MOBS).size()));
+                WHITELISTED_MOBS.get().size()));
     }
 }

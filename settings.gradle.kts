@@ -15,7 +15,7 @@ plugins {
 
 rootProject.name = "ClickMobs"
 
-include("spigot", "fabric")
+include("paper", "fabric")
 
 stonecutter {
     kotlinController = true

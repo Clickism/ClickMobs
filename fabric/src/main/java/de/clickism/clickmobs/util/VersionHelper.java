@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.world.World;
@@ -20,7 +21,16 @@ import net.minecraft.world.World;
 public class VersionHelper {
     public static void playSound(PlayerEntity player, SoundEvent soundEvent, SoundCategory category, float volume, float pitch) {
         //? if >=1.21.11 {
-        player.playSound(soundEvent, volume, pitch);
+        player.getEntityWorld().playSound(
+                null,
+                player.getX(),
+                player.getY(),
+                player.getZ(),
+                soundEvent,
+                category,
+                volume,
+                pitch
+        );
         //?} elif >=1.20.5 {
         /*player.playSoundToPlayer(soundEvent, category, volume, pitch);
          *///?} else
@@ -62,5 +72,14 @@ public class VersionHelper {
                || perms.hasPermission(DefaultPermissions.OWNERS);
         //?} else
         /*return player.hasPermissionLevel(3);*/
+    }
+
+    public static boolean isOp(ServerCommandSource source) {
+        //? if >=1.21.11 {
+        var perms = source.getPermissions();
+        return perms.hasPermission(DefaultPermissions.ADMINS)
+               || perms.hasPermission(DefaultPermissions.OWNERS);
+        //?} else
+        /*return source.hasPermissionLevel(3);*/
     }
 }

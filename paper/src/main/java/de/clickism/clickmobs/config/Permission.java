@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 public enum Permission {
     PICKUP,
     PLACE,
-    RELOAD;
+    CONFIG;
 
     private static final String PLUGIN_PREFIX = "clickmobs";
     private final String permission;

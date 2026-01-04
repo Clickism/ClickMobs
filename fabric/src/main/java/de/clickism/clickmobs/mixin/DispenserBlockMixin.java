@@ -52,7 +52,7 @@ public abstract class DispenserBlockMixin extends BlockWithEntity {
             CallbackInfoReturnable<DispenserBehavior> cir
     ) {
         if (!PickupHandler.isMob(itemStack)) return;
-        if (!CONFIG.get(ENABLE_DISPENSERS)) return;
+        if (!ENABLE_DISPENSERS.get()) return;
         cir.setReturnValue((pointer, stack) -> {
             //? if <1.21.1
             /*World world = world(pointer);*/

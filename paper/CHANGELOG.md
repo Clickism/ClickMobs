@@ -1,0 +1,11 @@
+- Switched to Paper API for better performance and ease of development.
+- Dropped `Spigot` and `1.20` support
+  - From now on, new releases will only support 1.21+.
+  - There might be bugfix releases for 1.20 and Spigot if necessary.
+- Rewrote dispenser logic to use Paper's `BlockPreDispenseEvent`.
+- **Updated to Configured 0.3**: Internal refactor and added command interface for configuration options!
+    - `/clickmobs config set <option> <value>`: Sets a configuration option.
+    - `/clickmobs config get <option>`: Gets the value of a configuration option.
+    - `/clickmobs config path`: Prints the path to the **configuration file**.
+    - `/clickmobs config reload`: Reloads the configuration file.
+    - Removed the old reload command and `cm` alias.

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 4,
   "credit": ["Clickism"],
   "update": "ClickMobs: §a§lNew version available: §f{version}",
   "no_permission": "You don't have permission to do this.",
@@ -11,7 +11,8 @@
   "mob.lore": [
     "§8Right click to place the {mob} back."
   ],
-  "usage": "§cUsage: {usage}",
-  "reload_success": "Reloaded §lClickMobs §aconfig.",
-  "reload_fail": "Failed to reload §lClickMobs §cconfig."
+  "config_set": "Config option \"&l{option}&a\" set to &l{value}.",
+  "config_get": "Config option \"&l{option}&a\" has value &l{value}.",
+  "config_path": "The config file is located at: &f{path}",
+  "config_reload": "Reloaded the config file."
 }
