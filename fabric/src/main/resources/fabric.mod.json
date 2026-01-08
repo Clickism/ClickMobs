@@ -1,34 +1,34 @@
 {
-	"schemaVersion": 1,
-	"id": "clickmobs",
-	"version": "${version}",
-	"name": "ClickMobs",
-	"description": "A simple plugin that allows you to pick up any mob into your inventory.",
-	"authors": [
-		"Clickism"
-	],
-	"contact": {
-		"homepage": "https://modrinth.com/plugin/clickmobs",
-		"sources": "https://github.com/Clickism/ClickMobs"
-	},
-	"license": "ARR",
-	"icon": "assets/clickmobs/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"de.clickism.clickmobs.ClickMobs"
-		]
-	},
-	"mixins": [
-		"clickmobs.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=${fabricVersion}",
-		"minecraft": "${targetVersion}",
-		"java": ">=17",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "clickmobs",
+  "version": "${version}",
+  "name": "ClickMobs",
+  "description": "A simple plugin that allows you to pick up any mob into your inventory.",
+  "authors": [
+    "Clickism"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/plugin/clickmobs",
+    "sources": "https://github.com/Clickism/ClickMobs"
+  },
+  "license": "ARR",
+  "icon": "assets/clickmobs/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "de.clickism.clickmobs.ClickMobs"
+    ]
+  },
+  "mixins": [
+    "clickmobs.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabricVersion}",
+    "minecraft": "${targetVersion}",
+    "java": ">=17",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
 }
