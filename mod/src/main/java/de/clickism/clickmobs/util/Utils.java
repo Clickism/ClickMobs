@@ -6,9 +6,9 @@
 
 package de.clickism.clickmobs.util;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 public class Utils {
     /**
@@ -41,13 +41,13 @@ public class Utils {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
     
-    public static void offerToHand(PlayerEntity player, ItemStack itemStack) {
-        PlayerInventory inventory = player.getInventory();
+    public static void offerToHand(Player player, ItemStack itemStack) {
+        Inventory inventory = player.getInventory();
         int selectedSlot = VersionHelper.getSelectedSlot(inventory);
-        if (inventory.getStack(selectedSlot).isEmpty()) {
-            inventory.insertStack(selectedSlot, itemStack);
+        if (inventory.getItem(selectedSlot).isEmpty()) {
+            inventory.add(selectedSlot, itemStack);
             return;
         }
-        inventory.offerOrDrop(itemStack);
+        inventory.placeItemBackInInventory(itemStack);
     }
 }

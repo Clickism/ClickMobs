@@ -7,17 +7,23 @@
 package de.clickism.clickmobs.mixin;
 
 import de.clickism.clickmobs.mob.PickupHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.dispenser.DispenserBehavior;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPointer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import de.clickism.clickmobs.util.VersionHelper;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
+//? if >1.20.1 {
+/*import net.minecraft.core.dispenser.BlockSource;
+*///?} else {
+import net.minecraft.core.BlockSource;
+//?}
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,64 +33,56 @@ import static de.clickism.clickmobs.ClickMobsConfig.CONFIG;
 import static de.clickism.clickmobs.ClickMobsConfig.ENABLE_DISPENSERS;
 
 @Mixin(DispenserBlock.class)
-public abstract class DispenserBlockMixin extends BlockWithEntity {
-    protected DispenserBlockMixin(Settings settings) {
+public abstract class DispenserBlockMixin extends BaseEntityBlock {
+    protected DispenserBlockMixin(Properties settings) {
         super(settings);
     }
 
-    //? if >=1.21.1 {
     @Inject(
-            method = "getBehaviorForItem(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/block/dispenser/DispenserBehavior;", 
+            method = "getDispenseMethod",
             at = @At("HEAD"),
             cancellable = true
     )
-    //?} else {
-    /*@Inject(
-            method = "Lnet/minecraft/block/DispenserBlock;getBehaviorForItem(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/block/dispenser/DispenserBehavior;",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    *///?}
     protected void getBehaviorForItem(
             //? if >=1.21.1
-            World world,
-            ItemStack itemStack, 
-            CallbackInfoReturnable<DispenserBehavior> cir
+            //Level world,
+            ItemStack itemStack,
+            CallbackInfoReturnable<DispenseItemBehavior> cir
     ) {
         if (!PickupHandler.isMob(itemStack)) return;
         if (!ENABLE_DISPENSERS.get()) return;
         cir.setReturnValue((pointer, stack) -> {
             //? if <1.21.1
-            /*World world = world(pointer);*/
-            Direction direction = state(pointer).get(DispenserBlock.FACING);
-            BlockPos blockPos = pos(pointer).offset(direction);
+            Level world = world(pointer);
+            Direction direction = state(pointer).getValue(DispenserBlock.FACING);
+            BlockPos blockPos = pos(pointer).relative(direction);
             Entity entity = PickupHandler.readEntityFromItemStack(world, stack);
             if (entity == null) return stack;
-            entity.refreshPositionAndAngles(blockPos, 0, 0);
-            world.spawnEntity(entity);
-            stack.decrement(1);
+            VersionHelper.moveEntity(entity, blockPos);
+            world.addFreshEntity(entity);
+            stack.shrink(1);
             return stack;
         });
     }
     
-    private static ServerWorld world(BlockPointer pointer) {
+    private static ServerLevel world(BlockSource pointer) {
         //? if >=1.21.1 {
-        return pointer.world();
-        //?} else
-        /*return pointer.getWorld();*/
+        /*return pointer.level();
+        *///?} else
+        return pointer.getLevel();
     }
     
-    private static BlockPos pos(BlockPointer pointer) {
+    private static BlockPos pos(BlockSource pointer) {
         //? if >=1.21.1 {
-        return pointer.pos();
-        //?} else
-        /*return pointer.getPos();*/
+        /*return pointer.pos();
+        *///?} else
+        return pointer.getPos();
     }
     
-    private static BlockState state(BlockPointer pointer) {
+    private static BlockState state(BlockSource pointer) {
         //? if >=1.21.1 {
-        return pointer.state();
-        //?} else
-        /*return pointer.getBlockState();*/
+        /*return pointer.state();
+        *///?} else
+        return pointer.getBlockState();
     }
 }

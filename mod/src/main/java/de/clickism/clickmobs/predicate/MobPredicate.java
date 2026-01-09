@@ -6,7 +6,7 @@
 
 package de.clickism.clickmobs.predicate;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 

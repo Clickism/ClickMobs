@@ -22,7 +22,7 @@ val configuredVersion = "0.3"
 
 dependencies {
 	minecraft("com.mojang:minecraft:${minecraftVersion}")
-	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
+	mappings(loom.officialMojangMappings())
 	modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 	// Configured
@@ -32,6 +32,14 @@ dependencies {
 	modImplementation(include("de.clickism:configured-fabric-command-adapter:${configuredVersion}")!!)
 	// Configured Dependency
 	implementation(include("org.yaml:snakeyaml:2.0")!!)
+}
+
+stonecutter {
+	replacements {
+		string(current.parsed < "1.21.11") {
+			replace("Identifier", "ResourceLocation")
+		}
+	}
 }
 
 tasks.processResources {

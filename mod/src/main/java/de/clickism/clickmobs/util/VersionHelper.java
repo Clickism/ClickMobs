@@ -7,21 +7,23 @@
 package de.clickism.clickmobs.util;
 
 //? if >=1.21.11
-import net.minecraft.command.DefaultPermissions;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
+//import net.minecraft.server.permissions.Permissions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class VersionHelper {
-    public static void playSound(PlayerEntity player, SoundEvent soundEvent, SoundCategory category, float volume, float pitch) {
+    public static void playSound(Player player, SoundEvent soundEvent, SoundSource category, float volume, float pitch) {
         //? if >=1.21.11 {
-        player.getEntityWorld().playSound(
+        /*player.level().playSound(
                 null,
                 player.getX(),
                 player.getY(),
@@ -31,55 +33,63 @@ public class VersionHelper {
                 volume,
                 pitch
         );
-        //?} elif >=1.20.5 {
-        /*player.playSoundToPlayer(soundEvent, category, volume, pitch);
+        *///?} elif >=1.20.5 {
+        /*player.playNotifySound(soundEvent, category, volume, pitch);
          *///?} else
-        /*player.playSound(soundEvent, category, volume, pitch);*/
+        player.playNotifySound(soundEvent, category, volume, pitch);
     }
 
-    public static ItemStack getSelectedStack(PlayerInventory inventory) {
+    public static ItemStack getSelectedStack(Inventory inventory) {
         //? if >=1.21.5 {
-        return inventory.getSelectedStack();
-        //?} else
-        /*return inventory.getMainHandStack();*/
+        /*return inventory.getSelectedItem();
+        *///?} else
+        return inventory.getSelected();
     }
 
-    public static int getSelectedSlot(PlayerInventory inventory) {
+    public static int getSelectedSlot(Inventory inventory) {
         //? if >=1.21.5 {
-        return inventory.getSelectedSlot();
-        //?} else
-        /*return inventory.selectedSlot;*/
+        /*return inventory.getSelectedSlot();
+        *///?} else
+        return inventory.selected;
     }
 
     public static MinecraftServer getServer(Entity entity) {
-        //? if >=1.21.9 {
-        return entity.getEntityWorld().getServer();
-        //?} else
-        /*return entity.getServer();*/
+        return entity.level().getServer();
     }
 
-    public static World getWorld(Entity entity) {
-        //? if >=1.21.9 {
-        return entity.getEntityWorld();
-        //?} else
-        /*return entity.getWorld();*/
+    public static Level getWorld(Entity entity) {
+        return entity.level();
     }
 
-    public static boolean isOp(PlayerEntity player) {
+    public static boolean isOp(Player player) {
         //? if >=1.21.11 {
-        var perms = player.getPermissions();
-        return perms.hasPermission(DefaultPermissions.ADMINS)
-               || perms.hasPermission(DefaultPermissions.OWNERS);
-        //?} else
-        /*return player.hasPermissionLevel(3);*/
+        /*var perms = player.permissions();
+        return perms.hasPermission(Permissions.COMMANDS_ADMIN)
+               || perms.hasPermission(Permissions.COMMANDS_OWNER);
+        *///?} else
+        return player.hasPermissions(3);
     }
 
-    public static boolean isOp(ServerCommandSource source) {
+    public static boolean isOp(CommandSourceStack source) {
         //? if >=1.21.11 {
-        var perms = source.getPermissions();
-        return perms.hasPermission(DefaultPermissions.ADMINS)
-               || perms.hasPermission(DefaultPermissions.OWNERS);
-        //?} else
-        /*return source.hasPermissionLevel(3);*/
+        /*var perms = source.permissions();
+        return perms.hasPermission(Permissions.COMMANDS_ADMIN)
+               || perms.hasPermission(Permissions.COMMANDS_OWNER);
+        *///?} else
+        return source.hasPermission(3);
+    }
+
+    public static boolean isVillagerDataHolder(Entity entity) {
+        //? if >=1.21.11 {
+        /*return entity instanceof net.minecraft.world.entity.npc.villager.VillagerDataHolder;
+        *///?} else
+        return entity instanceof net.minecraft.world.entity.npc.VillagerDataHolder;
+    }
+
+    public static void moveEntity(Entity entity, BlockPos blockPos) {
+        //? if >=1.21.5 {
+        /*entity.snapTo(blockPos, 0, 0);
+        *///?} else
+        entity.moveTo(blockPos, 0, 0);
     }
 }

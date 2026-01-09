@@ -8,27 +8,29 @@ package de.clickism.clickmobs.mob;
 
 import de.clickism.clickmobs.util.MessageType;
 import de.clickism.clickmobs.util.VersionHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.server.commands.TagCommand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -36,26 +38,28 @@ import java.util.List;
 import java.util.Set;
 
 //? if >=1.21.6 {
-import net.minecraft.storage.NbtReadView;
-import net.minecraft.storage.NbtWriteView;
-import net.minecraft.storage.ReadView;
-import net.minecraft.util.ErrorReporter;
-//?}
-//? if >=1.21.1 {
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LoreComponent;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.SpawnReason;
-//?} else {
-/*import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
+/*import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.util.ProblemReporter;
 *///?}
+//? if >=1.21.1 {
+/*import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.component.CustomData;
+*///?} else {
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+//?}
+//? if >=1.21.4
+//import net.minecraft.world.entity.EntitySpawnReason;
+
 
 public class PickupHandler {
 
     private static final String TYPE_KEY = "EntityType";
     //? if <1.21.1
-    /*private static final String DATA_KEY = "ClickMobsData";*/
+    private static final String DATA_KEY = "ClickMobsData";
 
     private static final String ALL_TAG = "?all";
     public static final Set<String> BLACKLISTED_MATERIALS_IN_HAND = new HashSet<>();
@@ -65,7 +69,7 @@ public class PickupHandler {
             return true;
         }
 
-        String itemName = Registries.ITEM.getId(item).toString();
+        String itemName = BuiltInRegistries.ITEM.getKey(item).toString();
         if (itemName.toLowerCase().matches(".*_harness$")) {
             // Harnesses cause problems with Happy Ghasts
             return true;
@@ -74,135 +78,135 @@ public class PickupHandler {
     }
 
     //? if >=1.21.6 {
-    public static <T extends Entity> ItemStack toItemStack(T entity) {
-        NbtWriteView view = NbtWriteView.create(new ErrorReporter.Impl());
-        entity.writeData(view);
-        String id = EntityType.getId(entity.getType()).toString();
+    /*public static <T extends Entity> ItemStack toItemStack(T entity) {
+        TagValueOutput view = TagValueOutput.createWithoutContext(new ProblemReporter.Collector());
+        entity.saveWithoutId(view);
+        String id = EntityType.getKey(entity.getType()).toString();
         view.putString(TYPE_KEY, id);
-        ItemStack itemStack = getItemStack(getDisplayName(entity), getEntityName(entity), view.getNbt());
+        ItemStack itemStack = getItemStack(getDisplayName(entity), getEntityName(entity), view.buildResult());
         MobTextures.setEntityTexture(itemStack, entity);
         entity.remove(Entity.RemovalReason.DISCARDED);
         return itemStack;
     }
-    //?} else {
-    /*public static <T extends Entity> ItemStack toItemStack(T entity) {
-        NbtCompound nbt = new NbtCompound();
-        entity.writeNbt(nbt);
-        String id = EntityType.getId(entity.getType()).toString();
+    *///?} else {
+    public static <T extends Entity> ItemStack toItemStack(T entity) {
+        CompoundTag nbt = new CompoundTag();
+        entity.save(nbt);
+        String id = EntityType.getKey(entity.getType()).toString();
         nbt.putString(TYPE_KEY, id);
         ItemStack itemStack = getItemStack(getDisplayName(entity), getEntityName(entity), nbt);
         MobTextures.setEntityTexture(itemStack, entity);
         entity.remove(Entity.RemovalReason.DISCARDED);
         return itemStack;
     }
-    *///?}
+    //?}
 
-    private static ItemStack getItemStack(Text name, String entityName, NbtCompound nbt) {
-        ItemStack itemStack = Items.PLAYER_HEAD.getDefaultStack();
+    private static ItemStack getItemStack(Component name, String entityName, CompoundTag nbt) {
+        ItemStack itemStack = Items.PLAYER_HEAD.getDefaultInstance();
         writeCustomData(itemStack, nbt);
-        formatItem(itemStack, name.copy().fillStyle(Style.EMPTY.withItalic(false).withColor(Formatting.YELLOW)),
-                List.of(Text.literal("Right click to place the ")
-                        .append(Text.literal(entityName))
+        formatItem(itemStack, name.copy().withStyle(Style.EMPTY.withItalic(false).withColor(ChatFormatting.YELLOW)),
+                List.of(Component.literal("Right click to place the ")
+                        .append(Component.literal(entityName))
                         .append(" back.")
-                        .fillStyle(Style.EMPTY.withItalic(false).withColor(Formatting.DARK_GRAY)))
+                        .withStyle(Style.EMPTY.withItalic(false).withColor(ChatFormatting.DARK_GRAY)))
         );
         return itemStack;
     }
 
     //? if >=1.21.1 {
-    private static void writeCustomData(ItemStack itemStack, NbtCompound nbt) {
-        itemStack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt));
+    /*private static void writeCustomData(ItemStack itemStack, CompoundTag nbt) {
+        itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
     }
     
     @Nullable
-    private static NbtCompound readCustomData(ItemStack itemStack) {
-        NbtComponent nbt = itemStack.get(DataComponentTypes.CUSTOM_DATA);
+    private static CompoundTag readCustomData(ItemStack itemStack) {
+        CustomData nbt = itemStack.get(DataComponents.CUSTOM_DATA);
         if (nbt == null) return null;
-        return nbt.copyNbt();
+        return nbt.copyTag();
     }
     
-    private static void formatItem(ItemStack itemStack, Text name, List<Text> lore) {
-        itemStack.set(DataComponentTypes.ITEM_NAME, name);
-        itemStack.set(DataComponentTypes.CUSTOM_NAME, name);
-        itemStack.set(DataComponentTypes.LORE, new LoreComponent(lore));
+    private static void formatItem(ItemStack itemStack, Component name, List<Component> lore) {
+        itemStack.set(DataComponents.ITEM_NAME, name);
+        itemStack.set(DataComponents.CUSTOM_NAME, name);
+        itemStack.set(DataComponents.LORE, new ItemLore(lore));
     }
-    //?} else {
-    /*private static void writeCustomData(ItemStack itemStack, NbtCompound nbt) {
-        itemStack.getOrCreateNbt().put(DATA_KEY, nbt);
+    *///?} else {
+    private static void writeCustomData(ItemStack itemStack, CompoundTag nbt) {
+        itemStack.getOrCreateTag().put(DATA_KEY, nbt);
     }
 
     @Nullable
-    private static NbtCompound readCustomData(ItemStack itemStack) {
-        NbtCompound nbt = itemStack.getNbt(); // Don't create
+    private static CompoundTag readCustomData(ItemStack itemStack) {
+        var nbt = itemStack.getTag(); // Don't create
         if (nbt == null) return null;
         return nbt.getCompound(DATA_KEY);
     }
 
-    private static void formatItem(ItemStack itemStack, Text name, List<Text> lore) {
-        NbtList list = new NbtList();
-        lore.forEach(text -> list.add(NbtString.of(Text.Serializer.toJson(text))));
-        NbtCompound display = itemStack.getOrCreateSubNbt("display");
+    private static void formatItem(ItemStack itemStack, Component name, List<Component> lore) {
+        var list = new ListTag();
+        lore.forEach(text -> list.add(StringTag.valueOf(Component.Serializer.toJson(text))));
+        var display = itemStack.getOrCreateTagElement("display");
         display.put("Lore", list);
-        display.put("Name", NbtString.of(Text.Serializer.toJson(name)));
+        display.put("Name", StringTag.valueOf(Component.Serializer.toJson(name)));
     }
-    *///?}
+    //?}
 
     public static boolean isMob(ItemStack itemStack) {
         return readCustomData(itemStack) != null;
     }
 
     @Nullable
-    public static Entity readEntityFromItemStack(World world, ItemStack itemStack) {
+    public static Entity readEntityFromItemStack(Level world, ItemStack itemStack) {
         try {
-            NbtCompound nbt = readCustomData(itemStack);
+            CompoundTag nbt = readCustomData(itemStack);
             if (nbt == null) return null;
             //? if >=1.21.5 {
-            String id = nbt.getString(TYPE_KEY).orElse(null);
-            //?} else
-            /*String id = nbt.getString(TYPE_KEY);*/
+            /*String id = nbt.getString(TYPE_KEY).orElse(null);
+            *///?} else
+            String id = nbt.getString(TYPE_KEY);
             if (id == null) return null;
-            EntityType<?> type = EntityType.get(id).orElse(null);
+            EntityType<?> type = EntityType.byString(id).orElse(null);
             if (type == null) return null;
             //? if >=1.21.4 {
-            Entity entity = type.create(world, SpawnReason.SPAWN_ITEM_USE);
-             //?} else
-            /*Entity entity = type.create(world);*/
+            /*Entity entity = type.create(world, EntitySpawnReason.SPAWN_ITEM_USE);
+             *///?} else
+            Entity entity = type.create(world);
             if (entity == null) return null;
             //? if >=1.21.6 {
-            ReadView view = NbtReadView.create(new ErrorReporter.Impl(), world.getRegistryManager(), nbt);
-            entity.readData(view);
-            //?} else
-            /*entity.readNbt(nbt);*/
+            /*ValueInput view = TagValueInput.create(new ProblemReporter.Collector(), world.registryAccess(), nbt);
+            entity.load(view);
+            *///?} else
+            entity.load(nbt);
             return entity;
         } catch (Exception e) {
             return null;
         }
     }
 
-    private static MutableText getDisplayName(Entity entity) {
+    private static MutableComponent getDisplayName(Entity entity) {
         if (entity.hasCustomName()) {
-            return Text.literal("\"").append(entity.getCustomName()).append("\"");
+            return Component.literal("\"").append(entity.getCustomName()).append("\"");
         }
-        Text name = entity.getType().getName();
-        if (entity instanceof MobEntity mob && mob.isBaby()) {
-            return Text.literal("Baby ").append(name);
+        Component name = entity.getType().getDescription();
+        if (entity instanceof Mob mob && mob.isBaby()) {
+            return Component.literal("Baby ").append(name);
         }
         return name.copy();
     }
 
     private static String getEntityName(Entity entity) {
-        return entity.getType().getName().getString().toLowerCase();
+        return entity.getType().getDescription().getString().toLowerCase();
     }
 
-    public static void notifyPickup(PlayerEntity player, Entity entity) {
-        String name = entity.getType().getName().getString().toLowerCase();
-        MessageType.PICKUP_MESSAGE.sendActionbarSilently(player, Text.literal("You picked up a ")
-                .append(Text.literal(name)));
-        ServerWorld world = (ServerWorld) VersionHelper.getWorld(player);
+    public static void notifyPickup(Player player, Entity entity) {
+        String name = entity.getType().getDescription().getString().toLowerCase();
+        MessageType.PICKUP_MESSAGE.sendActionbarSilently(player, Component.literal("You picked up a ")
+                .append(Component.literal(name)));
+        ServerLevel world = (ServerLevel) VersionHelper.getWorld(player);
         double x = entity.getX();
         double y = entity.getY() + .25f;
         double z = entity.getZ();
-        world.spawnParticles(ParticleTypes.SWEEP_ATTACK, x, y, z, 1, 0, 0, 0, 1);
-        VersionHelper.playSound(player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.NEUTRAL, 1, .5f);
+        world.sendParticles(ParticleTypes.SWEEP_ATTACK, x, y, z, 1, 0, 0, 0, 1);
+        VersionHelper.playSound(player, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.NEUTRAL, 1, .5f);
     }
 }

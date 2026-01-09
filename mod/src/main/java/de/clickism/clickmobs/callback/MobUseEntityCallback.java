@@ -14,17 +14,16 @@ import de.clickism.clickmobs.util.MessageType;
 import de.clickism.clickmobs.util.Utils;
 import de.clickism.clickmobs.util.VersionHelper;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.village.VillagerDataContainer;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import static de.clickism.clickmobs.ClickMobsConfig.BLACKLISTED_MOBS;
@@ -42,32 +41,32 @@ public class MobUseEntityCallback implements UseEntityCallback {
     }
 
     @Override
-    public ActionResult interact(PlayerEntity player, World world, Hand hand, Entity entity, @Nullable EntityHitResult hitResult) {
-        if (world.isClient()) return ActionResult.PASS;
-        if (entity instanceof LivingEntity && entity instanceof VillagerDataContainer
-                && ClickMobs.isClickVillagersPresent()) return ActionResult.PASS;
-        if (!hand.equals(Hand.MAIN_HAND)) return ActionResult.PASS;
-        if (player.isSpectator()) return ActionResult.PASS;
-        if (!player.isSneaking()) return ActionResult.PASS;
-        if (!(entity instanceof LivingEntity livingEntity)) return ActionResult.PASS;
-        if (livingEntity instanceof PlayerEntity) return ActionResult.PASS;
-        if (hitResult == null) return ActionResult.CONSUME;
+    public InteractionResult interact(Player player, Level world, InteractionHand hand, Entity entity, @Nullable EntityHitResult hitResult) {
+        if (world.isClientSide()) return InteractionResult.PASS;
+        if (entity instanceof LivingEntity && VersionHelper.isVillagerDataHolder(entity)
+            && ClickMobs.isClickVillagersPresent()) return InteractionResult.PASS;
+        if (!hand.equals(InteractionHand.MAIN_HAND)) return InteractionResult.PASS;
+        if (player.isSpectator()) return InteractionResult.PASS;
+        if (!player.isShiftKeyDown()) return InteractionResult.PASS;
+        if (!(entity instanceof LivingEntity livingEntity)) return InteractionResult.PASS;
+        if (livingEntity instanceof Player) return InteractionResult.PASS;
+        if (hitResult == null) return InteractionResult.CONSUME;
         return handlePickup(player, livingEntity);
     }
 
-    private ActionResult handlePickup(PlayerEntity player, LivingEntity entity) {
+    private InteractionResult handlePickup(Player player, LivingEntity entity) {
         Item item = VersionHelper.getSelectedStack(player.getInventory()).getItem();
         if (PickupHandler.isBlacklistedItemInHand(item)) {
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
         if (!canBePickedUp(entity)) {
-            MessageType.FAIL.sendActionbar(player, Text.literal("You can't pick up this mob"));
-            return ActionResult.PASS;
+            MessageType.FAIL.sendActionbar(player, Component.literal("You can't pick up this mob"));
+            return InteractionResult.PASS;
         }
         PickupHandler.notifyPickup(player, entity);
         ItemStack itemStack = PickupHandler.toItemStack(entity);
         Utils.offerToHand(player, itemStack);
-        return ActionResult.CONSUME;
+        return InteractionResult.CONSUME;
     }
 
     public boolean canBePickedUp(LivingEntity entity) {

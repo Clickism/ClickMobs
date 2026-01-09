@@ -10,58 +10,57 @@ import de.clickism.clickmobs.ClickMobs;
 import de.clickism.clickmobs.mob.PickupHandler;
 import de.clickism.clickmobs.util.VersionHelper;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.village.VillagerDataContainer;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class MobUseBlockCallback implements UseBlockCallback {
     @Override
-    public ActionResult interact(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
-        if (!hand.equals(Hand.MAIN_HAND)) return ActionResult.PASS;
-        if (hitResult == null) return ActionResult.PASS;
-        if (world.isClient()) return ActionResult.PASS;
-        if (player.isSpectator()) return ActionResult.PASS;
-        ItemStack itemStack = player.getMainHandStack();
+    public InteractionResult interact(Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
+        if (!hand.equals(InteractionHand.MAIN_HAND)) return InteractionResult.PASS;
+        if (hitResult == null) return InteractionResult.PASS;
+        if (world.isClientSide()) return InteractionResult.PASS;
+        if (player.isSpectator()) return InteractionResult.PASS;
+        ItemStack itemStack = player.getMainHandItem();
         Entity entity = PickupHandler.readEntityFromItemStack(world, itemStack);
-        if (entity == null) return ActionResult.PASS;
-        if (entity instanceof LivingEntity && entity instanceof VillagerDataContainer
-                && ClickMobs.isClickVillagersPresent()) return ActionResult.PASS;
+        if (entity == null) return InteractionResult.PASS;
+        if (entity instanceof LivingEntity && VersionHelper.isVillagerDataHolder(entity)
+            && ClickMobs.isClickVillagersPresent()) return InteractionResult.PASS;
         BlockPos clickedPos = hitResult.getBlockPos();
         //? if >=1.20.5 {
-        ActionResult actionResult = world.getBlockState(clickedPos).onUse(world, player, hitResult);
-        //?} else
-        /*ActionResult actionResult = world.getBlockState(clickedPos).onUse(world, player, hand, hitResult);*/
-        if (actionResult.isAccepted()) return actionResult;
-        BlockPos pos = clickedPos.offset(hitResult.getSide());
-        entity.refreshPositionAndAngles(pos, 0, 0);
-        world.spawnEntity(entity);
-        itemStack.decrement(1);
+        /*InteractionResult actionResult = world.getBlockState(clickedPos).useWithoutItem(world, player, hitResult);
+        *///?} else
+        InteractionResult actionResult = world.getBlockState(clickedPos).use(world, player, hand, hitResult);
+        if (actionResult.consumesAction()) return actionResult;
+        BlockPos pos = clickedPos.relative(hitResult.getDirection());
+        VersionHelper.moveEntity(entity, pos);
+        world.addFreshEntity(entity);
+        itemStack.shrink(1);
         if (itemStack.getCount() <= 0) {
-            PlayerInventory inventory = player.getInventory();
+            Inventory inventory = player.getInventory();
             int slot = VersionHelper.getSelectedSlot(inventory);
-            inventory.setStack(slot, Items.AIR.getDefaultStack());
+            inventory.setItem(slot, Items.AIR.getDefaultInstance());
         }
-        BlockPos posBelow = pos.down();
-        VersionHelper.playSound(player, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.NEUTRAL, 1, .5f);
-        ((ServerWorld) world).spawnParticles(
-                new BlockStateParticleEffect(ParticleTypes.BLOCK, world.getBlockState(posBelow)),
+        BlockPos posBelow = pos.below();
+        VersionHelper.playSound(player, SoundEvents.PLAYER_ATTACK_WEAK, SoundSource.NEUTRAL, 1, .5f);
+        ((ServerLevel) world).sendParticles(
+                new BlockParticleOption(ParticleTypes.BLOCK, world.getBlockState(posBelow)),
                 pos.getX() + .5, pos.getY(), pos.getZ() + .5,
                 30, 0, 0, 0, 1
         );
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 }

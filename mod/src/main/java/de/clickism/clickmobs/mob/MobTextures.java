@@ -13,22 +13,21 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 //? if >=1.21.1 {
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ProfileComponent;
-//?} else {
-/*import com.mojang.authlib.GameProfile;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
-
-*///?}
+/*import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.ResolvableProfile;
+*///?} else {
+import com.mojang.authlib.GameProfile;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+//?}
 
 public class MobTextures {
 
@@ -115,16 +114,16 @@ public class MobTextures {
             Map.entry(EntityType.CAMEL, "ewogICJ0aW1lc3RhbXAiIDogMTY4Nzc4NjM1NjA5MSwKICAicHJvZmlsZUlkIiA6ICIzNTE2NjhhMTk5MmM0ZGZlOWRkNmY5NTUxNWFkNzVmNyIsCiAgInByb2ZpbGVOYW1lIiA6ICJCbHVlX1BrIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2JhNGM5NWJmYTBiNjE3MjIyNTUzODkxNDFiNTA1Y2YxYTM4YmFkOWIwZWY1NDNkZTYxOWYwY2M5MjIxZWQ5NzQiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ=="),
             Map.entry(EntityType.SNIFFER, "ewogICJ0aW1lc3RhbXAiIDogMTY5MjAwODMxNDk4MCwKICAicHJvZmlsZUlkIiA6ICIyMWUzNjdkNzI1Y2Y0ZTNiYjI2OTJjNGEzMDBhNGRlYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJHZXlzZXJNQyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9iYjFkMDZjOWQyZmQxOGRiNjczOWI0Zjg3MGJjODYxMGJjNWFjOWJkYmIxNjVjOWYxYzdiOGJkZTM5Yzc4MzY0IgogICAgfQogIH0KfQ==")
             //? if >=1.21.1 {
-            ,Map.entry(EntityType.BREEZE, "ewogICJ0aW1lc3RhbXAiIDogMTcxODc5OTgyMDc1MywKICAicHJvZmlsZUlkIiA6ICI1MjhlYzVmMmEzZmM0MDA0YjYwY2IwOTA5Y2JiMjdjYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJQdWxpenppIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2EyNzU3MjhhZjdlNmEyOWM4ODEyNWI2NzVhMzlkODhhZTk5MTliYjYxZmRjMjAwMzM3ZmVkNmFiMGM0OWQ2NWMiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ=="),
+            /*,Map.entry(EntityType.BREEZE, "ewogICJ0aW1lc3RhbXAiIDogMTcxODc5OTgyMDc1MywKICAicHJvZmlsZUlkIiA6ICI1MjhlYzVmMmEzZmM0MDA0YjYwY2IwOTA5Y2JiMjdjYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJQdWxpenppIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2EyNzU3MjhhZjdlNmEyOWM4ODEyNWI2NzVhMzlkODhhZTk5MTliYjYxZmRjMjAwMzM3ZmVkNmFiMGM0OWQ2NWMiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ=="),
             Map.entry(EntityType.ARMADILLO, "ewogICJ0aW1lc3RhbXAiIDogMTcxNTEwMjgxMDM1OSwKICAicHJvZmlsZUlkIiA6ICJiYzRlZGZiNWYzNmM0OGE3YWM5ZjFhMzlkYzIzZjRmOCIsCiAgInByb2ZpbGVOYW1lIiA6ICI4YWNhNjgwYjIyNDYxMzQwIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzk4NTJiMzNiYTI5NGY1NjAwOTA3NTJkMTEzZmU3MjhjYmM3ZGQwNDIwMjlhMzhkNTM4MmQ2NWEyMTQ2MDY4YjciLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ=="),
             Map.entry(EntityType.BOGGED, "ewogICJ0aW1lc3RhbXAiIDogMTczNjg2MjM5MjQ1NywKICAicHJvZmlsZUlkIiA6ICJiNzRlYjViMTc5OTc0YzZjODk3ZTgwNTM4Y2M1NmYwMSIsCiAgInByb2ZpbGVOYW1lIiA6ICJQYW5kYUNoYW4yOCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83MTQ0ZDdiZDE0Njk1OTNkZjU5ZGNlMGNlZmIzYWZlYWE1NGI4YjMyOTljZGJmYzM0YjMzOGJmYjlhZDIxMDAiCiAgICB9CiAgfQp9")
-            //?}
+            *///?}
             //? if >=1.21.4 {
-            ,Map.entry(EntityType.CREAKING, "ewogICJ0aW1lc3RhbXAiIDogMTczNjg2MjM5OTU1NiwKICAicHJvZmlsZUlkIiA6ICJmMzNlZGMyNTRmNDk0NWY2YTg5ZjFjM2JhZmNkZjIwNiIsCiAgInByb2ZpbGVOYW1lIiA6ICJGVV9CYWJ5IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2FlZjAwOWQ4NmZjYzQyMDM2MWE2OGNiYjhiZmE4NWE3NDIyYmZlOWUyZjMwNjI0N2JlMWUxYjVkMjBmYzUyYjEiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==")
-            //?}
+            /*,Map.entry(EntityType.CREAKING, "ewogICJ0aW1lc3RhbXAiIDogMTczNjg2MjM5OTU1NiwKICAicHJvZmlsZUlkIiA6ICJmMzNlZGMyNTRmNDk0NWY2YTg5ZjFjM2JhZmNkZjIwNiIsCiAgInByb2ZpbGVOYW1lIiA6ICJGVV9CYWJ5IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2FlZjAwOWQ4NmZjYzQyMDM2MWE2OGNiYjhiZmE4NWE3NDIyYmZlOWUyZjMwNjI0N2JlMWUxYjVkMjBmYzUyYjEiLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ==")
+            *///?}
             //? if >=1.21.6 {
-            ,Map.entry(EntityType.HAPPY_GHAST, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODI2OThhYTcyNzRlZTI0MWQzMTM2MmUyZmFhNDhjZmE3MzNkMjUwMTA1MTY1NjhkNDBmM2Y5NjcyNDdkYTExYiJ9fX0=")
-            //?}
+            /*,Map.entry(EntityType.HAPPY_GHAST, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODI2OThhYTcyNzRlZTI0MWQzMTM2MmUyZmFhNDhjZmE3MzNkMjUwMTA1MTY1NjhkNDBmM2Y5NjcyNDdkYTExYiJ9fX0=")
+            *///?}
     );
 
     public static void setEntityTexture(ItemStack itemStack, Entity entity) {
@@ -132,27 +131,27 @@ public class MobTextures {
     }
 
     //? if >=1.21.9 {
-    private static void setTexture(ItemStack itemStack, String texture) {
+    /*private static void setTexture(ItemStack itemStack, String texture) {
         ArrayListMultimap<String, Property> properties = ArrayListMultimap.create();
         properties.put("textures", new Property("textures", texture));
         PropertyMap propertyMap = new PropertyMap(properties);
-        var profile = ProfileComponent.ofStatic(new GameProfile(UUID.randomUUID(), "", propertyMap));
-        itemStack.set(DataComponentTypes.PROFILE, profile);
+        var profile = ResolvableProfile.createResolved(new GameProfile(UUID.randomUUID(), "", propertyMap));
+        itemStack.set(DataComponents.PROFILE, profile);
     }
-    //?} elif >=1.20.5 {
+    *///?} elif >=1.20.5 {
     /*private static void setTexture(ItemStack itemStack, String texture) {
         PropertyMap propertyMap = new PropertyMap();
         propertyMap.put("textures", new Property("textures", texture));
-        itemStack.set(DataComponentTypes.PROFILE,
-                new ProfileComponent(Optional.empty(), Optional.of(UUID.randomUUID()), propertyMap));
+        itemStack.set(DataComponents.PROFILE,
+                new ResolvableProfile(Optional.empty(), Optional.of(UUID.randomUUID()), propertyMap));
     }
     *///?} else {
-    /*private static void setTexture(ItemStack itemStack, String texture) {
+    private static void setTexture(ItemStack itemStack, String texture) {
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         profile.getProperties().put("textures", new Property("textures", texture));
-        itemStack.getOrCreateNbt().put("SkullOwner", NbtHelper.writeGameProfile(new NbtCompound(), profile));
+        itemStack.getOrCreateTag().put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), profile));
     }
-    *///?}
+    //?}
 
     public static String getTexture(Entity entity) {
         String texture = TEXTURE_MAP.get(entity.getType());
