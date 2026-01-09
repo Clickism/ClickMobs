@@ -2,8 +2,11 @@ plugins {
 	id("net.fabricmc.fabric-loom-remap") version "1.14-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
+val modVersion = property("mod.version").toString()
+val minecraftVersion = stonecutter.current.project.substringBeforeLast('-')
+val loader = stonecutter.current.project.substringAfterLast('-')
 
-version = "${parent?.name}-${property("mod.version")}+${stonecutter.current.project}"
+version = "${modVersion}+${stonecutter.current.project}"
 group = project.property("maven_group").toString()
 
 base {
@@ -18,7 +21,7 @@ repositories {
 val configuredVersion = "0.3"
 
 dependencies {
-	minecraft("com.mojang:minecraft:${stonecutter.current.project}")
+	minecraft("com.mojang:minecraft:${minecraftVersion}")
 	mappings("net.fabricmc:yarn:${property("deps.yarn_mappings")}:v2")
 	modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
@@ -33,10 +36,9 @@ dependencies {
 
 tasks.processResources {
 	val props = mapOf(
-		"version" to version,
-		"targetVersion" to project.property("mod.mc_version"),
-		"minecraftVersion" to stonecutter.current.version,
-		"fabricVersion" to project.property("deps.fabric_loader")
+		"mod_version" to version,
+		"minecraft_version" to project.property("mod.minecraft_version"),
+		"fabric_loader_version" to project.property("deps.fabric_loader")
 	)
 	filesMatching("fabric.mod.json") {
 		expand(props)
@@ -64,10 +66,10 @@ publishMods {
 	displayName.set("ClickMobs ${property("mod.version")} for Fabric")
 	file.set(tasks.remapJar.get().archiveFile)
 	version.set(project.version.toString())
-	changelog.set(rootProject.file("fabric/CHANGELOG.md").readText())
+	changelog.set(rootProject.file("mod/CHANGELOG.md").readText())
 	type.set(STABLE)
 	modLoaders.add("fabric")
-	val mcVersions = property("mod.target_mc_versions").toString().split(',')
+	val mcVersions = property("mod.publishing_target_minecraft_versions").toString().split(',')
 	modrinth {
 		accessToken.set(System.getenv("MODRINTH_TOKEN"))
 		projectId.set("tRdRT5jS")
@@ -88,5 +90,8 @@ loom {
 	runConfigs.all {
 		ideConfigGenerated(true)
 		runDir = "../../run"
+		if (environment == "client") {
+			programArgs("--username=ClickToPlay")
+		}
 	}
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "clickmobs",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "ClickMobs",
   "description": "A simple plugin that allows you to pick up any mob into your inventory.",
   "authors": [
@@ -23,8 +23,8 @@
     "clickmobs.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${fabricVersion}",
-    "minecraft": "${targetVersion}",
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "${minecraft_version}",
     "java": ">=17",
     "fabric-api": "*"
   },
