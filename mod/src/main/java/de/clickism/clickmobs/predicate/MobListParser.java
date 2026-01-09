@@ -43,7 +43,7 @@ public class MobListParser {
                     mobList.addPredicate(parsePredicate(line));
                     continue;
                 }
-                mobList.addMob(MobList.parseResourceLocation(line));
+                mobList.addMob(MobList.parseIdentifier(line));
             } catch (Exception e) {
                 ClickMobs.LOGGER.error("Error parsing mob predicate/line: '{}'. Error: {}", line, e.getMessage());
             }

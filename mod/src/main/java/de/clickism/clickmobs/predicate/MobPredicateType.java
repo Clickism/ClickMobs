@@ -7,10 +7,10 @@
 package de.clickism.clickmobs.predicate;
 
 //? if =1.20.1 {
-import net.minecraft.world.entity.Mob;
-//?} else {
-/*import net.minecraft.world.entity.Leashable;
-*///?}
+/*import net.minecraft.world.entity.Mob;
+*///?} else {
+import net.minecraft.world.entity.Leashable;
+//?}
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.TamableAnimal;
@@ -48,20 +48,20 @@ public interface MobPredicateType<T> {
         @Override
         public boolean test(LivingEntity entity, List<String> args) {
             return args.stream()
-                    .anyMatch(string -> string.equals(MobList.getResourceLocationOfEntity(entity)));
+                    .anyMatch(string -> string.equals(MobList.getIdentifierOfEntity(entity)));
         }
 
         @Override
         public String parseArg(String arg) {
-            return MobList.parseResourceLocation(arg).toString();
+            return MobList.parseIdentifier(arg).toString();
         }
     };
 
     MobPredicateType<?> LEASHED = (entity, args) ->
             //? if =1.20.1 {
-            entity instanceof Mob mob && mob.isLeashed();
-            //?} else
-            //entity instanceof Leashable leashable && leashable.isLeashed();
+            /*entity instanceof Mob mob && mob.isLeashed();
+            *///?} else
+            entity instanceof Leashable leashable && leashable.isLeashed();
 
     boolean test(LivingEntity entity, List<T> args);
 

@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "de.clickism.clickmobs.ClickMobs"
+      "de.clickism.clickmobs.platform.fabric.FabricEntrypoint"
     ]
   },
   "mixins": [

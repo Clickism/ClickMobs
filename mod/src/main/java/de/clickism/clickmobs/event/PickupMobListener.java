@@ -1,47 +1,50 @@
 /*
- * Copyright 2025 Clickism
+ * Copyright 2026 Clickism
  * Released under the GNU General Public License 3.0.
  * See LICENSE.md for details.
  */
 
-package de.clickism.clickmobs.callback;
+package de.clickism.clickmobs.event;
 
 import de.clickism.clickmobs.ClickMobs;
-import de.clickism.clickmobs.predicate.MobList;
 import de.clickism.clickmobs.mob.PickupHandler;
+import de.clickism.clickmobs.predicate.MobList;
 import de.clickism.clickmobs.predicate.MobListParser;
 import de.clickism.clickmobs.util.MessageType;
 import de.clickism.clickmobs.util.Utils;
 import de.clickism.clickmobs.util.VersionHelper;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import static de.clickism.clickmobs.ClickMobsConfig.BLACKLISTED_MOBS;
 import static de.clickism.clickmobs.ClickMobsConfig.WHITELISTED_MOBS;
 
-public class MobUseEntityCallback implements UseEntityCallback {
+public class PickupMobListener {
 
     private final MobListParser parser = new MobListParser();
     private MobList whitelistedMobs;
     private MobList blacklistedMobs;
 
-    public MobUseEntityCallback() {
+    public PickupMobListener() {
         WHITELISTED_MOBS.onChange(list -> this.whitelistedMobs = parser.parseMobList(list));
         BLACKLISTED_MOBS.onChange(list -> this.blacklistedMobs = parser.parseMobList(list));
     }
 
-    @Override
-    public InteractionResult interact(Player player, Level world, InteractionHand hand, Entity entity, @Nullable EntityHitResult hitResult) {
+    public InteractionResult event(
+            Player player,
+            Level world,
+            InteractionHand hand,
+            Entity entity
+    ) {
         if (world.isClientSide()) return InteractionResult.PASS;
         if (entity instanceof LivingEntity && VersionHelper.isVillagerDataHolder(entity)
             && ClickMobs.isClickVillagersPresent()) return InteractionResult.PASS;
@@ -50,7 +53,6 @@ public class MobUseEntityCallback implements UseEntityCallback {
         if (!player.isShiftKeyDown()) return InteractionResult.PASS;
         if (!(entity instanceof LivingEntity livingEntity)) return InteractionResult.PASS;
         if (livingEntity instanceof Player) return InteractionResult.PASS;
-        if (hitResult == null) return InteractionResult.CONSUME;
         return handlePickup(player, livingEntity);
     }
 
@@ -75,4 +77,5 @@ public class MobUseEntityCallback implements UseEntityCallback {
         }
         return !blacklistedMobs.contains(entity);
     }
+
 }

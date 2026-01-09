@@ -1,17 +1,13 @@
 /*
- * Copyright 2025 Clickism
+ * Copyright 2026 Clickism
  * Released under the GNU General Public License 3.0.
  * See LICENSE.md for details.
  */
 
-package de.clickism.clickmobs.callback;
+package de.clickism.clickmobs.event;
 
 import de.clickism.clickmobs.util.MessageType;
 import de.clickism.clickmobs.util.VersionHelper;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
 
@@ -20,7 +16,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class UpdateNotifier implements ServerPlayConnectionEvents.Join {
+public class UpdateNotifier {
 
     private final Supplier<String> newerVersionSupplier;
     // Warn players only once per session
@@ -30,11 +26,9 @@ public class UpdateNotifier implements ServerPlayConnectionEvents.Join {
         this.newerVersionSupplier = newerVersionSupplier;
     }
 
-    @Override
-    public void onPlayReady(ServerGamePacketListenerImpl handler, PacketSender sender, MinecraftServer server) {
+    public void onJoin(ServerPlayer player) {
         String newerVersion = newerVersionSupplier.get();
         if (newerVersion == null) return;
-        ServerPlayer player = handler.player;
         if (notifiedPlayers.contains(player.getUUID())) return;
         notifiedPlayers.add(player.getUUID());
         if (!VersionHelper.isOp(player)) return;

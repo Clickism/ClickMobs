@@ -38,28 +38,28 @@ import java.util.List;
 import java.util.Set;
 
 //? if >=1.21.6 {
-/*import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.util.ProblemReporter;
-*///?}
+//?}
 //? if >=1.21.1 {
-/*import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.component.CustomData;
-*///?} else {
-import net.minecraft.nbt.ListTag;
+//?} else {
+/*import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-//?}
+*///?}
 //? if >=1.21.4
-//import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 
 public class PickupHandler {
 
     private static final String TYPE_KEY = "EntityType";
     //? if <1.21.1
-    private static final String DATA_KEY = "ClickMobsData";
+    //private static final String DATA_KEY = "ClickMobsData";
 
     private static final String ALL_TAG = "?all";
     public static final Set<String> BLACKLISTED_MATERIALS_IN_HAND = new HashSet<>();
@@ -78,7 +78,7 @@ public class PickupHandler {
     }
 
     //? if >=1.21.6 {
-    /*public static <T extends Entity> ItemStack toItemStack(T entity) {
+    public static <T extends Entity> ItemStack toItemStack(T entity) {
         TagValueOutput view = TagValueOutput.createWithoutContext(new ProblemReporter.Collector());
         entity.saveWithoutId(view);
         String id = EntityType.getKey(entity.getType()).toString();
@@ -88,8 +88,8 @@ public class PickupHandler {
         entity.remove(Entity.RemovalReason.DISCARDED);
         return itemStack;
     }
-    *///?} else {
-    public static <T extends Entity> ItemStack toItemStack(T entity) {
+    //?} else {
+    /*public static <T extends Entity> ItemStack toItemStack(T entity) {
         CompoundTag nbt = new CompoundTag();
         entity.save(nbt);
         String id = EntityType.getKey(entity.getType()).toString();
@@ -99,7 +99,7 @@ public class PickupHandler {
         entity.remove(Entity.RemovalReason.DISCARDED);
         return itemStack;
     }
-    //?}
+    *///?}
 
     private static ItemStack getItemStack(Component name, String entityName, CompoundTag nbt) {
         ItemStack itemStack = Items.PLAYER_HEAD.getDefaultInstance();
@@ -114,7 +114,7 @@ public class PickupHandler {
     }
 
     //? if >=1.21.1 {
-    /*private static void writeCustomData(ItemStack itemStack, CompoundTag nbt) {
+    private static void writeCustomData(ItemStack itemStack, CompoundTag nbt) {
         itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
     }
     
@@ -130,8 +130,8 @@ public class PickupHandler {
         itemStack.set(DataComponents.CUSTOM_NAME, name);
         itemStack.set(DataComponents.LORE, new ItemLore(lore));
     }
-    *///?} else {
-    private static void writeCustomData(ItemStack itemStack, CompoundTag nbt) {
+    //?} else {
+    /*private static void writeCustomData(ItemStack itemStack, CompoundTag nbt) {
         itemStack.getOrCreateTag().put(DATA_KEY, nbt);
     }
 
@@ -149,7 +149,7 @@ public class PickupHandler {
         display.put("Lore", list);
         display.put("Name", StringTag.valueOf(Component.Serializer.toJson(name)));
     }
-    //?}
+    *///?}
 
     public static boolean isMob(ItemStack itemStack) {
         return readCustomData(itemStack) != null;
@@ -161,22 +161,22 @@ public class PickupHandler {
             CompoundTag nbt = readCustomData(itemStack);
             if (nbt == null) return null;
             //? if >=1.21.5 {
-            /*String id = nbt.getString(TYPE_KEY).orElse(null);
-            *///?} else
-            String id = nbt.getString(TYPE_KEY);
+            String id = nbt.getString(TYPE_KEY).orElse(null);
+            //?} else
+            //String id = nbt.getString(TYPE_KEY);
             if (id == null) return null;
             EntityType<?> type = EntityType.byString(id).orElse(null);
             if (type == null) return null;
             //? if >=1.21.4 {
-            /*Entity entity = type.create(world, EntitySpawnReason.SPAWN_ITEM_USE);
-             *///?} else
-            Entity entity = type.create(world);
+            Entity entity = type.create(world, EntitySpawnReason.SPAWN_ITEM_USE);
+             //?} else
+            //Entity entity = type.create(world);
             if (entity == null) return null;
             //? if >=1.21.6 {
-            /*ValueInput view = TagValueInput.create(new ProblemReporter.Collector(), world.registryAccess(), nbt);
+            ValueInput view = TagValueInput.create(new ProblemReporter.Collector(), world.registryAccess(), nbt);
             entity.load(view);
-            *///?} else
-            entity.load(nbt);
+            //?} else
+            //entity.load(nbt);
             return entity;
         } catch (Exception e) {
             return null;
