@@ -9,7 +9,10 @@ package de.clickism.clickmobs.platform.neoforge;
 /*import de.clickism.clickmobs.event.PickupMobListener;
 import de.clickism.clickmobs.event.PlaceMobInVehicleListener;
 import de.clickism.clickmobs.event.PlaceMobListener;
+import de.clickism.clickmobs.event.UpdateNotifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 public class NeoforgeEventListener {
@@ -26,6 +29,14 @@ public class NeoforgeEventListener {
     public void onRightClickEntity(PlayerInteractEvent.EntityInteract event) {
         pickupMobListener.event(event.getEntity(), event.getLevel(), event.getHand(), event.getTarget());
         placeMobInVehicleListener.event(event.getEntity(), event.getLevel(), event.getHand(), event.getTarget());
+    }
+
+    public record JoinListener(UpdateNotifier notifier) {
+        @SubscribeEvent
+        public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+            if (!(event.getEntity() instanceof ServerPlayer player)) return;
+            notifier.onJoin(player);
+        }
     }
 }
 *///?}

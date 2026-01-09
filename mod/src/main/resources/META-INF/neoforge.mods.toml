@@ -1,0 +1,24 @@
+license="GPL-3.0"
+issueTrackerURL="https://github.com/Clickism/ClickMobs/issues"
+showAsResourcePack=false
+
+[[mixins]]
+config="clickmobs.mixins.json"
+
+[[mods]]
+modId="clickmobs"
+version="${mod_version}"
+displayName="ClickMobs"
+logoFile="assets/clickmobs/icon.png"
+authors="Clickism"
+description="A simple plugin that allows you to pick up any mob into your inventory."
+
+[[dependencies.clickmobs]]
+modId="neoforge"
+type="required"
+versionRange="*"
+side="BOTH"
+
+[[dependencies.clickmobs]]
+modId = "minecraft"
+type = "required"
