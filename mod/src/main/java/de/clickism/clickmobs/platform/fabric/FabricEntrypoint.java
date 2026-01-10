@@ -71,7 +71,7 @@ public class FabricEntrypoint implements ModInitializer {
             String modVersion = FabricLoader.getInstance().getModContainer(ClickMobs.MOD_ID)
                     .map(container -> container.getMetadata().getVersion().getFriendlyString())
                     .orElse(null);
-            ClickMobs.checkUpdates(modVersion);
+            ClickMobs.checkUpdates(modVersion, "fabric");
             var notifier = new UpdateNotifier(ClickMobs::newerVersion);
             ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
                 notifier.onJoin(handler.player);

@@ -33,7 +33,7 @@ public class NeoforgeEntrypoint {
                     .getModContainerById(ClickMobs.MOD_ID)
                     .map(container -> container.getModInfo().getVersion().toString())
                     .orElse(null);
-            ClickMobs.checkUpdates(modVersion);
+            ClickMobs.checkUpdates(modVersion, "neoforge");
             var notifier = new UpdateNotifier(ClickMobs::newerVersion);
             NeoForge.EVENT_BUS.register(new NeoforgeEventListener.JoinListener(notifier));
         }

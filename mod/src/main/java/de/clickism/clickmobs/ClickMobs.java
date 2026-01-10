@@ -25,14 +25,14 @@ public class ClickMobs {
         CONFIG.load();
     }
 
-    public static void checkUpdates(String modVersion) {
+    public static void checkUpdates(String modVersion, String loader) {
         //? if >=1.21.9 {
         String minecraftVersion = DetectedVersion.tryDetectVersion().name();
         //?} elif >= 1.21.6 {
         /*String minecraftVersion = DetectedVersion.BUILT_IN.name();
          *///?} else
         //String minecraftVersion = DetectedVersion.BUILT_IN.getName();
-        new UpdateChecker(MOD_ID, "fabric", minecraftVersion).checkVersion(version -> {
+        new UpdateChecker(MOD_ID, loader, minecraftVersion).checkVersion(version -> {
             if (modVersion == null || UpdateChecker.getRawVersion(modVersion).equals(version)) {
                 return;
             }
