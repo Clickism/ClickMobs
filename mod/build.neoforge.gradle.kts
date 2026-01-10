@@ -2,7 +2,6 @@ import org.gradle.api.internal.artifacts.dependencies.DefaultImmutableVersionCon
 
 plugins {
     id("net.neoforged.moddev") version "2.0.137"
-    id("com.gradleup.shadow") version "9.3.0"
 }
 val modVersion = property("mod.version").toString()
 
@@ -16,8 +15,6 @@ repositories {
 
 val minConfiguredVersion = "0.3"
 val configuredVersion = "0.3.1"
-
-val shade by configurations.creating
 
 dependencies {
     // Configured
@@ -63,9 +60,18 @@ base {
     archivesName.set(property("archives_base_name").toString())
 }
 
+stonecutter {
+    replacements {
+        string(current.parsed < "1.21.11") {
+            replace("Identifier", "ResourceLocation")
+        }
+    }
+}
+
 tasks.processResources {
     val properties = mapOf(
         "mod_version" to modVersion,
+        "minecraft_version_range" to project.property("mod.minecraft_version_range"),
         "minecraft_version" to project.property("mod.minecraft_version"),
     )
     filesMatching(listOf("META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
@@ -74,21 +80,25 @@ tasks.processResources {
     inputs.properties(properties)
 }
 
-tasks.jarJar {
-    dependsOn(tasks.shadowJar)
-}
 
-tasks.shadowJar {
-    configurations = listOf(shade)
-    archiveClassifier.set("")
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    enableAutoRelocation = false
-    mergeServiceFiles()
-    // Stop Gson and Snakeyaml from being relocated
-    val prefix = "de.clickism.clickmobs.shadow"
-    relocate("de.clickism.configured", "$prefix.configured")
-    relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
-    dependencies {
-        exclude(dependency("com.google.code.gson:gson"))
+publishMods {
+    displayName.set("ClickMobs ${property("mod.version")} for Neoforge")
+    file.set(tasks.remapJar.get().archiveFile)
+    version.set(project.version.toString())
+    changelog.set(rootProject.file("mod/CHANGELOG.md").readText())
+    type.set(STABLE)
+    modLoaders.add("neoforge")
+    val mcVersions = property("mod.publishing_target_minecraft_versions").toString().split(',')
+    modrinth {
+        accessToken.set(System.getenv("MODRINTH_TOKEN"))
+        projectId.set("tRdRT5jS")
+        minecraftVersions.addAll(mcVersions)
+    }
+    curseforge {
+        accessToken.set(System.getenv("CURSEFORGE_TOKEN"))
+        projectId.set("1179556")
+        clientRequired.set(false)
+        serverRequired.set(true)
+        minecraftVersions.addAll(mcVersions)
     }
 }

@@ -1,3 +1,5 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
 license="GPL-3.0"
 issueTrackerURL="https://github.com/Clickism/ClickMobs/issues"
 showAsResourcePack=false
@@ -11,7 +13,9 @@ version="${mod_version}"
 displayName="ClickMobs"
 logoFile="assets/clickmobs/icon.png"
 authors="Clickism"
-description="A simple plugin that allows you to pick up any mob into your inventory."
+description='''
+A simple plugin that allows you to pick up any mob into your inventory.
+'''
 
 [[dependencies.clickmobs]]
 modId="neoforge"
@@ -22,6 +26,8 @@ side="BOTH"
 [[dependencies.clickmobs]]
 modId = "minecraft"
 type = "required"
+versionRange = "*"
+side = "BOTH"
 
 [[dependencies.clickmobs]]
 modId="configured_neoforge_command_adapter"
