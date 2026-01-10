@@ -23,7 +23,8 @@ dependencies {
         "de.clickism:configured-core:${configuredVersion}",
         "de.clickism:configured-yaml:${configuredVersion}",
         "de.clickism:configured-json:${configuredVersion}",
-        "de.clickism:configured-neoforge-command-adapter:${configuredVersion}"
+        "de.clickism:configured-neoforge-command-adapter:${configuredVersion}",
+        "eu.pb4:sgui:1.12.0+1.21.11-neoforge"
     ).forEach {
         jarJar(implementation(it) { isChanging = true }) {
             strictly("[$minConfiguredVersion,)")
@@ -46,7 +47,12 @@ neoForge {
                     "org.yaml:snakeyaml:2.0"
                 ).forEach {
                     implementation(it)
-                    add("additionalRuntimeClasspath", it)
+                    val config = if (neoForge.versionCapabilities.legacyClasspath()) {
+                        "additionalRuntimeClasspath"
+                    } else {
+                        "implementation"
+                    }
+                    add(config, it)
                 }
             }
         }
