@@ -23,8 +23,7 @@ dependencies {
         "de.clickism:configured-core:${configuredVersion}",
         "de.clickism:configured-yaml:${configuredVersion}",
         "de.clickism:configured-json:${configuredVersion}",
-        "de.clickism:configured-neoforge-command-adapter:${configuredVersion}",
-        "eu.pb4:sgui:1.12.0+1.21.11-neoforge"
+        "de.clickism:configured-neoforge-command-adapter:${configuredVersion}"
     ).forEach {
         jarJar(implementation(it) { isChanging = true }) {
             strictly("[$minConfiguredVersion,)")
