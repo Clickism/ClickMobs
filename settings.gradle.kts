@@ -16,7 +16,6 @@ include("paper", "mod")
 
 stonecutter {
     kotlinController = true
-    centralScript = "build.gradle.kts"
     create("mod") {
         fun version(version: String, vararg loaders: String) {
             loaders.forEach {

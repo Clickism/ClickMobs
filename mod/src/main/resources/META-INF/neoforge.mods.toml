@@ -22,3 +22,9 @@ side="BOTH"
 [[dependencies.clickmobs]]
 modId = "minecraft"
 type = "required"
+
+[[dependencies.clickmobs]]
+modId="configured_neoforge_command_adapter"
+type="required"
+versionRange="*"
+side="BOTH"

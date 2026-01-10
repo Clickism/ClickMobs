@@ -1,5 +1,8 @@
+import org.gradle.api.internal.artifacts.dependencies.DefaultImmutableVersionConstraint.strictly
+
 plugins {
     id("net.neoforged.moddev") version "2.0.137"
+    id("com.gradleup.shadow") version "9.3.0"
 }
 val modVersion = property("mod.version").toString()
 
@@ -8,18 +11,28 @@ version = "${modVersion}+${stonecutter.current.project}"
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
-val configuredVersion = "0.3"
+val minConfiguredVersion = "0.3"
+val configuredVersion = "0.3.1"
+
+val shade by configurations.creating
 
 dependencies {
     // Configured
-    implementation("de.clickism:configured-core:${configuredVersion}")
-    implementation("de.clickism:configured-yaml:${configuredVersion}")
-    implementation("de.clickism:configured-json:${configuredVersion}")
-//    modImplementation(include("de.clickism:configured-fabric-command-adapter:${configuredVersion}")!!)
+    listOf(
+        "de.clickism:configured-core:${configuredVersion}",
+        "de.clickism:configured-yaml:${configuredVersion}",
+        "de.clickism:configured-json:${configuredVersion}",
+        "de.clickism:configured-neoforge-command-adapter:${configuredVersion}"
+    ).forEach {
+        jarJar(implementation(it)!!) {
+            strictly("[$minConfiguredVersion,)")
+        }
+    }
     // Configured Dependency
-    implementation("org.yaml:snakeyaml:2.0")
+    jarJar(implementation("org.yaml:snakeyaml:2.0")!!)
 }
 
 neoForge {
@@ -44,7 +57,6 @@ neoForge {
             sourceSet(sourceSets["main"])
         }
     }
-//    sourceSets["main"].resources.srcDir("${rootDir}/versions/datagen/${stonecutter.current.version.split("-")[0]}/src/main/generated")
 }
 
 base {
@@ -60,4 +72,23 @@ tasks.processResources {
         expand(properties)
     }
     inputs.properties(properties)
+}
+
+tasks.jarJar {
+    dependsOn(tasks.shadowJar)
+}
+
+tasks.shadowJar {
+    configurations = listOf(shade)
+    archiveClassifier.set("")
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    enableAutoRelocation = false
+    mergeServiceFiles()
+    // Stop Gson and Snakeyaml from being relocated
+    val prefix = "de.clickism.clickmobs.shadow"
+    relocate("de.clickism.configured", "$prefix.configured")
+    relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
+    dependencies {
+        exclude(dependency("com.google.code.gson:gson"))
+    }
 }

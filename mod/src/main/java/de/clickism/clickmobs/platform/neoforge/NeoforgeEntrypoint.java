@@ -6,11 +6,13 @@
 
 package de.clickism.clickmobs.platform.neoforge;
 //? if neoforge {
+
 /*import de.clickism.clickmobs.ClickMobs;
 import de.clickism.clickmobs.event.UpdateNotifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 import static de.clickism.clickmobs.ClickMobsConfig.CHECK_UPDATE;
@@ -21,6 +23,9 @@ public class NeoforgeEntrypoint {
         NeoForge.EVENT_BUS.register(new NeoforgeEventListener());
 
         ClickMobs.initialize();
+
+        // Register commands
+        NeoForge.EVENT_BUS.register(new NeoforgeEventListener.ConfigCommandRegisterListener());
 
         // Check for updates
         if (CHECK_UPDATE.get()) {
