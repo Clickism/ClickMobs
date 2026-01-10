@@ -56,7 +56,7 @@ public class NeoforgeEventListener {
         @SubscribeEvent
         public void onRegisterCommands(RegisterCommandsEvent event) {
             event.getDispatcher().register(Commands.literal("clickmobs")
-                    .requires(VersionHelper::isOp)
+                    .requires(VersionHelper::isOpOrInSinglePlayer)
                     .then(NeoforgeCommandAdapter.ofConfig(CONFIG)
                             .add(new SetCommand((sender, key, value) -> {
                                 MessageType.CONFIG.send(sender, Component.literal("§aConfig option \"§l" + key + "§a\" set to §l" + value + "."));

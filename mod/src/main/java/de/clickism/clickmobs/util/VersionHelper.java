@@ -79,6 +79,14 @@ public class VersionHelper {
         //return source.hasPermission(3);
     }
 
+    public static boolean isOpOrInSinglePlayer(CommandSourceStack source) {
+        var player = source.getPlayer();
+        if (player != null && player.level().getServer().isSingleplayer()) {
+            return true;
+        }
+        return isOp(source);
+    }
+
     public static boolean isVillagerDataHolder(Entity entity) {
         //? if >=1.21.11 {
         return entity instanceof net.minecraft.world.entity.npc.villager.VillagerDataHolder;
