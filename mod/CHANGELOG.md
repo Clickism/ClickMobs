@@ -1,8 +1,5 @@
-- Fixed: Command/interaction sounds wouldn't play on 1.21.11.
-- **Updated to Configured 0.3**: Internal refactor and added command interface for configuration options!
-    - `/clickmobs config set <option> <value>`: Sets a configuration option.
-    - `/clickmobs config get <option>`: Gets the value of a configuration option.
-    - `/clickmobs config path`: Prints the path to the **configuration file**.
-    - `/clickmobs config reload`: Reloads the configuration file.
-- Whitelist/blacklist will now reload when the config is reloaded.
-- Fixed: Running with ClickVillagers 1.6+ would cause a crash.
+- Added `Neoforge` support.
+- Switched to mojang mappings for Fabric/Neoforge.
+  - *This will make updating to 26.1 faster when it releases.*
+- You can now execute `/clickvillagers` commands in singleplayer without being cheats enabled.
+  - *You still need operator permissions on servers.*
