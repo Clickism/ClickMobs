@@ -2,6 +2,8 @@ import org.gradle.api.internal.artifacts.dependencies.DefaultImmutableVersionCon
 
 plugins {
     id("net.neoforged.moddev") version "2.0.137"
+    id("me.modmuss50.mod-publish-plugin") version "0.8.4"
+    id("com.gradleup.shadow") version "9.3.0"
 }
 val modVersion = property("mod.version").toString()
 
@@ -16,20 +18,22 @@ repositories {
 val minConfiguredVersion = "0.3"
 val configuredVersion = "0.3.1"
 
+val shade by configurations.creating
+
 dependencies {
     // Configured
     listOf(
         "de.clickism:configured-core:${configuredVersion}",
         "de.clickism:configured-yaml:${configuredVersion}",
         "de.clickism:configured-json:${configuredVersion}",
-        "de.clickism:configured-neoforge-command-adapter:${configuredVersion}"
+        // Configured Dependency
+        "org.yaml:snakeyaml:2.0"
     ).forEach {
-        jarJar(implementation(it)!!) {
-            strictly("[$minConfiguredVersion,)")
-        }
+        shade(implementation(it)!!)
     }
-    // Configured Dependency
-    jarJar(implementation("org.yaml:snakeyaml:2.0")!!)
+    jarJar(implementation("de.clickism:configured-neoforge-command-adapter:${configuredVersion}")!!) {
+        strictly("[$minConfiguredVersion,)")
+    }
 }
 
 neoForge {
@@ -80,10 +84,29 @@ tasks.processResources {
     inputs.properties(properties)
 }
 
+tasks.build {
+    dependsOn(tasks.shadowJar)
+}
+
+tasks.shadowJar {
+    from(tasks.jarJar.get().outputs)
+    configurations = listOf(shade)
+    archiveClassifier.set("")
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    mergeServiceFiles()
+    enableAutoRelocation = false
+    val prefix = "de.clickism.clickmobs.shadow"
+    dependencies {
+        exclude(dependency("com.google.code.gson:gson"))
+        exclude(dependency("com.mojang:brigadier"))
+    }
+    relocate("de.clickism.configured", "de.clickism.configured")
+    relocate("org.yaml.snakeyaml", "$prefix.snakeyaml")
+}
 
 publishMods {
     displayName.set("ClickMobs ${property("mod.version")} for Neoforge")
-    file.set(tasks.remapJar.get().archiveFile)
+    file.set(tasks.shadowJar.get().archiveFile)
     version.set(project.version.toString())
     changelog.set(rootProject.file("mod/CHANGELOG.md").readText())
     type.set(STABLE)
