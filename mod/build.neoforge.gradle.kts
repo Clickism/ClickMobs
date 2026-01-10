@@ -37,6 +37,19 @@ neoForge {
     version = property("deps.neoforge").toString()
 
     runs {
+        configureEach {
+            dependencies {
+                listOf(
+                    "de.clickism:configured-core:${configuredVersion}",
+                    "de.clickism:configured-yaml:${configuredVersion}",
+                    "de.clickism:configured-json:${configuredVersion}",
+                    "org.yaml:snakeyaml:2.0"
+                ).forEach {
+                    implementation(it)
+                    add("additionalRuntimeClasspath", it)
+                }
+            }
+        }
         register("client") {
             client()
             gameDirectory = file("run/")
