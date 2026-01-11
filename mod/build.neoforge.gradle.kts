@@ -5,6 +5,7 @@ plugins {
     id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 val modVersion = property("mod.version").toString()
+val loader = stonecutter.current.project.substringAfterLast('-')
 
 group = project.property("maven_group").toString()
 version = "${modVersion}+${stonecutter.current.project}"
@@ -55,15 +56,16 @@ neoForge {
                 }
             }
         }
+        val runDir = "../../run"
         register("client") {
             client()
-            gameDirectory = file("run/")
+            gameDirectory = file(runDir)
             ideName = "NeoForge Client (${stonecutter.active?.version})"
             programArgument("--username=ClickToPlay")
         }
         register("server") {
             server()
-            gameDirectory = file("run/")
+            gameDirectory = file(runDir)
             ideName = "NeoForge Server (${stonecutter.active?.version})"
         }
     }
