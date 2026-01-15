@@ -1,0 +1,19 @@
+{
+  "version": 4,
+  "credit": ["Retromilia_Hatoboku"],
+  "update": "ClickMobs: §a§l發現新版本：§f{version}",
+  "no_permission": "你沒有權限執行此操作。",
+  "pick_up": "你撿起了 {mob}",
+  "blacklisted_mob": "你無法撿起此生物",
+  "write_error": "寫入生物數據失敗。",
+  "read_error": "讀取生物數據失敗。",
+  "baby_mob": "幼體 {mob}",
+  "mob.lore": [
+    "§8右鍵點擊以重新放置",
+    "§8該 {mob}。"
+  ],
+  "config_set": "配置項 \"&l{option}&a\" 已設為 &l{value}。",
+  "config_get": "配置項 \"&l{option}&a\" 的當前值為 &l{value}。",
+  "config_path": "配置文件路徑為：&f{path}",
+  "config_reload": "已重新加載配置文件。"
+}
