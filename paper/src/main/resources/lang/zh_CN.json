@@ -1,0 +1,18 @@
+{
+  "version": 4,
+  "credit": ["新毛宝贝"],
+  "update": "ClickMobs: §a§l发现新版本：§f{version}",
+  "no_permission": "你没有权限执行此操作。",
+  "pick_up": "你拾起了 {mob}",
+  "blacklisted_mob": "你无法拾取此生物",
+  "write_error": "写入生物数据失败。",
+  "read_error": "读取生物数据失败。",
+  "baby_mob": "小 {mob}",
+  "mob.lore": [
+    "§8右键点击以重新放置该 {mob}。"
+  ],
+  "config_set": "配置项 \"&l{option}&a\" 已设为 &l{value}。",
+  "config_get": "配置项 \"&l{option}&a\" 的当前值为 &l{value}。",
+  "config_path": "配置文件路径为：&f{path}",
+  "config_reload": "已重新加载配置文件。"
+}
