@@ -33,6 +33,8 @@ dependencies {
     implementation("de.clickism:configured-json:${configuredVersion}")
     implementation("de.clickism:configured-localization:${configuredVersion}")
     implementation("de.clickism:configured-paper-command-adapter:${configuredVersion}")
+    // Update Checker
+    implementation("de.clickism:modrinth-update-checker:1.0")
     // Metrics
     implementation("org.bstats:bstats-bukkit:3.1.0")
 }
@@ -43,7 +45,7 @@ java {
 
 tasks.runServer {
     dependsOn(tasks.build)
-    minecraftVersion("26.1")
+    minecraftVersion("1.21.11")
     // Try to use global run dir
     providers.gradleProperty("minecraft.runs.paper").orNull?.let {
         runDirectory(file(it))
