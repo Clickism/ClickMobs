@@ -108,7 +108,12 @@ public class MobTextures {
             Map.entry("ARMADILLO", "http://textures.minecraft.net/texture/9852b33ba294f560090752d113fe728cbc7dd042029a38d5382d65a2146068b7"),
             Map.entry("BOGGED", "http://textures.minecraft.net/texture/7144d7bd1469593df59dce0cefb3afeaa54b8b3299cdbfc34b338bfb9ad2100"),
             Map.entry("CREAKING", "http://textures.minecraft.net/texture/aef009d86fcc420361a68cbb8bfa85a7422bfe9e2f306247be1e1b5d20fc52b1"),
-            Map.entry("HAPPY_GHAST", "http://textures.minecraft.net/texture/82698aa7274ee241d31362e2faa48cfa733d25010516568d40f3f967247da11b")
+            Map.entry("HAPPY_GHAST", "http://textures.minecraft.net/texture/82698aa7274ee241d31362e2faa48cfa733d25010516568d40f3f967247da11b"),
+            Map.entry("NAUTILUS", "http://textures.minecraft.net/texture/b53d63eb175b00fb35285f4330d0be68a0713db94e00e6fdd85832d41e3a08b"),
+            Map.entry("ZOMBIE_NAUTILUS", "http://textures.minecraft.net/texture/fd9a933376da44c3391307cb9f4cf03f16f3a54f495fd5a11bad8a373f9d5720"),
+            Map.entry("PARCHED", "http://textures.minecraft.net/texture/24aeceff5f26dd8413c5c03547c234ac03108d187af0b9cd834a8ce12598591c"),
+            Map.entry("COPPER_GOLEM", "http://textures.minecraft.net/texture/248e0f9eb24a10600729438dd99997839e1a99e276d76e32fd434bdb5f54296c"),
+            Map.entry("CAMEL_HUSK", "http://textures.minecraft.net/texture/3bd7a92a6f67b7500d16c4e12f28058ec2859311556ba03be2d1f581170f2db6")
     );
 
     public static void setEntityTexture(ItemStack item, LivingEntity entity) {

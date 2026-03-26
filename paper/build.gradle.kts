@@ -20,7 +20,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
 }
 
-val configuredVersion = "0.3"
+val configuredVersion = "0.3.1"
 
 dependencies {
     // Paper
@@ -43,7 +43,7 @@ java {
 
 tasks.runServer {
     dependsOn(tasks.build)
-    minecraftVersion("1.21.11")
+    minecraftVersion("26.1")
     // Try to use global run dir
     providers.gradleProperty("minecraft.runs.paper").orNull?.let {
         runDirectory(file(it))
@@ -93,7 +93,7 @@ publishMods {
     modLoaders.add("paper")
     modLoaders.add("purpur")
     val mcVersionStart = "1.21"
-    val mcVersionEnd = "1.21.11"
+    val mcVersionEnd = "26.1"
     modrinth {
         accessToken.set(System.getenv("MODRINTH_TOKEN"))
         projectId.set("tRdRT5jS")
