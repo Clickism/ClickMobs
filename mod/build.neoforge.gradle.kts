@@ -1,5 +1,3 @@
-import org.gradle.api.internal.artifacts.dependencies.DefaultImmutableVersionConstraint.strictly
-
 plugins {
     id("net.neoforged.moddev") version "2.0.137"
     id("me.modmuss50.mod-publish-plugin") version "0.8.4"
@@ -27,7 +25,9 @@ dependencies {
         "de.clickism:configured-neoforge-command-adapter:${configuredVersion}"
     ).forEach {
         jarJar(implementation(it) { isChanging = true }) {
-            strictly("[$minConfiguredVersion,)")
+            version {
+                strictly("[$minConfiguredVersion,)")
+            }
         }
     }
     // Configured Dependency
