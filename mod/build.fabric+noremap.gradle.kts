@@ -1,10 +1,10 @@
 plugins {
-	id("net.fabricmc.fabric-loom-remap") version "1.14-SNAPSHOT"
+	id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 val modVersion = property("mod.version").toString()
 val minecraftVersion = stonecutter.current.project.substringBeforeLast('-')
-val loader = stonecutter.current.project.substringAfterLast('-')
+val loader = stonecutter.current.project.substringAfterLast('-').substringBeforeLast('+')
 
 version = "$modVersion+$minecraftVersion-$loader"
 group = project.property("maven_group").toString()
@@ -18,18 +18,17 @@ repositories {
 	mavenLocal()
 }
 
-val configuredVersion = "0.3"
+val configuredVersion = "0.3.1"
 
 dependencies {
 	minecraft("com.mojang:minecraft:${minecraftVersion}")
-	mappings(loom.officialMojangMappings())
-	modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+	implementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
+	implementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 	// Configured
 	implementation(include("de.clickism:configured-core:${configuredVersion}")!!)
 	implementation(include("de.clickism:configured-yaml:${configuredVersion}")!!)
 	implementation(include("de.clickism:configured-json:${configuredVersion}")!!)
-	modImplementation(include("de.clickism:configured-fabric-command-adapter:${configuredVersion}")!!)
+	implementation(include("de.clickism:configured-fabric-noremap-command-adapter:${configuredVersion}")!!)
 	// Configured Dependency
 	implementation(include("org.yaml:snakeyaml:2.0")!!)
 }
@@ -55,11 +54,10 @@ tasks.processResources {
 }
 
 java {
-	val j21 = stonecutter.eval(stonecutter.current.version, ">=1.20.5")
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(if (j21) 21 else 17))
+		languageVersion.set(JavaLanguageVersion.of(25))
 	}
-	val javaVersion = if (j21) JavaVersion.VERSION_17 else JavaVersion.VERSION_17
+	val javaVersion = JavaVersion.VERSION_25
 	sourceCompatibility = javaVersion
 	targetCompatibility = javaVersion
 }
@@ -72,7 +70,7 @@ tasks.jar {
 
 publishMods {
 	displayName.set("ClickMobs ${property("mod.version")} for Fabric")
-	file.set(tasks.remapJar.get().archiveFile)
+	file.set(tasks.jar.get().archiveFile)
 	version.set(project.version.toString())
 	changelog.set(rootProject.file("mod/CHANGELOG.md").readText())
 	type.set(STABLE)

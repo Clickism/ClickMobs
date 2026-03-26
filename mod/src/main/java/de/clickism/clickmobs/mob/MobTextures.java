@@ -124,6 +124,13 @@ public class MobTextures {
             //? if >=1.21.6 {
             ,Map.entry(EntityType.HAPPY_GHAST, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODI2OThhYTcyNzRlZTI0MWQzMTM2MmUyZmFhNDhjZmE3MzNkMjUwMTA1MTY1NjhkNDBmM2Y5NjcyNDdkYTExYiJ9fX0=")
             //?}
+            //? if >=1.21.11 {
+            ,Map.entry(EntityType.NAUTILUS, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjUzZDYzZWIxNzViMDBmYjM1Mjg1ZjQzMzBkMGJlNjhhMDcxM2RiOTRlMDBlNmZkZDg1ODMyZDQxZTNhMDhiIn19fQ=="),
+            Map.entry(EntityType.ZOMBIE_NAUTILUS, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmQ5YTkzMzM3NmRhNDRjMzM5MTMwN2NiOWY0Y2YwM2YxNmYzYTU0ZjQ5NWZkNWExMWJhZDhhMzczZjlkNTcyMCJ9fX0="),
+            Map.entry(EntityType.PARCHED, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjRhZWNlZmY1ZjI2ZGQ4NDEzYzVjMDM1NDdjMjM0YWMwMzEwOGQxODdhZjBiOWNkODM0YThjZTEyNTk4NTkxYyJ9fX0="),
+            Map.entry(EntityType.COPPER_GOLEM, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTllMjRlOTRkYmU0MmUyMzBkODMyOTNhNzdkNjFmZjcxMDFhOGM2OGFiNjhiYmM2YTkzZjk2MzBmYjJmZGI0In19fQ=="),
+            Map.entry(EntityType.CAMEL_HUSK, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2JkN2E5MmE2ZjY3Yjc1MDBkMTZjNGUxMmYyODA1OGVjMjg1OTMxMTU1NmJhMDNiZTJkMWY1ODExNzBmMmRiNiJ9fX0=")
+            //?}
     );
 
     public static void setEntityTexture(ItemStack itemStack, Entity entity) {
