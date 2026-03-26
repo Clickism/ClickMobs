@@ -1,5 +1,3 @@
-- Added `Neoforge` support.
-- Switched to mojang mappings for Fabric/Neoforge.
-  - *This will make updating to 26.1 faster when it releases.*
-- You can now execute `/clickvillagers` commands in singleplayer without being cheats enabled.
-  - *You still need operator permissions on servers.*
+- Added Minecraft 26.1 Support
+- Added missing textures for the following mobs:
+    - Nautilus, Zombie Nautilus, Parched, Copper Golem and Camel Husk
