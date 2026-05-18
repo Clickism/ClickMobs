@@ -9,3 +9,4 @@
     - `/clickmobs config path`: Prints the path to the **configuration file**.
     - `/clickmobs config reload`: Reloads the configuration file.
     - Removed the old reload command and `cm` alias.
+    - Added Hungarian language support.
