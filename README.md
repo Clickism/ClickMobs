@@ -22,7 +22,7 @@ them around.**
   - Use dispensers to spawn the mobs back automatically.
 - Clean messages, sound effects and particle effects.
 - Blacklist/whitelist any mob you want using **tags**!
-- **Language support:** German & English (Paper/Spigot only)
+- **Language support:** German, English & Hungarian (Paper/Spigot only)
 
 ### Blacklisting & Whitelisting Mobs
 - Blacklist/whitelist any mob you want using **tags**.
