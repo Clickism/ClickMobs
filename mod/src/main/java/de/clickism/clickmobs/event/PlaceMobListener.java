@@ -33,11 +33,13 @@ public class PlaceMobListener {
             InteractionHand hand,
             BlockHitResult hitResult
     ) {
+        InteractionHand usedHand = getUsedHand(player);
+        if (!hand.equals(usedHand)) return InteractionResult.PASS;
         if (!hand.equals(InteractionHand.MAIN_HAND)) return InteractionResult.PASS;
         if (hitResult == null) return InteractionResult.PASS;
         if (world.isClientSide()) return InteractionResult.PASS;
         if (player.isSpectator()) return InteractionResult.PASS;
-        ItemStack itemStack = player.getMainHandItem();
+        ItemStack itemStack = player.getItemInHand(hand);
         Entity entity = PickupHandler.readEntityFromItemStack(world, itemStack);
         if (entity == null) return InteractionResult.PASS;
         if (entity instanceof LivingEntity && VersionHelper.isVillagerDataHolder(entity)
@@ -65,5 +67,17 @@ public class PlaceMobListener {
                 30, 0, 0, 0, 1
         );
         return InteractionResult.SUCCESS;
+    }
+
+    private static InteractionHand getUsedHand(Player player) {
+        ItemStack mainHandItem = player.getMainHandItem();
+        if (!mainHandItem.isEmpty()) {
+            return InteractionHand.MAIN_HAND;
+        }
+        ItemStack offHandItem = player.getOffhandItem();
+        if (!offHandItem.isEmpty()) {
+            return InteractionHand.OFF_HAND;
+        }
+        return InteractionHand.MAIN_HAND; // Default to main hand
     }
 }
