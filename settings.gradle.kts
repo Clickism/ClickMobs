@@ -7,7 +7,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.8.2"
+    id("dev.kikugie.stonecutter") version "0.9.6"
 }
 
 rootProject.name = "ClickMobs"
@@ -25,12 +25,10 @@ stonecutter {
         }
         version("1.20.1", "fabric")
         version("1.21.1", "fabric", "neoforge")
-        version("1.21.4", "fabric", "neoforge")
-        version("1.21.5", "fabric", "neoforge")
-        version("1.21.8", "fabric", "neoforge")
         version("1.21.10", "fabric", "neoforge")
         version("1.21.11", "fabric", "neoforge")
         version("26.1", "fabric+noremap")
-        vcsVersion = "26.1-fabric+noremap"
+        version("26.2", "fabric+noremap")
+        vcsVersion = "26.2-fabric+noremap"
     }
 }

@@ -1,3 +1,3 @@
-- Added Minecraft 26.1 Support
-- Added missing textures for the following mobs:
-    - Nautilus, Zombie Nautilus, Parched, Copper Golem and Camel Husk
+- Added 26.2 support
+- Fixed: Can't place a mob from the off-hand
+- Bumped Configured version to 0.3.2.

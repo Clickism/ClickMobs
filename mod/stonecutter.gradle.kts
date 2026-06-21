@@ -2,7 +2,7 @@ plugins {
     id("dev.kikugie.stonecutter")
 }
 
-stonecutter active "26.1-fabric+noremap"
+stonecutter active "26.2-fabric+noremap"
 
 stonecutter {
     parameters {

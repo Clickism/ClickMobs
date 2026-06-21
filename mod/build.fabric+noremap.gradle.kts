@@ -18,7 +18,7 @@ repositories {
 	mavenLocal()
 }
 
-val configuredVersion = "0.3.1"
+val configuredVersion = "0.3.2"
 
 dependencies {
 	minecraft("com.mojang:minecraft:${minecraftVersion}")
