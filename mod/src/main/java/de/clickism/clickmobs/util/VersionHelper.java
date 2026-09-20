@@ -20,6 +20,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+//? if >=26.3 {
+import net.minecraft.util.Prediction;
+//?}
+
 public class VersionHelper {
     public static void playSound(Player player, SoundEvent soundEvent, SoundSource category, float volume, float pitch) {
         //? if >=1.21.11 {
@@ -99,5 +103,12 @@ public class VersionHelper {
         entity.snapTo(blockPos, 0, 0);
         //?} else
         //entity.moveTo(blockPos, 0, 0);
+    }
+
+    public static void placeItemBackInInventory(Inventory inventory, ItemStack itemStack) {
+        //? if >=26.3 {
+        inventory.placeItemBackInInventory(itemStack, Prediction.PREDICTED);
+        //?} else
+        //inventory.placeItemBackInInventory(itemStack);
     }
 }

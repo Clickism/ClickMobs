@@ -1,6 +1,6 @@
 plugins {
 	id("net.fabricmc.fabric-loom-remap") version "1.14-SNAPSHOT"
-	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
+	id("me.modmuss50.mod-publish-plugin") version "2.2.0"
 }
 val modVersion = property("mod.version").toString()
 val minecraftVersion = stonecutter.current.project.substringBeforeLast('-')
@@ -83,12 +83,13 @@ publishMods {
 		projectId.set("tRdRT5jS")
 		requires("fabric-api")
 		minecraftVersions.addAll(mcVersions)
+		environment.set(SERVER_ONLY)
 	}
 	curseforge {
 		accessToken.set(System.getenv("CURSEFORGE_TOKEN"))
 		projectId.set("1179556")
-		clientRequired.set(false)
-		serverRequired.set(true)
+		client.set(false)
+		server.set(true)
 		requires("fabric-api")
 		minecraftVersions.addAll(mcVersions)
 	}

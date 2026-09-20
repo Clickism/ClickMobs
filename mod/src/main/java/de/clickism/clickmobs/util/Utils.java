@@ -48,6 +48,6 @@ public class Utils {
             inventory.add(selectedSlot, itemStack);
             return;
         }
-        inventory.placeItemBackInInventory(itemStack);
+        VersionHelper.placeItemBackInInventory(inventory, itemStack);
     }
 }
