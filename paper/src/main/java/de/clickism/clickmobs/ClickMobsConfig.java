@@ -29,7 +29,7 @@ public interface ClickMobsConfig {
             CONFIG.option("language", "en_US")
                     .description("""
                             Language of the plugin.
-                            Currently supported languages: en_US, de_DE
+                            Currently supported languages: en_US, de_DE, hu_HU
                             """)
                     .onChange(lang -> Message.LOCALIZATION
                             .language(lang)

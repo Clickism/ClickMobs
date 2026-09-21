@@ -1,0 +1,18 @@
+{
+  "version": 4,
+  "credit": ["SzaBee13"],
+  "update": "ClickMobs: §a§lÚj verzió érhető el: §f{version}",
+  "no_permission": "Nincs jogosultságod ehhez.",
+  "pick_up": "Felvetted a(z) {mob}-ot",
+  "blacklisted_mob": "Ezt a mobbot nem veheted fel",
+  "write_error": "Nem sikerült menteni a mobb adatait.",
+  "read_error": "Nem sikerült beolvasni a mobb adatait.",
+  "baby_mob": "Bébi {mob}",
+  "mob.lore": [
+    "§8Jobb klikk a(z) {mob} visszahelyezéséhez."
+  ],
+  "config_set": "A(z) \"&l{option}&a\" konfig opció értéke &l{value}&a lett.",
+  "config_get": "A(z) \"&l{option}&a\" konfig opció jelenlegi értéke: &l{value}.",
+  "config_path": "A konfig fájl helye: &f{path}",
+  "config_reload": "A konfig fájl újratöltve."
+}
