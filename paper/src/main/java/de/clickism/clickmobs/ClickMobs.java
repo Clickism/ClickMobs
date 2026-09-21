@@ -17,12 +17,12 @@ import de.clickism.clickmobs.message.Message;
 import de.clickism.clickmobs.mob.PickupManager;
 import de.clickism.clickmobs.predicate.MobList;
 import de.clickism.clickmobs.predicate.MobListParser;
-import de.clickism.clickmobs.util.UpdateChecker;
 import de.clickism.configured.papercommandadapter.PaperCommandAdapter;
 import de.clickism.configured.papercommandadapter.command.GetCommand;
 import de.clickism.configured.papercommandadapter.command.PathCommand;
 import de.clickism.configured.papercommandadapter.command.ReloadCommand;
 import de.clickism.configured.papercommandadapter.command.SetCommand;
+import de.clickism.modrinthupdatechecker.ModrinthUpdateChecker;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -30,7 +30,6 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
@@ -102,10 +101,11 @@ public final class ClickMobs extends JavaPlugin {
         setupBStats();
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     private void checkUpdates() {
         LOGGER.info("Checking for updates...");
-        new UpdateChecker(PROJECT_ID, "spigot", null).checkVersion(version -> {
-            if (getDescription().getVersion().equals(version)) return;
+        new ModrinthUpdateChecker(PROJECT_ID, "paper", null).checkVersion(version -> {
+            if (getPluginMeta().getVersion().equals(version)) return;
             newerVersion = version;
             LOGGER.info("New version available: " + version);
             Bukkit.getOnlinePlayers().forEach(player -> {

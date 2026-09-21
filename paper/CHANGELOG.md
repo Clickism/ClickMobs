@@ -10,3 +10,5 @@
     - `/clickmobs config reload`: Reloads the configuration file.
     - Removed the old reload command and `cm` alias.
     - Added Hungarian language support.
+- Added missing textures for the following mobs:
+  - Nautilus, Zombie Nautilus, Parched, Copper Golem and Camel Husk

@@ -1,27 +1,34 @@
 pluginManagement {
     repositories {
-        maven {
-            name = "Fabric"
-            url = uri("https://maven.fabricmc.net/")
-        }
         mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
     }
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.7.10"
+    id("dev.kikugie.stonecutter") version "0.9.8"
 }
 
 rootProject.name = "ClickMobs"
 
-include("paper", "fabric")
+include("paper", "mod")
 
 stonecutter {
     kotlinController = true
-    centralScript = "build.gradle.kts"
-    create("fabric") {
-        versions("1.21.11", "1.21.10", "1.21.9", "1.21.8", "1.21.5", "1.21.4", "1.21.1", "1.20.1")
-        vcsVersion = "1.21.11"
+    create("mod") {
+        fun version(version: String, vararg loaders: String) {
+            loaders.forEach {
+                this.version("$version-$it", version)
+                    .buildscript = "build.$it.gradle.kts"
+            }
+        }
+        version("1.20.1", "fabric")
+        version("1.21.1", "fabric", "neoforge")
+        version("1.21.11", "fabric", "neoforge")
+        version("26.1", "fabric+noremap")
+        version("26.2", "fabric+noremap")
+        version("26.3", "fabric+noremap")
+        vcsVersion = "26.3-fabric+noremap"
     }
 }

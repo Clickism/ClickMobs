@@ -1,0 +1,3 @@
+- Added 26.2 support
+- Fixed: Can't place a mob from the off-hand
+- Bumped Configured version to 0.3.2.

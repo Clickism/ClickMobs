@@ -20,7 +20,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
 }
 
-val configuredVersion = "0.3"
+val configuredVersion = "0.3.1"
 
 dependencies {
     // Paper
@@ -33,6 +33,8 @@ dependencies {
     implementation("de.clickism:configured-json:${configuredVersion}")
     implementation("de.clickism:configured-localization:${configuredVersion}")
     implementation("de.clickism:configured-paper-command-adapter:${configuredVersion}")
+    // Update Checker
+    implementation("de.clickism:modrinth-update-checker:1.0")
     // Metrics
     implementation("org.bstats:bstats-bukkit:3.1.0")
 }
@@ -43,7 +45,11 @@ java {
 
 tasks.runServer {
     dependsOn(tasks.build)
-    minecraftVersion("1.21.10")
+    minecraftVersion("1.21.11")
+    // Try to use global run dir
+    providers.gradleProperty("minecraft.runs.paper").orNull?.let {
+        runDirectory(file(it))
+    }
 }
 
 tasks.build {
@@ -89,7 +95,7 @@ publishMods {
     modLoaders.add("paper")
     modLoaders.add("purpur")
     val mcVersionStart = "1.21"
-    val mcVersionEnd = "1.21.11"
+    val mcVersionEnd = "26.1"
     modrinth {
         accessToken.set(System.getenv("MODRINTH_TOKEN"))
         projectId.set("tRdRT5jS")
